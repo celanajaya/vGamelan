@@ -1,21 +1,33 @@
 .container {
     display: flex;           /* establish flex container */
-    flex-direction: column;  /* make main axis vertical */
-    justify-content: center; /* center items vertically, in this case */
-    align-items: center;     /* center items horizontally, in this case */
+    flex-direction: row;  /* make main axis horizontal */
+    justify-content: space-between; /* center items vertically, in this case */
+    align-items: flex-start;     /* center items horizontally, in this case */
     height: 100%;
-    width: 1000px;
+    width: 100%;
     margin: 0 auto;
     font-family: 'Open Sans';
     border: 1px dotted cornflowerblue;
 }
 
+.sub-container {
+    flex-direction: column;
+    justify-content: center; /* center items vertically, in this case */
+    align-items: center;     /* center items horizontally, in this case */
+    text-align: center;
+    height: 100%;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.elaboration {
+    width: 133%;
+}
+
 .row {
     flex-direction: row;
-    margin:20px;
     width: 100%;
     text-align: center; /* will center text in <p>, which is not a flex item */
-    border: 1px solid #ED33CF;
 }
 
 p {
@@ -25,6 +37,9 @@ p {
 
 .instrument {
     border: 1px solid #ED33CF;
+    margin: 5px;
+    border-radius: 15px;
+    box-shadow: 0.5px 0.5px 0.5px #555
 }
 
 .controls {
@@ -44,6 +59,7 @@ p {
     border: 1px solid #ED33CF;
     border-radius: 3px;
     padding:3px;
+    box-shadow: 0.5px 0.5px 0.5px #555
 }
 
 .mute-button:hover{
@@ -78,6 +94,8 @@ p {
 .active {
     animation-name: example;
     animation-duration: 0.1s;
+    background-color: #ED33CF;
+    color: white;
 }
 
 .key {
@@ -103,6 +121,8 @@ p {
     font-size: 18px;
     border-radius: 5px;
     margin-top: 10px;
+    box-shadow: 0.5px 0.5px 0.5px #555
+
 }
 
 #start {
@@ -171,7 +191,7 @@ p {
 
 @keyframes example {
     from {background-color: white;}
-    to {background-color: springgreen;}
+    to {background-color: #ED33CF;}
 }
 
 @keyframes rotate {
