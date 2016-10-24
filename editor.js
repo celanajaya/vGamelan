@@ -41,6 +41,8 @@ function createEditor(parent, height, width) {
                 .attr('width', squareWidth)
                 .attr('height', squareHeight)
                 .attr('fill', 'rgb(220, 220, 220)')
+                .attr('stroke', 'black')
+                .attr('stroke-width', 0.05)
                 .attr('x',squareWidth * row)
                 .attr('y', squareHeight * col)
                 .attr('id', instrumentName + "-" + col.toString() + "-" + row.toString());

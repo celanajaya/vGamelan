@@ -21,8 +21,8 @@
 }
 
 svg {
-    background: gainsboro;
-    margin: 1px;
+    margin: 0 auto;
+    padding-top: 5px;
 }
 
 .elaboration {

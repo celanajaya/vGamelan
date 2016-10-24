@@ -100,7 +100,7 @@ function buildInstrument(config) {
     }
 
     //hacky way of connecting svg to analyzer
-    analyzers[instrumentName].svg = createSvg("#" + config[0], instrument.offsetHeight/2, instrument.offsetWidth);
+    analyzers[instrumentName].svg = createAnalyzer("#" + config[0], instrument.offsetHeight/2, instrument.offsetWidth);
 }
 
 function addControls(instrument) {
