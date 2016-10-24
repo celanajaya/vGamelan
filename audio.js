@@ -124,6 +124,7 @@ function configureGong() {
 
 //handle animations
 function toggleActive(item) {
+    if (!item) return;
     if (item.classList.contains("active")){
         item.classList.remove("active")
     } else {

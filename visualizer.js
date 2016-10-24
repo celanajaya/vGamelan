@@ -35,7 +35,7 @@ function startAnalyzers() {
                     return kInstrumentHeight - d*0.8;
                 })
                 .attr('height', function (d) {
-                    if (d*0.8 < 50) return 0;
+                    if (d < 50) return 0;
                     return d;
                 })
                 .attr('fill', function (d) {

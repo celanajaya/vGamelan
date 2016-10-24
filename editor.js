@@ -41,21 +41,34 @@ function createEditor(parent, height, width) {
                 .attr('width', squareWidth)
                 .attr('height', squareHeight)
                 .attr('fill', 'rgb(220, 220, 220)')
-                // .attr('stroke', 'rgb(0, 0, 0)')
                 .attr('x',squareWidth * row)
                 .attr('y', squareHeight * col)
                 .attr('id', instrumentName + "-" + col.toString() + "-" + row.toString());
         }
     }
-    showPattern();
-
+    showPattern(instrumentName, part, range.length);
     return svg;
 }
 
 
-function showPattern() {
+function showPattern(instrumentName, part, range) {
     //add the data stuff
+    return function() {
+        // clearAllSvg();
+        part.forEach(function (note, index) {
+            if (note === "-") return;
+            var id = instrumentName + "-" + (range - note).toString() + "-" + index.toString();
+            d3.select("#" + id)
+                .attr('fill', "rgb(232, 113, 228)");
+        });
+    }();
 }
+
+function clearAllSvg(){
+    d3.selectAll("rect")
+        .attr('fill', "rgb(220, 220, 220)");
+}
+
 
 
 
