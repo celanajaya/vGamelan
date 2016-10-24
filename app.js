@@ -101,7 +101,8 @@ function buildInstrument(config) {
     }
 
     //hacky way of connecting svg to analyzer
-    analyzers[instrumentName].svg = createSvg("#" + config[0], instrument.offsetHeight, instrument.offsetWidth);
+    console.log(instrument.offsetHeight);
+    analyzers[instrumentName].svg = createSvg("#" + config[0], instrument.offsetHeight/2, instrument.offsetWidth);
     //TODO:find a better way to get this value to the svg render function
     kInstrumentHeight = instrument.offsetHeight;
 }
