@@ -23,6 +23,8 @@ function createSvg(parent, height, width) {
 //render audio components
 function startAnalyzers() {
     // Copy frequency data to frequencyData array.
+    var instrumentHeight =  document.getElementById("#reyong").offsetHeight;
+
     for (var analyzer in analyzers) {
         if (analyzers.hasOwnProperty(analyzer)) {
             var svg = analyzers[analyzer].svg;
@@ -32,7 +34,7 @@ function startAnalyzers() {
             svg.selectAll('rect')
                 .data(svg.frequencyData)
                 .attr('y', function (d) {
-                    return kInstrumentHeight - d*0.8;
+                    return instrumentHeight - d*0.8;
                 })
                 .attr('height', function (d) {
                     if (d < 50) return 0;

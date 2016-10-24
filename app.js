@@ -24,7 +24,6 @@ var jegoganRange = [].instrumentRange(5, 0, 5)
 //Audio Players
 var players = {};
 var analyzers = {};
-var kInstrumentHeight;
 
 //initial arrays
 var reyong_part;
@@ -101,10 +100,7 @@ function buildInstrument(config) {
     }
 
     //hacky way of connecting svg to analyzer
-    console.log(instrument.offsetHeight);
     analyzers[instrumentName].svg = createSvg("#" + config[0], instrument.offsetHeight/2, instrument.offsetWidth);
-    //TODO:find a better way to get this value to the svg render function
-    kInstrumentHeight = instrument.offsetHeight;
 }
 
 function addControls(instrument) {
