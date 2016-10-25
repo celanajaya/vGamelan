@@ -63,6 +63,12 @@ function init() {
         document.getElementById("tempoValue").innerHTML = tSlider.value;
         Tone.Transport.bpm.value = tSlider.value;
     });
+
+    var vSlider = document.getElementById("master-volume-slider");
+    setSliderListener(vSlider, function() {
+        document.getElementById("masterVolume").innerHTML = vSlider.value;
+        Tone.Master.volume = tSlider.value;
+    });
     configureGong();
 };
 
