@@ -24,7 +24,6 @@ var jegoganRange = [].instrumentRange(5, 0, 5)
 //Audio Players
 var players = {};
 var analyzers = {};
-var kInstrumentHeight;
 
 //initial arrays
 var reyong_part;
@@ -55,6 +54,7 @@ var nyogCagStayingPattern = 0;
 
 //******Building UI**********
 function init() {
+    setAllParts()
     instrumentConfig.forEach(buildInstrument);
     initializeMuteButtons();
     addDropDowns();
@@ -62,6 +62,12 @@ function init() {
     setSliderListener(tSlider, function() {
         document.getElementById("tempoValue").innerHTML = tSlider.value;
         Tone.Transport.bpm.value = tSlider.value;
+    });
+
+    var vSlider = document.getElementById("master-volume-slider");
+    setSliderListener(vSlider, function() {
+        document.getElementById("masterVolume").innerHTML = vSlider.value;
+        Tone.Master.volume = tSlider.value;
     });
     configureGong();
 };
@@ -98,16 +104,19 @@ function buildInstrument(config) {
             players[id[0]].start(parseInt(id[1]));
         });
     }
-    //TODO: add visualizer
-    analyzers[instrumentName].svg = createSvg("#" + config[0], instrument.offsetHeight, instrument.offsetWidth);
-    kInstrumentHeight = instrument.offsetHeight;
+
+    //hacky way of connecting svg to analyzer
+    analyzers[instrumentName].svg = createAnalyzer("#" + config[0], instrument.offsetHeight/2, instrument.offsetWidth);
 }
 
 function addControls(instrument) {
     var controls = document.createElement("div");
     controls.classList.add("controls");
+    controls.id = instrument.id + "-controls";
+    var controlItemContainer = document.createElement("div");
+    controlItemContainer.classList.add("control-item-container");
     for (var i = 0; i < 3; i++) {
-        var cItem = document.createElement("div")
+        var cItem = document.createElement("div");
         cItem.classList.add("control-item");
         switch (i) {
             case 0:
@@ -123,9 +132,11 @@ function addControls(instrument) {
                 cItem.classList.add("dropdown-container");
                 break;
         }
-        controls.appendChild(cItem);
+        controlItemContainer.appendChild(cItem);
     }
+    controls.appendChild(controlItemContainer);
     instrument.appendChild(controls);
+    createEditor("#" + controls.id, controls.offsetHeight, controls.offsetWidth);
 }
 
 function createVolumeSliderForInstrument(instrument) {
@@ -257,6 +268,13 @@ function getPokokFromUser(){
 function start(event) {
     event.target.id = "stop";
     event.target.innerHTML = "Stop";
+
+    // start playback
+    activateTransport();
+    startAnalyzers();
+}
+
+function setAllParts() {
     resetElaborations();
 
     //set basic melody parts
@@ -268,10 +286,6 @@ function start(event) {
     setReyongPart(pokok);
     setGangsaPart("kantilan", pokok);
     setGangsaPart("pemade", pokok);
-
-    // start playback
-    activateTransport();
-    startAnalyzers();
 }
 
 function stop(event) {

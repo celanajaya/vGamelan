@@ -54,7 +54,7 @@ function setLoop(instrument) {
             q = [];
             var buffers = getBuffers(instrument, i);
             buffers.forEach(function(buffer){
-                if (buffer === "-") return;
+                if (buffer === "-" || players[instrument].mute) return;
                 players[instrument].start(buffer);
                 players[instrument].stop(buffer, "+" + interval);
                 q.push(document.getElementById(instrument + " " + buffer));
@@ -124,6 +124,7 @@ function configureGong() {
 
 //handle animations
 function toggleActive(item) {
+    if (!item) return;
     if (item.classList.contains("active")){
         item.classList.remove("active")
     } else {

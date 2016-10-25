@@ -1,42 +1,76 @@
 .container {
     display: flex;           /* establish flex container */
-    flex-direction: column;  /* make main axis vertical */
-    justify-content: center; /* center items vertically, in this case */
-    align-items: center;     /* center items horizontally, in this case */
+    flex-direction: row;  /* make main axis horizontal */
+    justify-content: space-between; /* center items vertically, in this case */
+    align-items: flex-start;     /* center items horizontally, in this case */
     height: 100%;
-    width: 1000px;
+    width: 100%;
     margin: 0 auto;
     font-family: 'Open Sans';
     border: 1px dotted cornflowerblue;
 }
 
+.sub-container {
+    flex-direction: column;
+    justify-content: center; /* center items vertically, in this case */
+    align-items: center;     /* center items horizontally, in this case */
+    text-align: center;
+    height: 100%;
+    width: 80%;
+    margin: 0 auto;
+}
+
+svg {
+    margin: 0 auto;
+    padding-top: 5px;
+}
+
+.elaboration {
+    width: 133%;
+}
+
 .row {
     flex-direction: row;
-    margin:20px;
     width: 100%;
     text-align: center; /* will center text in <p>, which is not a flex item */
-    border: 1px solid #ED33CF;
 }
+
 
 p {
     font-size: large;
     font-weight: 500;
 }
 
+.pokok {
+    margin: 5px;
+    border: 1px solid #ED33CF;
+    border-radius: 15px;
+    box-shadow: 0.5px 0.5px 0.5px #555
+}
+
 .instrument {
     border: 1px solid #ED33CF;
+    margin: 5px;
+    border-radius: 15px;
+    box-shadow: 0.5px 0.5px 0.5px #555
 }
 
 .controls {
+    flex-direction: column;
+    border-bottom: 1px dotted cornflowerblue;
+    margin: 10px;
+}
+
+.control-item-container {
     display: flex;
     flex-direction: row;
     align-items: center;     /* center items vertically, in this case */
-    justify-content: flex-start;
+    justify-content: space-around;
+    padding-bottom: 10px;
     border-bottom: 1px dotted cornflowerblue;
-    padding: 10px;
 }
 
-.controls .control-item {
+.control-item {
     width: 50%;
 }
 
@@ -44,6 +78,7 @@ p {
     border: 1px solid #ED33CF;
     border-radius: 3px;
     padding:3px;
+    box-shadow: 0.5px 0.5px 0.5px #555
 }
 
 .mute-button:hover{
@@ -67,9 +102,11 @@ p {
     border: 1px solid #ED33CF;
     -moz-border-radius: 40px;
     -webkit-border-radius: 40px;
-    border-radius: 50px;
+    border-radius: 25px;
     display: inline-flex;
+    /*box-shadow: inset 0px 0px 10px #ED33CF;*/
 }
+
 
 .pot:hover {
     background-color: springgreen;
@@ -78,6 +115,9 @@ p {
 .active {
     animation-name: example;
     animation-duration: 0.1s;
+    background-color: #ED33CF;
+    box-shadow: inset 0px 0px 10px #fff;
+    color: #fff;
 }
 
 .key {
@@ -86,6 +126,7 @@ p {
     margin: 5px;
     border: 1px solid #ED33CF;
     display: inline-flex;
+    /*box-shadow: inset 0px 0px 10px #ED33CF;*/
 }
 
 .key:hover {
@@ -103,6 +144,8 @@ p {
     font-size: 18px;
     border-radius: 5px;
     margin-top: 10px;
+    box-shadow: 0.5px 0.5px 0.5px #555
+
 }
 
 #start {
@@ -136,7 +179,7 @@ p {
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #f9f9f9;
+    background-color: #fff;
     color: black;
     text-align: left;
     min-width: 40px;
@@ -145,7 +188,7 @@ p {
 }
 
 .dropdown-content p:hover {
-    background-color: #f1f1f1;
+    background-color: #fff;
 }
 
 .slider-container {
@@ -170,11 +213,18 @@ p {
 }
 
 @keyframes example {
-    from {background-color: white;}
-    to {background-color: springgreen;}
+    from {background-color: #fff;
+          box-shadow: inset 0px 0px 0px #E871E4;}
+    to {background-color: #ED33CF;
+        box-shadow: inset 0px 0px 40px #fff ;}
 }
 
 @keyframes rotate {
     from {transform: rotate(0deg);}
     to {transform: rotate(270deg);}
+}
+
+@keyframes show {
+    from {display: none;}
+    to {display:flex}
 }
