@@ -38,9 +38,6 @@ function setGangsaPart(instrument, pokok) {
         case kEmpat:
             patternFunction = getGangsaEmpatAtIndex;
             break;
-        default:
-            patternFunction = getGangsaTeluAtIndex;
-            break;
     }
     var polos = [];
     var sangsih = [];
@@ -210,53 +207,14 @@ function getNgempat(num) {
     return ngempat;
 }
 
-/*use a reduce function, to parse the metric grouping and determine the octave for a note*/
-function gangsaToBuffer(buffers, note, i) {
-    //add rests
-    if (note == "-") return buffers.push(note);
-
-    //check the pitch range of the metric grouping
-    var x, y, z
-    note = gangsaRange.indexOf(note);
-    if (note < 2) { //bump lowest notes up an octave
-        return note + 5
-    }
-    return buffers
-}
-
-function getGangsaTeluAtIndex(part, pair) {
-    var kotekanFunc = part === "polos" ? teluCompositeToPolos : teluCompositeToSangsih
-
-    if (pair[0] != pair[1]) {
-        return makeTelu.move(pair).map(kotekanFunc);
+//take each sub-array and make sure the pitches are adjacent to the pokokTone (which is always the last one)
+//TELU HELPERS
+//pair == POKOK tones
+function getGangsaTeluAtIndex(part, pokokPair) {
+    if (pokokPair[0] != pokokPair[1]) { //moving or staying
+        return makeTelu.move(pokokPair)[part];
     } else {
-        return makeTelu.stay(pair, teluStayingPattern).map(kotekanFunc);
-    }
-}
-
-function teluCompositeToPolos(value, index) {
-    switch (index) {
-        case 1:
-        case 3:
-        case 4:
-        case 6:
-        case 7:
-            return value;
-        default:
-            return "-";
-    }
-}
-
-function teluCompositeToSangsih(value, index) {
-    switch (index) {
-        case 0:
-        case 2:
-        case 3:
-        case 5:
-        case 6:
-            return value;
-        default:
-            return "-";
+        return makeTelu.stay(pokokPair, teluStayingPattern)[part];
     }
 }
 

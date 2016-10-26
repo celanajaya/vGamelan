@@ -47,10 +47,15 @@ Array.prototype.toNotation = function(newLine) {
 //Kotekan Telu
 var makeTelu = 	{
     move: function(pokokTonePair) {
-    	var t = getTeluTones(pokokTonePair);
+    	var p = getTeluTones(pokokTonePair);
         var movingContour = [t.y,t.z,t.x,t.y,t.z,t.x,t.y,t.z];
 		// console.log(movingContour);
-        return movingContour
+        return {
+			"polos_part" : ["-",p.tones.z,"-",p.tones.y,p.tones.z,"-",p.tones.y,p.tones.z],
+			"sangsih_part" : [p.tones.y,"-",p.tones.x,p.tones.y,"-",p.tones.x,p.tones.y,"-"],
+			"polos_buffer" : ["-",p.buffers.z,"-",p.buffers.y,p.buffers.z,"-",p.buffers.y,p.buffers.z],
+			"sangsih_buffer" : [p.buffers.y,"-",p.buffers.x,p.buffers.y,"-",p.buffers.x,p.buffers.y,"-"]
+		}
     },
 
     //parameter 1: the previous and goal tone of the pokok
@@ -71,6 +76,8 @@ function getTeluTones(arr) {
 	//some cryptic shit to wrap the notes around correctly
 	//TODO: fix these hard-coded '5's to be the number of tones in the current scale
 	var x, y, z;
+	//need to determine octaves for buffers
+	var bX, bY, bZ;
 	z = arr[1];
 	if (arr[0] > arr[1]) {
 		//descending
@@ -78,9 +85,11 @@ function getTeluTones(arr) {
 		y = z + 1;
 		x = z + 2;
 		//adjust y and x according to the limits of the scale
-		y = y > 5 ? 1 : y;
-		if (x > 5) {
-			x = y === 1 ? 2 : 1;
+		if (y > 5) { //wrapping around is necessary
+			y = 1;
+			if (x > 5) {
+				x = y === 1 ? 2 : 1;
+			}
 		}
 	} else {
 		//ascending
@@ -88,12 +97,18 @@ function getTeluTones(arr) {
 		y = z - 1;
 		x = z - 2;
 		//adjust y and x according to the limits of the scale
-		y = y < 1 ? 5 : y;
-		if (x < 1) {
-			x = y === 5 ? 4 : 5;
+		if (y < 1) {
+			y = 5;
+			if (x < 1) {
+				x = y === 5 ? 4 : 5;
+			}
 		}
 	}
-	return {x: x, y: y, z: z};
+
+	//flip the octave of either x or y
+
+	return {"tones" : {"x": x, "y": y, "z": z},
+			"buffers" : {"x":bX, "y":bY, "z":bZ};
 }
 
 //Basic Norot (reyong norot is in a separate file)
