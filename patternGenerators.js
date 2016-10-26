@@ -56,10 +56,13 @@ function setGangsaPart(instrument, pokok) {
         pemade_part = [polos, sangsih];
         pemade_part_buffers = [polos.map(gangsaToBuffer), sangsih.map(gangsaToBuffer)];
         // console.log(instrument + " part set: ", pemade_part);
+        console.log(instrument + "buffers:", pemade_part_buffers);
+
     } else {
         kantilan_part = [polos, sangsih];
         kantilan_part_buffers = [polos.map(gangsaToBuffer), sangsih.map(gangsaToBuffer)];
         // console.log(instrument + " part set: ", kantilan_part);
+        console.log(instrument + "buffers:", kantilan_part_buffers);
     }
 }
 
@@ -118,10 +121,12 @@ function getReyongKilitanAtIndex(position, index) {
     }
 }
 
+//TODO: refactor reyong pattern generation to follow this format
 function reyongToBuffer(pattern, pos) {
     //assign octave based on the player position
-    var octave = pos < 2 ? 0:1
-    return pattern.map(function(n){return reyongRange[octave].indexOf(n)});
+    // var octave = pos < 2 ? 0:1
+    // return pattern.map(function(n){return reyongRange[octave].indexOf(n)});
+    return pattern
 }
 
 //Gangsa
@@ -154,6 +159,7 @@ function getGangsaNorotAtIndex(part, index) {
 }
 
 //Norot Helpers
+//TODO: refactor indices to account for multiple elaboration pattern lengths
 function fastMovingPolos(value, index) {
     switch (index) {
         case 1:
@@ -204,13 +210,18 @@ function getNgempat(num) {
     return ngempat;
 }
 
-function gangsaToBuffer(note) {
-    if (note == "-") return note;
+/*use a reduce function, to parse the metric grouping and determine the octave for a note*/
+function gangsaToBuffer(buffers, note, i) {
+    //add rests
+    if (note == "-") return buffers.push(note);
+
+    //check the pitch range of the metric grouping
+    var x, y, z
     note = gangsaRange.indexOf(note);
     if (note < 2) { //bump lowest notes up an octave
         return note + 5
     }
-    return note
+    return buffers
 }
 
 function getGangsaTeluAtIndex(part, pair) {

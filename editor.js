@@ -1,84 +1,90 @@
-function createEditor(parent, height, width) {
+function createEditor(parent, totalHeight, totalWidth) {
     var instrumentName = parent.split("-")[0].slice(1);
+    //instrumental part
     var part;
-    var rangeLength;
+    //number of keys/pots, used as y value
+    var rangeHeight;
+    //total length of pattern, used as x value
     var partLength;
-    var meter;
+    //how often to show an emphasized beat (aka length of individual sub-patterns)
+    var emphasis;
 
     var svg = d3.select(parent).append('svg').attr('height', height).attr('width', width);
 
+    //configure dimensions based on pattern/instrument properties
     switch (instrumentName) {
         case "jegogan":
             part = jegogan;
-            rangeLength = jegoganRange.length;
+            rangeHeight = jegoganRange.length;
             partLength = jegogan.length
-            meter = 4;
+            emphasis = meter;
             break;
         case "jublag":
             part= pokok;
-            rangeLength = jublagRange.length;
+            rangeHeight = jublagRange.length;
             partLength = pokok.length;
-            meter = 4;
+            emphasis = meter;
             break;
         case"penyacah":
             part= neliti;
-            rangeLength = jublagRange.length;
+            rangeHeight = jublagRange.length;
             partLength = neliti.length;
-            meter = 4;
+            emphasis = meter;
         case "ugal":
             part = neliti;
-            rangeLength = gangsaRange.length;
+            rangeHeight = gangsaRange.length;
             partLength = neliti.length;
-            meter = 4;
+            emphasis = meter;
             break;
         case"pemade":
             part = pemade_part_buffers.reduce(toConcatedArrays,[]);
-            rangeLength = gangsaRange.length;
-            partLength = pokok.length * 8;
-            meter = 8;
+            rangeHeight = gangsaRange.length;
+            partLength = gangsaPatternLength;
+            emphasis = gangsaPatternLength;
             break;
         case"kantilan":
             part = kantilan_part_buffers.reduce(toConcatedArrays, []);
-            partLength = pokok.length * 8;
-            rangeLength = gangsaRange.length;
-            meter = 8;
+            partLength = gangsaPatternLength;
+            emphasis = gangsaPatternLength;
+            rangeHeight = gangsaRange.length;
             break;
         case"reyong":
             part = reyong_part_buffers.reduce(toConcatedArrays, []);
-            rangeLength = 12;
-            partLength = pokok.length * 8;
-            meter = 8;
+            rangeHeight = 12;
+            partLength = reyongPatternLength;
+            emphasis = reyongPatternLength;
             break;
     }
+
     //make basic grid of svg rects
-    for (var col = 0; col < rangeLength; col++) {
-        for (var row = 0; row < partLength; row++) {
-            var squareWidth = width / partLength;
-            var squareHeight = height / rangeLength;
+    for (var y = 0; y < rangeHeight; y++) {
+        for (var x = 0; x < partLength; x++) {
+            var squareWidth = totalWidth / partLength;
+            var squareHeight = totalHeight / rangeHeight;
             //every 4th or 8th column is a little darker
-            var boxColor = row % meter === meter - 1 ? 'rgb(200, 200, 200)':'rgb(220, 220, 220)';
+            var boxColor = x % meter === meter - 1 ? 'rgb(200, 200, 200)':'rgb(220, 220, 220)';
             svg.append('rect')
                 .attr('width', squareWidth)
                 .attr('height', squareHeight)
                 .attr('fill', boxColor)
                 .attr('stroke', 'black')
                 .attr('stroke-width', 0.05)
-                .attr('x',squareWidth * row)
-                .attr('y', squareHeight * col)
-                .attr('id', instrumentName + "-" + col.toString() + "-" + row.toString())
+                .attr('x',squareWidth * x)
+                .attr('y', squareHeight * y)
+                .attr('id', instrumentName + "-" + y.toString() + "-" + x.toString())
         }
     }
-    showPattern(instrumentName, part, rangeLength, partLength);
+    showPattern(instrumentName, part, rangeHeight, partLength);
     return svg;
 }
 
 //takes a string for the instrument name, a flattened (polos and sangsih, etc...) array of buffers, the total range of the instrument, and the
 //actual length of the part
-function showPattern(instrumentName, part, rangeLength, partLength) {
+function showPattern(instrumentName, part, rangeHeight, partLength) {
     part.forEach(function (buffer, index) {
         var color = index > partLength ? "rgb(0,255,127)" : "rgb(232, 113, 228)"
         if (buffer === "-") return;
-        var id = instrumentName + "-" + (rangeLength - buffer).toString() + "-" + (index % partLength).toString();
+        var id = instrumentName + "-" + (rangeHeight - buffer).toString() + "-" + (index % partLength).toString();
         d3.select("#" + id)
             .attr('fill', color)
     });

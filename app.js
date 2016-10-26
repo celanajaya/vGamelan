@@ -56,6 +56,11 @@ var empatStayingPattern = [0,0];
 var nyogCagMovingPattern = 0;
 var nyogCagStayingPattern = 0;
 
+//TODO: support polyrhythmic elaborations
+var gangsaPatternLength = 8;
+var reyongPatternLength = 8;
+var meter = 8;
+
 //******Building UI**********
 function init() {
     setAllParts()

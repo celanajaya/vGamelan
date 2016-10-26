@@ -74,6 +74,7 @@ function setLoop(instrument) {
 }
 
 //returns an array of buffers to be played simultaneously (takes a instrument name and an index)
+//TODO: turn 8s into a variable representing the length of the elaboration pattern per pokok tone
 function readBuffers(instrument, index) {
     switch (instrument) {
         case "jegogan":
@@ -86,11 +87,11 @@ function readBuffers(instrument, index) {
             var lowOctaveBuffer = gangsaRange.indexOf(neliti[index % neliti.length]);
             return [lowOctaveBuffer + 5];
         case "pemade":
-            return [pemade_part_buffers[0][index % pokok.length * 8],
-                    pemade_part_buffers[1][index % pokok.length * 8]];
+            return [pemade_part_buffers[0][index % pokok.length * gangsaPatternLength],
+                    pemade_part_buffers[1][index % pokok.length * gangsaPatternLength]];
         case "kantilan":
-            return [kantilan_part_buffers[0][index % pokok.length * 8],
-                    kantilan_part_buffers[1][index % pokok.length * 8]];
+            return [kantilan_part_buffers[0][index % pokok.length * gangsaPatternLength],
+                    kantilan_part_buffers[1][index % pokok.length * gangsaPatternLength]];
         case "reyong":
             return reyong_part_buffers.map(function(arr){return arr[index % (pokok.length * 8)]});
     }
