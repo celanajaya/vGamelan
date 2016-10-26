@@ -11,11 +11,21 @@ Array.prototype.atRotation = function (index) {
 
 //special hacky method for getting instrument ranges
 Array.prototype.instrumentRange = function(upperBound, lowerBound, mod) {
+	var arr;
 	if (lowerBound) {
-		return Array.apply(null, Array(upperBound + lowerBound - 1)).map(function (_, i) {return (i%mod) + 1;}).slice(lowerBound - 1);
+		 arr = Array.apply(null, Array(upperBound + lowerBound - 1)).map(function (_, i) {return (i%mod) + 1;}).slice(lowerBound - 1);
 	} else {
-		return Array.apply(null, Array(upperBound)).map(function (_, i) {return (i%mod) + 1;});
+		arr = Array.apply(null, Array(upperBound)).map(function (_, i) {return (i%mod) + 1;});
 	}
+	//divide by octave
+	return arr.reduce(function(a,b,i){
+		if (i % 5 == 0) {
+			a.push([b]);
+		} else {
+			a[a.length - 1].push(b);
+		}
+		return a
+	},[]);
 }
 
 //use when converting a kotekan part to an audio buffer number

@@ -9,8 +9,9 @@ function setReyongPart(pokok) {
             rPattern = rPattern.concat(patternFunction(i,j));
         }
         reyong_part[i] = rPattern;
+        reyong_part_buffers[i] = reyongToBuffer(rPattern, i)
     }
-    console.log("reyong part set:", reyong_part);
+    // console.log("reyong part set:", reyong_part);
 }
 
 function setGangsaPart(instrument, pokok) {
@@ -50,11 +51,14 @@ function setGangsaPart(instrument, pokok) {
         sangsih = sangsih.concat(patternFunction("sangsih", [prev, cur]));
     }
 
+    //set two versions of each part one with solfege values and the other as buffer indices
     if (instrument === "pemade") {
         pemade_part = [polos, sangsih];
+        pemade_part_buffers = [polos.map(gangsaToBuffer), sangsih.map(gangsaToBuffer)];
         // console.log(instrument + " part set: ", pemade_part);
     } else {
         kantilan_part = [polos, sangsih];
+        kantilan_part_buffers = [polos.map(gangsaToBuffer), sangsih.map(gangsaToBuffer)];
         // console.log(instrument + " part set: ", kantilan_part);
     }
 }
@@ -112,6 +116,12 @@ function getReyongKilitanAtIndex(position, index) {
         });
         return e;
     }
+}
+
+function reyongToBuffer(pattern, pos) {
+    //assign octave based on the player position
+    var octave = pos < 2 ? 0:1
+    return pattern.map(function(n){return reyongRange[octave].indexOf(n)});
 }
 
 //Gangsa
@@ -194,6 +204,15 @@ function getNgempat(num) {
     return ngempat;
 }
 
+function gangsaToBuffer(note) {
+    if (note == "-") return note;
+    note = gangsaRange.indexOf(note);
+    if (note < 2) { //bump lowest notes up an octave
+        return note + 5
+    }
+    return note
+}
+
 function getGangsaTeluAtIndex(part, pair) {
     var kotekanFunc = part === "polos" ? teluCompositeToPolos : teluCompositeToSangsih
 
@@ -230,48 +249,32 @@ function teluCompositeToSangsih(value, index) {
     }
 }
 
-function getGangsaNyogCagAtIndex(part, index) {
-    var currentNote = pokok[index];
-    var previousNote = pokok[index - 1];
-    if (!previousNote) {
-        previousNote = pokok[pokok.length - 1];
-    }
-    if (currentNote !== previousNote) {
-        return makeNyogCag.move([previousNote, currentNote], 0)
-            .map(scaleDegreeToGangsaKey);
-    } else {
-        return makeNyogCag.stay([previousNote, currentNote], 0)
-            .map(scaleDegreeToGangsaKey);
-    }
-}
-
-function getGangsaEmpatAtIndex(part, index) {
-    var currentNote = pokok[index];
-    var previousNote = pokok[index - 1];
-    if (!previousNote) {
-        previousNote = pokok[pokok.length - 1];
-    }
-    if (currentNote !== previousNote) {
-        return makeEmpat.move([previousNote, currentNote], part)
-            .map(scaleDegreeToGangsaKey);
-    } else {
-        return makeEmpat.stay([previousNote, currentNote], part, empatStayingPattern)
-            .map(scaleDegreeToGangsaKey);
-    }
-}
-
-function scaleDegreeToGangsaKey(scaleDegree) {
-    var index = gangsaRange.indexOf(scaleDegree);
-    if (index === -1) {
-        index += 3;
-    }
-    return index;
-}
-
-function scaleDegreeToReyongPot(scaleDegree) {
-    var index = reyongRange.indexOf(scaleDegree);
-    if (index === -1) {
-        index += 3;
-    }
-    return index;
-}
+// function getGangsaNyogCagAtIndex(part, index) {
+//     var currentNote = pokok[index];
+//     var previousNote = pokok[index - 1];
+//     if (!previousNote) {
+//         previousNote = pokok[pokok.length - 1];
+//     }
+//     if (currentNote !== previousNote) {
+//         return makeNyogCag.move([previousNote, currentNote], 0)
+//             .map(scaleDegreeToGangsaKey);
+//     } else {
+//         return makeNyogCag.stay([previousNote, currentNote], 0)
+//             .map(scaleDegreeToGangsaKey);
+//     }
+// }
+//
+// function getGangsaEmpatAtIndex(part, index) {
+//     var currentNote = pokok[index];
+//     var previousNote = pokok[index - 1];
+//     if (!previousNote) {
+//         previousNote = pokok[pokok.length - 1];
+//     }
+//     if (currentNote !== previousNote) {
+//         return makeEmpat.move([previousNote, currentNote], part)
+//             .map(scaleDegreeToGangsaKey);
+//     } else {
+//         return makeEmpat.stay([previousNote, currentNote], part, empatStayingPattern)
+//             .map(scaleDegreeToGangsaKey);
+//     }
+// }

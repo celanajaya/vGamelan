@@ -16,6 +16,7 @@ var patternTypes = [kKilitan, kNorot, kTelu, kEmpat, kNyogCag];
 
 //Instrument Ranges
 //an array showing the scale tones on the instrument
+//TODO: split up ranges by octave into multidimensional arrays
 var gangsaRange = [].instrumentRange(10, 2, 5);
 var reyongRange = [].instrumentRange(12, 3, 5);
 var jublagRange = [].instrumentRange(5, 0, 5);
@@ -26,12 +27,15 @@ var players = {};
 var analyzers = {};
 
 //initial arrays
-var reyong_part;
-var pemade_part;
-var kantilan_part;
-var neliti;
-var pokok;
-var jegogan;
+var reyong_part = [[],[],[],[]];
+var reyong_part_buffers = [[],[],[],[]];
+var pemade_part = [[],[]];
+var pemade_part_buffers = [[],[]];
+var kantilan_part = [[],[]];
+var kantilan_part_buffers = [[],[]];
+var neliti = [];
+var pokok = [];
+var jegogan = [];
 resetElaborations();
 
 function resetElaborations() {

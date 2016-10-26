@@ -23,6 +23,7 @@ function setLoop(instrument) {
         var interval;
         var offset = 0;
 
+        //determine the rate of play and the initial offset for an instrumetn
         switch (instrument) {
             case "jegogan":
                 interval = "1n";
@@ -49,39 +50,31 @@ function setLoop(instrument) {
         }
 
         new Tone.Loop(function (time) {
-
+            //handle UI state for keys/pots
             q.forEach(toggleActive);
             q = [];
-            var buffers = getBuffers(instrument, i);
+
+            //read the appropriate buffers for the index
+            var buffers = readBuffers(instrument, i);
             buffers.forEach(function(buffer){
+                //return if it's a rest value
                 if (buffer === "-" || players[instrument].mute) return;
+
                 players[instrument].start(buffer);
                 players[instrument].stop(buffer, "+" + interval);
+
+                //add the note to be turned on
                 q.push(document.getElementById(instrument + " " + buffer));
             });
+
             q.forEach(toggleActive);
             i++;
         }, interval).start(offset);
     }
 }
 
-//TODO: find ways to appropriately cross octaves
-//this method converts
-function getBuffers(instrument, index) {
-    //helper function for parsing gangsa buffers
-    function bufferFromPart(buffers, part) {
-        var value = part[index % part.length];
-        if (value != "-") {
-            var gangsaBuffer = gangsaRange.indexOf(value);
-            //if it's below low dang, move to upper octave
-            gangsaBuffer = gangsaBuffer < 3 ? gangsaBuffer + 5 : gangsaBuffer
-            buffers.push(gangsaBuffer);
-        } else {
-            buffers.push(value);
-        }
-        return buffers;
-    }
-
+//returns an array of buffers to be played simultaneously (takes a instrument name and an index)
+function readBuffers(instrument, index) {
     switch (instrument) {
         case "jegogan":
             return [jegogan[index % jegogan.length] - 1];
@@ -93,11 +86,13 @@ function getBuffers(instrument, index) {
             var lowOctaveBuffer = gangsaRange.indexOf(neliti[index % neliti.length]);
             return [lowOctaveBuffer + 5];
         case "pemade":
-            return pemade_part.reduce(bufferFromPart, []);
+            return [pemade_part_buffers[0][index % pokok.length * 8],
+                    pemade_part_buffers[1][index % pokok.length * 8]];
         case "kantilan":
-            return kantilan_part.reduce(bufferFromPart, []);
+            return [kantilan_part_buffers[0][index % pokok.length * 8],
+                    kantilan_part_buffers[1][index % pokok.length * 8]];
         case "reyong":
-            return reyong_part.map(function(arr){return arr[index % (pokok.length * 8)]});
+            return reyong_part_buffers.map(function(arr){return arr[index % (pokok.length * 8)]});
     }
 }
 
