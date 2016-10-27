@@ -87,11 +87,11 @@ function readBuffers(instrument, index) {
             var lowOctaveBuffer = gangsaRange.indexOf(neliti[index % neliti.length]);
             return [lowOctaveBuffer + 5];
         case "pemade":
-            return [pemade_part_buffers[0][index % pokok.length * gangsaPatternLength],
-                    pemade_part_buffers[1][index % pokok.length * gangsaPatternLength]];
+            return [pemade_part[0][index % pokok.length * gangsaPatternLength],
+                    pemade_part[1][index % pokok.length * gangsaPatternLength]];
         case "kantilan":
-            return [kantilan_part_buffers[0][index % pokok.length * gangsaPatternLength],
-                    kantilan_part_buffers[1][index % pokok.length * gangsaPatternLength]];
+            return [kantilan_part[0][index % pokok.length * gangsaPatternLength],
+                    kantilan_part[1][index % pokok.length * gangsaPatternLength]];
         case "reyong":
             return reyong_part_buffers.map(function(arr){return arr[index % (pokok.length * 8)]});
     }

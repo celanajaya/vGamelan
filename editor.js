@@ -9,14 +9,14 @@ function createEditor(parent, totalHeight, totalWidth) {
     //how often to show an emphasized beat (aka length of individual sub-patterns)
     var emphasis;
 
-    var svg = d3.select(parent).append('svg').attr('height', height).attr('width', width);
+    var svg = d3.select(parent).append('svg').attr('height', totalHeight).attr('width', totalWidth);
 
     //configure dimensions based on pattern/instrument properties
     switch (instrumentName) {
         case "jegogan":
             part = jegogan;
             rangeHeight = jegoganRange.length;
-            partLength = jegogan.length
+            partLength = jegogan.length;
             emphasis = meter;
             break;
         case "jublag":
@@ -37,19 +37,19 @@ function createEditor(parent, totalHeight, totalWidth) {
             emphasis = meter;
             break;
         case"pemade":
-            part = pemade_part_buffers.reduce(toConcatedArrays,[]);
+            part = pemade_part.reduce(toConcatedArrays,[]);
             rangeHeight = gangsaRange.length;
             partLength = gangsaPatternLength;
             emphasis = gangsaPatternLength;
             break;
         case"kantilan":
-            part = kantilan_part_buffers.reduce(toConcatedArrays, []);
+            part = kantilan_part.reduce(toConcatedArrays, []);
             partLength = gangsaPatternLength;
             emphasis = gangsaPatternLength;
             rangeHeight = gangsaRange.length;
             break;
         case"reyong":
-            part = reyong_part_buffers.reduce(toConcatedArrays, []);
+            part = reyong_part.reduce(toConcatedArrays, []);
             rangeHeight = 12;
             partLength = reyongPatternLength;
             emphasis = reyongPatternLength;

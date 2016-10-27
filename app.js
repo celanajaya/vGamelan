@@ -26,13 +26,10 @@ var jegoganRange = [].instrumentRange(5, 0, 5)
 var players = {};
 var analyzers = {};
 
-//initial arrays
+//initial arrays of buffer indices
 var reyong_part = [[],[],[],[]];
-var reyong_part_buffers = [[],[],[],[]];
 var pemade_part = [[],[]];
-var pemade_part_buffers = [[],[]];
 var kantilan_part = [[],[]];
-var kantilan_part_buffers = [[],[]];
 var neliti = [];
 var pokok = [];
 var jegogan = [];
@@ -292,7 +289,7 @@ function setAllParts() {
     jegogan = pokok.filter(function(n, i){return i%2 != 0});
 
     //set elaborations
-    setReyongPart(pokok);
+    // setReyongPart(pokok);
     setGangsaPart("kantilan", pokok);
     setGangsaPart("pemade", pokok);
 }

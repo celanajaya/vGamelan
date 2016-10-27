@@ -45,70 +45,79 @@ Array.prototype.toNotation = function(newLine) {
 
 
 //Kotekan Telu
+//Kotekan Pattern in buffers
 var makeTelu = 	{
     move: function(pokokTonePair) {
-    	var p = getTeluTones(pokokTonePair);
-        var movingContour = [t.y,t.z,t.x,t.y,t.z,t.x,t.y,t.z];
-		// console.log(movingContour);
-        return {
-			"polos_part" : ["-",p.tones.z,"-",p.tones.y,p.tones.z,"-",p.tones.y,p.tones.z],
-			"sangsih_part" : [p.tones.y,"-",p.tones.x,p.tones.y,"-",p.tones.x,p.tones.y,"-"],
-			"polos_buffer" : ["-",p.buffers.z,"-",p.buffers.y,p.buffers.z,"-",p.buffers.y,p.buffers.z],
-			"sangsih_buffer" : [p.buffers.y,"-",p.buffers.x,p.buffers.y,"-",p.buffers.x,p.buffers.y,"-"]
+    	var b = getTeluBuffers(pokokTonePair);
+        var composite = [b.y,b.z,b.x,b.y,b.z,b.x,b.y,b.z]
+		function splitPolosSangsih(elab, val) {
+			var gTone = composite[composite.length - 1];
+			if (val == gTone || Math.abs(val - gTone) == 1) {
+				elab[0].push(val)
+			}
+			if (val != gTone) {
+				elab[1].push(val)
+			}
+			return elab
 		}
+		return composite.reduce(splitPolosSangsih,[[],[]]);
     },
 
     //parameter 1: the previous and goal tone of the pokok
     //parameter 2: an array indicating staying pattern contour and rotation
     stay: function(pokokTonePair, stayingPattern) {
-		var t = getTeluTones(pokokTonePair);
+		var b = getTeluBuffers(pokokTonePair);
 		var stayingContours = [
-			[t.x,t.y,t.z,t.x,t.z,t.y,t.x,t.z],
-			[t.y,t.x,t.z,t.y,t.z,t.x,t.y,t.z],
-			[t.x,t.y,t.x,t.z,t.y,t.x,t.y,t.z]
+			[b.x,b.y,b.z,b.x,b.z,b.y,b.x,b.z],
+			[b.y,b.x,b.z,b.y,b.z,b.x,b.y,b.z],
+			[b.x,b.y,b.x,b.z,b.y,b.x,b.y,b.z]
 		];
-        var result = stayingContours[stayingPattern[0]].atRotation(stayingPattern[1]);
-		return result
+        var composite = stayingContours[stayingPattern[0]].atRotation(stayingPattern[1]);
+		function splitPolosSangsih(elab, val) {
+			var gTone = composite[composite.length - 1];
+			if (val == gTone || Math.abs(val - gTone) == 1) {
+				elab[0].push(val)
+			}
+			if (val != gTone) {
+				elab[1].push(val)
+			}
+			return elab
+		}
+		return composite.reduce(splitPolosSangsih,[[],[]])
     }
 }
 
-function getTeluTones(arr) {
+
+
+
+
+function getTeluBuffers(arr) {
 	//some cryptic shit to wrap the notes around correctly
 	//TODO: fix these hard-coded '5's to be the number of tones in the current scale
-	var x, y, z;
+	console.log(arr);
+	var x,y,z;
 	//need to determine octaves for buffers
-	var bX, bY, bZ;
-	z = arr[1];
+	var goalTone = arr[1];
+	if (goalTone < 4) {
+		z = gangsaRange[1].indexOf(goalTone) + 5
+	} else {
+		z = gangsaRange[0].indexOf(goalTone)
+	}
+
 	if (arr[0] > arr[1]) {
 		//descending
 		// console.log("descending");
 		y = z + 1;
 		x = z + 2;
-		//adjust y and x according to the limits of the scale
-		if (y > 5) { //wrapping around is necessary
-			y = 1;
-			if (x > 5) {
-				x = y === 1 ? 2 : 1;
-			}
-		}
+
 	} else {
 		//ascending
 		// console.log("ascending");
 		y = z - 1;
 		x = z - 2;
-		//adjust y and x according to the limits of the scale
-		if (y < 1) {
-			y = 5;
-			if (x < 1) {
-				x = y === 5 ? 4 : 5;
-			}
-		}
 	}
 
-	//flip the octave of either x or y
-
-	return {"tones" : {"x": x, "y": y, "z": z},
-			"buffers" : {"x":bX, "y":bY, "z":bZ};
+	return {"x": x, "y": y, "z": z}
 }
 
 //Basic Norot (reyong norot is in a separate file)
@@ -207,10 +216,9 @@ function makeNeliti(arr) {
 		if (num) {
 			newVal = val + 1;
 			return newVal > 5 ? 1:newVal
-
 		}
 		newVal = val - 1;
-		return newVal < 1 ? 5:newVal
+		return newVal < 1 ? -5:newVal
 	}
 
 	var n0;

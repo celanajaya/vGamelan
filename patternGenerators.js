@@ -9,7 +9,6 @@ function setReyongPart(pokok) {
             rPattern = rPattern.concat(patternFunction(i,j));
         }
         reyong_part[i] = rPattern;
-        reyong_part_buffers[i] = reyongToBuffer(rPattern, i)
     }
     // console.log("reyong part set:", reyong_part);
 }
@@ -41,25 +40,24 @@ function setGangsaPart(instrument, pokok) {
     }
     var polos = [];
     var sangsih = [];
-    for (var i = 0; i < pokok.length; i++) {
-        var cur = pokok[i]
-        var prev = i > 0 ? pokok[i-1]:pokok[pokok.length - 1];
-        polos = polos.concat(patternFunction("polos", [prev, cur]));
-        sangsih = sangsih.concat(patternFunction("sangsih", [prev, cur]));
-    }
 
-    //set two versions of each part one with solfege values and the other as buffer indices
+    var elab = pokok.reduce(function(elab, cur, i){
+        if (i % 2 != 0) {
+            var prev = i > 0 ? pokok[i - 1] : pokok[pokok.length - 1];
+            var pattern = patternFunction([prev, cur]);
+            elab[0].concat(pattern[0]);
+            elab[1].concat(pattern[1]);
+        }
+        return elab
+    }, [[],[]]);
+
     if (instrument === "pemade") {
-        pemade_part = [polos, sangsih];
-        pemade_part_buffers = [polos.map(gangsaToBuffer), sangsih.map(gangsaToBuffer)];
-        // console.log(instrument + " part set: ", pemade_part);
-        console.log(instrument + "buffers:", pemade_part_buffers);
+        pemade_part = elab;
+        console.log(instrument + " part set: ", pemade_part);
 
     } else {
-        kantilan_part = [polos, sangsih];
-        kantilan_part_buffers = [polos.map(gangsaToBuffer), sangsih.map(gangsaToBuffer)];
-        // console.log(instrument + " part set: ", kantilan_part);
-        console.log(instrument + "buffers:", kantilan_part_buffers);
+        kantilan_part = elab;
+        console.log(instrument + " part set: ", kantilan_part);
     }
 }
 
@@ -118,13 +116,6 @@ function getReyongKilitanAtIndex(position, index) {
     }
 }
 
-//TODO: refactor reyong pattern generation to follow this format
-function reyongToBuffer(pattern, pos) {
-    //assign octave based on the player position
-    // var octave = pos < 2 ? 0:1
-    // return pattern.map(function(n){return reyongRange[octave].indexOf(n)});
-    return pattern
-}
 
 //Gangsa
 function getGangsaNorotAtIndex(part, index) {
@@ -210,11 +201,11 @@ function getNgempat(num) {
 //take each sub-array and make sure the pitches are adjacent to the pokokTone (which is always the last one)
 //TELU HELPERS
 //pair == POKOK tones
-function getGangsaTeluAtIndex(part, pokokPair) {
+function getGangsaTeluAtIndex(pokokPair) {
     if (pokokPair[0] != pokokPair[1]) { //moving or staying
-        return makeTelu.move(pokokPair)[part];
+        return makeTelu.move(pokokPair);
     } else {
-        return makeTelu.stay(pokokPair, teluStayingPattern)[part];
+        return makeTelu.stay(pokokPair, teluStayingPattern);
     }
 }
 
