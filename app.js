@@ -70,11 +70,11 @@ function init() {
         Tone.Transport.bpm.value = tSlider.value;
     });
 
-    var vSlider = document.getElementById("master-volume-slider");
-    setSliderListener(vSlider, function() {
-        document.getElementById("masterVolume").innerHTML = vSlider.value;
-        Tone.Master.volume = tSlider.value;
-    });
+    // var vSlider = document.getElementById("master-volume-slider");
+    // setSliderListener(vSlider, function() {
+    //     document.getElementById("masterVolume").innerHTML = vSlider.value;
+    //     Tone.Master.volume = tSlider.value;
+    // });
     configureGong();
 };
 
@@ -97,8 +97,8 @@ function buildInstrument(config) {
     addControls(instrument);
 
     //Volume Stuff
-    // players[instrumentName].volume.value = -50;
-    // createVolumeSliderForInstrument(instrument);
+    players[instrumentName].volume.value = -50;
+    createVolumeSliderForInstrument(instrument);
 
     //generate keys/pots and add listeners
     for (var i = 0; i < numKeys; i++) {
@@ -289,7 +289,7 @@ function setAllParts() {
     jegogan = pokok.filter(function(n, i){return i%2 != 0});
 
     //set elaborations
-    // setReyongPart(pokok);
+    setReyongPart(pokok);
     setGangsaPart("kantilan", pokok);
     setGangsaPart("pemade", pokok);
 }

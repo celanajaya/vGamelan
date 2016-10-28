@@ -39,19 +39,19 @@ function createEditor(parent, totalHeight, totalWidth) {
         case"pemade":
             part = pemade_part.reduce(toConcatedArrays,[]);
             rangeHeight = gangsaRange.length;
-            partLength = gangsaPatternLength;
+            partLength = pokok.length * gangsaPatternLength;
             emphasis = gangsaPatternLength;
             break;
         case"kantilan":
             part = kantilan_part.reduce(toConcatedArrays, []);
-            partLength = gangsaPatternLength;
+            partLength = pokok.length * gangsaPatternLength;
             emphasis = gangsaPatternLength;
             rangeHeight = gangsaRange.length;
             break;
         case"reyong":
             part = reyong_part.reduce(toConcatedArrays, []);
             rangeHeight = 12;
-            partLength = reyongPatternLength;
+            partLength = pokok.length * reyongPatternLength;
             emphasis = reyongPatternLength;
             break;
     }
@@ -82,11 +82,11 @@ function createEditor(parent, totalHeight, totalWidth) {
 //actual length of the part
 function showPattern(instrumentName, part, rangeHeight, partLength) {
     part.forEach(function (buffer, index) {
-        var color = index > partLength ? "rgb(0,255,127)" : "rgb(232, 113, 228)"
+        // var color = index > partLength ? "rgb(0,255,127)" : "rgb(232, 113, 228)"
         if (buffer === "-") return;
         var id = instrumentName + "-" + (rangeHeight - buffer).toString() + "-" + (index % partLength).toString();
         d3.select("#" + id)
-            .attr('fill', color)
+            .attr('fill', "rgb(232, 113, 228)");
     });
 }
 

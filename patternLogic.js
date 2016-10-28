@@ -11,21 +11,11 @@ Array.prototype.atRotation = function (index) {
 
 //special hacky method for getting instrument ranges
 Array.prototype.instrumentRange = function(upperBound, lowerBound, mod) {
-	var arr;
 	if (lowerBound) {
-		 arr = Array.apply(null, Array(upperBound + lowerBound - 1)).map(function (_, i) {return (i%mod) + 1;}).slice(lowerBound - 1);
+        return Array.apply(null, Array(upperBound + lowerBound - 1)).map(function (_, i) {return (i%mod) + 1;}).slice(lowerBound - 1);
 	} else {
-		arr = Array.apply(null, Array(upperBound)).map(function (_, i) {return (i%mod) + 1;});
+		return Array.apply(null, Array(upperBound)).map(function (_, i) {return (i%mod) + 1;});
 	}
-	//divide by octave
-	return arr.reduce(function(a,b,i){
-		if (i % 5 == 0) {
-			a.push([b]);
-		} else {
-			a[a.length - 1].push(b);
-		}
-		return a
-	},[]);
 }
 
 //use when converting a kotekan part to an audio buffer number
@@ -48,76 +38,81 @@ Array.prototype.toNotation = function(newLine) {
 //Kotekan Pattern in buffers
 var makeTelu = 	{
     move: function(pokokTonePair) {
-    	var b = getTeluBuffers(pokokTonePair);
-        var composite = [b.y,b.z,b.x,b.y,b.z,b.x,b.y,b.z]
-		function splitPolosSangsih(elab, val) {
-			var gTone = composite[composite.length - 1];
-			if (val == gTone || Math.abs(val - gTone) == 1) {
-				elab[0].push(val)
-			}
-			if (val != gTone) {
-				elab[1].push(val)
-			}
-			return elab
+		var x,y,z;
+		//need to determine octaves for buffers
+        var pokokToBuffer = gangsaRange.indexOf(pokokTonePair[1]);
+        var z = Math.abs(pokokToBuffer) < 3 ? pokokToBuffer + 5 : pokokToBuffer;
+		if (pokokTonePair[0] > pokokTonePair[1]) {
+			//descending
+			y = z + 1;
+			x = z + 2;
+
+		} else {
+			//ascending
+			y = z - 1;
+			x = z - 2;
 		}
-		return composite.reduce(splitPolosSangsih,[[],[]]);
+
+		var variations = [[["-",z,"-",y,z,"-",y,z],[y,"-",x,y,"-",x,y,"-"]],
+                          [["-",z,"-",y,z,"-",y,z],[x,"-",x,y,"-",x,y,"-"]]];
+
+        return variations[rand()];
     },
 
     //parameter 1: the previous and goal tone of the pokok
     //parameter 2: an array indicating staying pattern contour and rotation
     stay: function(pokokTonePair, stayingPattern) {
-		var b = getTeluBuffers(pokokTonePair);
+		var x,y,z;
 		var stayingContours = [
-			[b.x,b.y,b.z,b.x,b.z,b.y,b.x,b.z],
-			[b.y,b.x,b.z,b.y,b.z,b.x,b.y,b.z],
-			[b.x,b.y,b.x,b.z,b.y,b.x,b.y,b.z]
+			['x','y','z','x','z','y','x','z'],
+			['y','x','z','y','z','x','y','z'],
+			['x','y','x','z','y','x','y','z']
 		];
-        var composite = stayingContours[stayingPattern[0]].atRotation(stayingPattern[1]);
-		function splitPolosSangsih(elab, val) {
-			var gTone = composite[composite.length - 1];
-			if (val == gTone || Math.abs(val - gTone) == 1) {
-				elab[0].push(val)
-			}
-			if (val != gTone) {
-				elab[1].push(val)
-			}
-			return elab
-		}
-		return composite.reduce(splitPolosSangsih,[[],[]])
+		var contour = stayingContours[stayingPattern[0]].atRotation(stayingPattern[1]);
+        var cValue = contour[contour.length - 1];
+        var pokokToBuffer = gangsaRange.indexOf(pokokTonePair[1]);
+        var goalTone = pokokToBuffer < 3 ? pokokToBuffer + 5 : pokokToBuffer;
+        var neg = false;
+
+        //TODO: add ability to toggle pos/neg values for nudge function, based on the direction the pattern came from
+        //sets variables based on the goal tone
+        switch (cValue) {
+            case "x":
+                var x = goalTone;
+                var y = nudge(x, 1, neg);
+                var z = nudge(x, 2, neg);
+                break;
+            case "y":
+                var y = goalTone;
+                var x = nudge(y, -1, neg);
+                var z = nudge(y, +1, neg);
+                break;
+            case "z":
+                var z = goalTone;
+                var y = nudge(z, -1, neg);
+                var x = nudge(z, -2, neg)
+                break;
+        }
+        //maps them to composite
+		var composite = contour.reduce(function(e,c){
+            switch(c) {
+                case "x":
+                    e[1].push(x);
+                    e[0].push("-");
+                    break;
+                case "y":
+                    e[1].push(y);
+                    e[0].push(y);
+                    break;
+                case "z":
+                    e[1].push("-");
+                    e[0].push(z);
+                    break;
+            }
+            return e;
+        },[[],[]]);
+        return composite;
     }
-}
-
-
-
-
-
-function getTeluBuffers(arr) {
-	//some cryptic shit to wrap the notes around correctly
-	//TODO: fix these hard-coded '5's to be the number of tones in the current scale
-	console.log(arr);
-	var x,y,z;
-	//need to determine octaves for buffers
-	var goalTone = arr[1];
-	if (goalTone < 4) {
-		z = gangsaRange[1].indexOf(goalTone) + 5
-	} else {
-		z = gangsaRange[0].indexOf(goalTone)
-	}
-
-	if (arr[0] > arr[1]) {
-		//descending
-		// console.log("descending");
-		y = z + 1;
-		x = z + 2;
-
-	} else {
-		//ascending
-		// console.log("ascending");
-		y = z - 1;
-		x = z - 2;
-	}
-
-	return {"x": x, "y": y, "z": z}
 }
 
 //Basic Norot (reyong norot is in a separate file)
@@ -208,7 +203,6 @@ var	makeNyogCag = {
 function makeNeliti(arr) {
 	//distance between any two pokok tones
 	var dif = Math.abs(arr[0] - arr[1]) % 5;
-	var rand = function(){ return Math.floor(Math.random() * 2)};
 
 	//bumps a note up or down by one scale degree
 	function bump(val,num) {
@@ -270,4 +264,13 @@ function makeNeliti(arr) {
 			break;
 	}
 	return [n0, arr[0], n1, arr[1]];
+}
+
+function rand() { return Math.floor(Math.random() * 2);}
+function nudge(val, inc, neg) {
+    if (neg) {
+        return val - inc;
+    } else {
+        return val + inc;
+    }
 }

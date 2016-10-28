@@ -27,25 +27,25 @@ function setLoop(instrument) {
         switch (instrument) {
             case "jegogan":
                 interval = "1n";
-                offset = "1:0:0";
+                offset += "1:0:0";
                 break;
             case "jublag":
                 interval = "2n";
-                offset = "0:1:4";
+                offset += "0:1:4";
                 break;
             case "penyacah":
             case "ugal":
                 interval = "4n";
-                offset = "0:0:4";
+                offset += "0:0:4";
                 break;
             case "pemade":
             case "kantilan":
                 interval = "16n";
-                offset = "0:0:4";
+                offset += "0:0:4";
                 break;
             case "reyong":
                 interval = "16n";
-                offset = "0:1:1";
+                offset += "0:1:1";
                 break;
         }
 
@@ -59,7 +59,6 @@ function setLoop(instrument) {
             buffers.forEach(function(buffer){
                 //return if it's a rest value
                 if (buffer === "-" || players[instrument].mute) return;
-
                 players[instrument].start(buffer);
                 players[instrument].stop(buffer, "+" + interval);
 
@@ -82,18 +81,20 @@ function readBuffers(instrument, index) {
         case "jublag":
             return [pokok[index % pokok.length] - 1];
         case "penyacah":
-            return [neliti[index % neliti.length] - 1];
+            var n = Math.abs(neliti[index % neliti.length]);
+            return [n - 1];
         case "ugal":
-            var lowOctaveBuffer = gangsaRange.indexOf(neliti[index % neliti.length]);
+            var n = Math.abs(neliti[index % neliti.length]);
+            var lowOctaveBuffer = gangsaRange.indexOf(n);
             return [lowOctaveBuffer + 5];
         case "pemade":
-            return [pemade_part[0][index % pokok.length * gangsaPatternLength],
-                    pemade_part[1][index % pokok.length * gangsaPatternLength]];
+            return [pemade_part[0][index % (pokok.length * gangsaPatternLength)],
+                    pemade_part[1][index % (pokok.length * gangsaPatternLength)]];
         case "kantilan":
-            return [kantilan_part[0][index % pokok.length * gangsaPatternLength],
-                    kantilan_part[1][index % pokok.length * gangsaPatternLength]];
+            return [kantilan_part[0][index % (pokok.length * gangsaPatternLength)],
+                    kantilan_part[1][index % (pokok.length * gangsaPatternLength)]];
         case "reyong":
-            return reyong_part_buffers.map(function(arr){return arr[index % (pokok.length * 8)]});
+            return reyong_part.map(function(arr){return arr[index % (pokok.length * reyongPatternLength)]});
     }
 }
 
@@ -116,6 +117,7 @@ function configureGong() {
     }).toMaster();
     players["gong"].fadeIn = 0.1;
     players["gong"].fadeOut = 0.3;
+    players["gong"].volume.value = -40;
 }
 
 //handle animations

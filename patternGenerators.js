@@ -10,7 +10,7 @@ function setReyongPart(pokok) {
         }
         reyong_part[i] = rPattern;
     }
-    // console.log("reyong part set:", reyong_part);
+    console.log("reyong part set:", reyong_part);
 }
 
 function setGangsaPart(instrument, pokok) {
@@ -38,16 +38,13 @@ function setGangsaPart(instrument, pokok) {
             patternFunction = getGangsaEmpatAtIndex;
             break;
     }
-    var polos = [];
-    var sangsih = [];
 
     var elab = pokok.reduce(function(elab, cur, i){
-        if (i % 2 != 0) {
-            var prev = i > 0 ? pokok[i - 1] : pokok[pokok.length - 1];
-            var pattern = patternFunction([prev, cur]);
-            elab[0].concat(pattern[0]);
-            elab[1].concat(pattern[1]);
-        }
+        var prev = i > 0 ? neliti[2*i - 1] : neliti[2*pokok.length - 1];
+        console.log(prev, cur);
+        var pattern = patternFunction([prev, cur]);
+        pattern[0].forEach(function(v){elab[0].push(v)});
+        pattern[1].forEach(function(v){elab[1].push(v)});
         return elab
     }, [[],[]]);
 
@@ -115,7 +112,6 @@ function getReyongKilitanAtIndex(position, index) {
         return e;
     }
 }
-
 
 //Gangsa
 function getGangsaNorotAtIndex(part, index) {
