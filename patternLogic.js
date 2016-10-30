@@ -37,18 +37,19 @@ Array.prototype.toNotation = function(newLine) {
 //Kotekan Telu
 //Kotekan Pattern in buffers
 var makeTelu = 	{
-    move: function(pokokTonePair) {
+    move: function(pokokBuffers) {
 		var x,y,z;
 		//need to determine octaves for buffers
-        var pokokToBuffer = gangsaRange.indexOf(pokokTonePair[1]);
-        var z = Math.abs(pokokToBuffer) < 3 ? pokokToBuffer + 5 : pokokToBuffer;
-		if (pokokTonePair[0] > pokokTonePair[1]) {
+        var z = pokokBuffers[1];
+		if (pokokBuffers[0] > pokokBuffers[1]) {
+            // console.log("descending");
 			//descending
 			y = z + 1;
 			x = z + 2;
 
 		} else {
 			//ascending
+            // console.log("ascending");
 			y = z - 1;
 			x = z - 2;
 		}
@@ -61,7 +62,8 @@ var makeTelu = 	{
 
     //parameter 1: the previous and goal tone of the pokok
     //parameter 2: an array indicating staying pattern contour and rotation
-    stay: function(pokokTonePair, stayingPattern) {
+    stay: function(pokokBuffers, stayingPattern) {
+        console.log("static");
 		var x,y,z;
 		var stayingContours = [
 			['x','y','z','x','z','y','x','z'],
@@ -70,8 +72,7 @@ var makeTelu = 	{
 		];
 		var contour = stayingContours[stayingPattern[0]].atRotation(stayingPattern[1]);
         var cValue = contour[contour.length - 1];
-        var pokokToBuffer = gangsaRange.indexOf(pokokTonePair[1]);
-        var goalTone = pokokToBuffer < 3 ? pokokToBuffer + 5 : pokokToBuffer;
+        var goalTone = pokokBuffers[1];
         var neg = false;
 
         //TODO: add ability to toggle pos/neg values for nudge function, based on the direction the pattern came from
@@ -90,7 +91,7 @@ var makeTelu = 	{
             case "z":
                 var z = goalTone;
                 var y = nudge(z, -1, neg);
-                var x = nudge(z, -2, neg)
+                var x = nudge(z, -2, neg);
                 break;
         }
         //maps them to composite
@@ -175,6 +176,7 @@ var	makeNyogCag = {
 		var z = arr[0];
 		var w, x, y;
 		if (arr[0] > arr[1]) {
+            console.log("descending", arr[0], arr[1]);
 			y = (arr[1] - 1) % 5;
 			x = (arr[1] - 2) % 5;
 			w = (arr[1] - 3) % 5;
@@ -209,10 +211,10 @@ function makeNeliti(arr) {
 		var newVal;
 		if (num) {
 			newVal = val + 1;
-			return newVal > 5 ? 1:newVal
+			return newVal > 5 ? 1 : newVal
 		}
 		newVal = val - 1;
-		return newVal < 1 ? -5:newVal
+		return newVal < 1 ? 5 : newVal
 	}
 
 	var n0;
@@ -263,14 +265,57 @@ function makeNeliti(arr) {
 			n1 = bump(arr[1], r);
 			break;
 	}
-	return [n0, arr[0], n1, arr[1]];
+	var initialTones = [n0, arr[0], n1, arr[1]];
+	return setBuffers(initialTones);
 }
 
 function rand() { return Math.floor(Math.random() * 2);}
+
 function nudge(val, inc, neg) {
     if (neg) {
         return val - inc;
     } else {
         return val + inc;
     }
+}
+
+function setBuffers(tones){
+//choose which ugal buffers to assign the neliti to, to make the smoothest contour
+    if (tones[1] == 5 && tones[3] == 1) {
+        return [2,3,5,4];
+    }
+    for (var i = 0; i < tones.length; i++) {
+        var cur = tones[i];
+        var prev = i != 0 ? tones[i - 1] : tones[tones.length- 1];
+        var prevPrev;
+        if ((i - 1) != 0) {
+            prevPrev = tones[i - 2];
+        }
+        if (cur === 1) {
+            tones[i] = gangsaRange.indexOf(cur);
+
+            if (prev === 5) {
+
+                if (prevPrev && prevPrev === 4) {
+
+                    tones[i - 2] = gangsaRange.indexOf(prevPrev);
+                }
+                if (i % 2 == 0) {
+                    tones[i - 1] = gangsaRange.indexOf(2) + 5;
+                } else {
+                    tones[i - 1] = gangsaRange.indexOf(prev);
+                }
+            }
+        } else {
+            tones[i] = gangsaRange.indexOf(cur) + 5;
+        }
+    }
+    var neg = true;
+    //check for repeated tones between the 2nd and 3rd notes
+    while (tones[1] == tones[2]) {
+        neg = !neg;
+        tones[2] = nudge(tones[3], -1, neg);
+    }
+    // console.log("neliti buffers", tones);
+    return tones;
 }

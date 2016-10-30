@@ -16,7 +16,6 @@ var patternTypes = [kKilitan, kNorot, kTelu, kEmpat, kNyogCag];
 
 //Instrument Ranges
 //an array showing the scale tones on the instrument
-//TODO: split up ranges by octave into multidimensional arrays
 var gangsaRange = [].instrumentRange(10, 2, 5);
 var reyongRange = [].instrumentRange(12, 3, 5);
 var jublagRange = [].instrumentRange(5, 0, 5);
@@ -33,7 +32,6 @@ var kantilan_part = [[],[]];
 var neliti = [];
 var pokok = [];
 var jegogan = [];
-resetElaborations();
 
 function resetElaborations() {
     reyong_part = [];
@@ -60,23 +58,27 @@ var meter = 8;
 
 //******Building UI**********
 function init() {
-    setAllParts()
+    setAllParts();
     instrumentConfig.forEach(buildInstrument);
     initializeMuteButtons();
     addDropDowns();
+    initializeTempoVolumeSliders()
+    configureGong();
+};
+
+function initializeTempoVolumeSliders(){
     var tSlider = document.getElementById("tempo-slider");
     setSliderListener(tSlider, function() {
         document.getElementById("tempoValue").innerHTML = tSlider.value;
         Tone.Transport.bpm.value = tSlider.value;
     });
 
-    // var vSlider = document.getElementById("master-volume-slider");
-    // setSliderListener(vSlider, function() {
-    //     document.getElementById("masterVolume").innerHTML = vSlider.value;
-    //     Tone.Master.volume = tSlider.value;
-    // });
-    configureGong();
-};
+    var vSlider = document.getElementById("master-volume-slider");
+    setSliderListener(vSlider, function() {
+        document.getElementById("masterVolume").innerHTML = vSlider.value;
+        Tone.Master.volume = tSlider.value;
+    });
+}
 
 function buildInstrument(config) {
     //grab the DOM element

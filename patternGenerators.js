@@ -39,12 +39,14 @@ function setGangsaPart(instrument, pokok) {
             break;
     }
 
-    var elab = pokok.reduce(function(elab, cur, i){
-        var prev = i > 0 ? neliti[2*i - 1] : neliti[2*pokok.length - 1];
-        console.log(prev, cur);
-        var pattern = patternFunction([prev, cur]);
-        pattern[0].forEach(function(v){elab[0].push(v)});
-        pattern[1].forEach(function(v){elab[1].push(v)});
+    var elab = neliti.reduce(function(elab, cur, i){
+        if (i % 2 != 0) {
+            var prev = i > 1 ? neliti[i - 2] : neliti[neliti.length - 1];
+            var pattern = patternFunction([prev, cur]);
+            //reduce/concat??
+            pattern[0].forEach(function (v) {elab[0].push(v)});
+            pattern[1].forEach(function (v) {elab[1].push(v)});
+        }
         return elab
     }, [[],[]]);
 

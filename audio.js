@@ -55,6 +55,9 @@ function setLoop(instrument) {
             q = [];
 
             //read the appropriate buffers for the index
+            if (instrument == "penyacah") {
+                return;
+            }
             var buffers = readBuffers(instrument, i);
             buffers.forEach(function(buffer){
                 //return if it's a rest value
@@ -81,12 +84,9 @@ function readBuffers(instrument, index) {
         case "jublag":
             return [pokok[index % pokok.length] - 1];
         case "penyacah":
-            var n = Math.abs(neliti[index % neliti.length]);
-            return [n - 1];
+            return [neliti[index % neliti.length]];
         case "ugal":
-            var n = Math.abs(neliti[index % neliti.length]);
-            var lowOctaveBuffer = gangsaRange.indexOf(n);
-            return [lowOctaveBuffer + 5];
+            return [neliti[index % neliti.length]];
         case "pemade":
             return [pemade_part[0][index % (pokok.length * gangsaPatternLength)],
                     pemade_part[1][index % (pokok.length * gangsaPatternLength)]];
