@@ -265,7 +265,12 @@ function initializeMuteButtons() {
 //TODO: fix cursor placement
 function configurePokokEditor() {
     var editor = document.getElementsByClassName("pokok-editor")[0];
-    editor.addEventListener("keyup", function(){
+    var val = editor.innerHTML
+    editor.addEventListener("keyup", function(e){
+        if (e.keyCode < 97 || e.keyCode > 101) {
+           editor.innerHTML = val;
+            return;
+        }
         var pArray = getPokokFromEditor();
         clearAllFromParent(editor, "gatra");
         pArray.toGatra(4, editor).forEach(function(g){editor.appendChild(g)});
