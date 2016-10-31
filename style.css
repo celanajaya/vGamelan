@@ -41,7 +41,7 @@ p {
     font-weight: 500;
 }
 
-.pokok {
+.pokok-editor {
     margin: 5px;
     border: 1px solid #ED33CF;
     border-radius: 15px;
@@ -87,7 +87,9 @@ p {
 
 .gatra {
     font-size: 40px;
-    width: 100%;
+    width: 50%;
+    padding: 10px;
+    display: inline-block;
 }
 
 .reyong {

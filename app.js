@@ -59,6 +59,7 @@ var meter = 8;
 //******Building UI**********
 function init() {
     setAllParts();
+    configurePokokEditor();
     instrumentConfig.forEach(buildInstrument);
     initializeMuteButtons();
     addDropDowns();
@@ -261,16 +262,36 @@ function initializeMuteButtons() {
         })
     }
 }
-//**********User Interactions***********
-function getPokokFromUser(){
-    document.getElementsByClassName("pokok")[0].childNodes.forEach(function(element){
-        if (element.className === 'gatra') {
-            for (var i = 0; i < element.innerHTML.length; i++){
-                pokok.push(parseInt(element.innerHTML[i]));
-            }
-        }
+//TODO: fix cursor placement
+function configurePokokEditor() {
+    var editor = document.getElementsByClassName("pokok-editor")[0];
+    editor.addEventListener("keyup", function(){
+        var pArray = getPokokFromEditor();
+        clearAllFromParent(editor, "gatra");
+        pArray.toGatra(4, editor).forEach(function(g){editor.appendChild(g)});
     });
-    return pokok;
+}
+
+function clearAllFromParent(parent, className) {
+    var children = Array.prototype.slice.call(parent.childNodes)
+    var elementsToRemove = children.filter(function(item) {return item.className === className});
+    elementsToRemove.forEach(function(gatra){parent.removeChild(gatra)});
+}
+//**********User Interactions***********
+function getPokokFromEditor(){
+    var elements = Array.prototype.slice.call(document.getElementsByClassName("pokok-editor")[0].childNodes);
+    var pArray = elements.reduce(function(p, element){
+        if (element.className === 'gatra') {
+            var a = element.innerHTML.split("");
+            p = p.concat(a);
+        }
+        return p;
+    },[]);
+    return pArray;
+}
+
+function setPokokArray() {
+    pokok = getPokokFromEditor();
 }
 
 function start(event) {
@@ -286,7 +307,7 @@ function setAllParts() {
     resetElaborations();
 
     //set basic melody parts
-    pokok = getPokokFromUser();
+    setPokokArray();
     setNeliti(pokok);
     jegogan = pokok.filter(function(n, i){return i%2 != 0});
 

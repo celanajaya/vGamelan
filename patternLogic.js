@@ -33,9 +33,25 @@ Array.prototype.toNotation = function(newLine) {
     }).join(" ");
 }
 
+//moves any extra items to a new gatra
+Array.prototype.toGatra = function(mod, parent) {
+    return this.reduce(function(gatras, item, index){
+        if (index % mod === 0) {
+            var newGatra = document.createElement("div");
+            newGatra.classList.add("gatra");
+            newGatra.innerHTML = item;
+            gatras.push(newGatra)
+        } else {
+            gatras[gatras.length - 1].innerHTML += item;
+        }
+        return gatras;
+    }, []);
+};
 
 //Kotekan Telu
 //Kotekan Pattern in buffers
+//consists of two pattern functions and
+//some state information (lastMove), which indicates the last moving pattern
 var makeTelu = 	{
     move: function(pokokBuffers) {
 		var x,y,z;
@@ -43,6 +59,7 @@ var makeTelu = 	{
         var z = pokokBuffers[1];
 		if (pokokBuffers[0] > pokokBuffers[1]) {
             // console.log("descending");
+            this["lastMove"] = "descending";
 			//descending
 			y = z + 1;
 			x = z + 2;
@@ -50,7 +67,8 @@ var makeTelu = 	{
 		} else {
 			//ascending
             // console.log("ascending");
-			y = z - 1;
+            this["lastMove"] = "descending";
+            y = z - 1;
 			x = z - 2;
 		}
 
@@ -73,10 +91,10 @@ var makeTelu = 	{
 		var contour = stayingContours[stayingPattern[0]].atRotation(stayingPattern[1]);
         var cValue = contour[contour.length - 1];
         var goalTone = pokokBuffers[1];
-        var neg = false;
+        //choose the three elaboration tones based whether we arrived at that note from above or below
+        var neg = this.lastMove === "descending";
 
-        //TODO: add ability to toggle pos/neg values for nudge function, based on the direction the pattern came from
-        //sets variables based on the goal tone
+        //sets telu notes based on contour
         switch (cValue) {
             case "x":
                 var x = goalTone;
@@ -95,7 +113,7 @@ var makeTelu = 	{
                 break;
         }
         //maps them to composite
-		var composite = contour.reduce(function(e,c){
+		var kotekan = contour.reduce(function(e,c){
             switch(c) {
                 case "x":
                     e[1].push(x);
@@ -112,7 +130,7 @@ var makeTelu = 	{
             }
             return e;
         },[[],[]]);
-        return composite;
+        return kotekan;
     }
 }
 
@@ -130,7 +148,6 @@ var makeNorot = {
         return [y, x, y, x, z, z, w, z];
     }
 }
-
 
 var makeEmpat = {
 	move: function(arr, part) {
