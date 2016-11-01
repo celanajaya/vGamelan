@@ -265,22 +265,33 @@ function initializeMuteButtons() {
 //TODO: fix cursor placement
 function configurePokokEditor() {
     var editor = document.getElementsByClassName("pokok-editor")[0];
-    var val = editor.innerHTML
+    var val = editor.innerHTML;
+    var savedOffset;
+
+    editor.addEventListener("keydown", function(e){
+        var r = window.getSelection().getRangeAt(0);
+        savedOffSet = [r.offsetStart];
+    });
+
     editor.addEventListener("keyup", function(e){
-        if (e.keyCode < 97 || e.keyCode > 101) {
-           editor.innerHTML = val;
+        if (e.keyCode < 49 || e.keyCode > 54) {
+            editor.innerHTML = val;
             return;
         }
         var pArray = getPokokFromEditor();
         clearAllFromParent(editor, "gatra");
         pArray.toGatra(4, editor).forEach(function(g){editor.appendChild(g)});
+        var r = document.createRange()
+        r.setStart(editor.lastChild, savedOffset);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(r)
     });
 }
 
 function clearAllFromParent(parent, className) {
     var children = Array.prototype.slice.call(parent.childNodes)
     var elementsToRemove = children.filter(function(item) {return item.className === className});
-    elementsToRemove.forEach(function(gatra){parent.removeChild(gatra)});
+    elementsToRemove.forEach(function(c){parent.removeChild(c)});
 }
 //**********User Interactions***********
 function getPokokFromEditor(){
