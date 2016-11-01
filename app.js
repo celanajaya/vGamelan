@@ -43,8 +43,8 @@ function resetElaborations() {
 }
 
 //default settings
-var pemadePatternType = patternTypes[2];
-var kantilanPatternType = patternTypes[2];
+var pemadePatternType = patternTypes[1];
+var kantilanPatternType = patternTypes[1];
 var reyongPatternType = patternTypes[1];
 var teluStayingPattern = [0,0];
 var empatStayingPattern = [0,0];
@@ -190,12 +190,22 @@ function addDropDowns() {
                 dropDownText = pemadePatternType;
                 break;
         }
-        dropDown.textContent = dropDownText + " ";
-
         // var caret = document.createElement("span");
         // caret.classList.add("caret");
+        // caret.classList.add("up");
         // caret.innerHTML = "▾";
+        // caret.addEventListener("click", function(){
+        //    if (caret.classList.contains("up")) {
+        //        caret.classList.remove("up");
+        //        caret.classList.add("down");
+        //    } else {
+        //        caret.classList.remove("down");
+        //        caret.classList.add("up");
+        //    }
+        // });
 
+        dropDown.textContent = dropDownText;
+        dropDown.appendChild(caret);
         container.appendChild(dropDown);
 
         var dropDownContent = document.createElement("div");
@@ -217,6 +227,8 @@ function addDropDowns() {
                     if (event.target.isGangsaPattern) {
                         pemadePatternType = event.target.textContent;
                         kantilanPatternType = event.target.textContent;
+                        setGangsaPart("pemade", pokok);
+                        setGangsaPart("kantilan", pokok);
                     } else {
                         reyongPatternType = event.target.textContent;
                     }
@@ -266,11 +278,11 @@ function initializeMuteButtons() {
 function configurePokokEditor() {
     var editor = document.getElementsByClassName("pokok-editor")[0];
     var val = editor.innerHTML;
-    var savedOffset;
+    var savedOffset = 0;
 
     editor.addEventListener("keydown", function(e){
         var r = window.getSelection().getRangeAt(0);
-        savedOffSet = [r.offsetStart];
+        savedOffset = [r.offsetStart];
     });
 
     editor.addEventListener("keyup", function(e){
@@ -307,7 +319,7 @@ function getPokokFromEditor(){
 }
 
 function setPokokArray() {
-    pokok = getPokokFromEditor();
+    pokok = getPokokFromEditor().map(function(n){return parseInt(n)});
 }
 
 function start(event) {

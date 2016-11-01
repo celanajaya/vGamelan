@@ -10,7 +10,7 @@ function setReyongPart(pokok) {
         }
         reyong_part[i] = rPattern;
     }
-    console.log("reyong part set:", reyong_part);
+    // console.log("reyong part set:", reyong_part);
 }
 
 function setGangsaPart(instrument, pokok) {
@@ -52,11 +52,11 @@ function setGangsaPart(instrument, pokok) {
 
     if (instrument === "pemade") {
         pemade_part = elab;
-        console.log(instrument + " part set: ", pemade_part);
+        // console.log(instrument + " part set: ", pemade_part);
 
     } else {
         kantilan_part = elab;
-        console.log(instrument + " part set: ", kantilan_part);
+        // console.log(instrument + " part set: ", kantilan_part);
     }
 }
 
@@ -64,7 +64,7 @@ function setNeliti(pokok) {
     for (var i = 1; i < pokok.length; i+=2) {
         neliti = neliti.concat(makeNeliti([pokok[i-1], pokok[i]]));
     }
-    console.log("neliti set: ", neliti);
+    // console.log("neliti set: ", neliti);
 }
 
 //************Pattern Calculation Methods*********************
@@ -207,20 +207,13 @@ function getGangsaTeluAtIndex(pokokPair) {
     }
 }
 
-// function getGangsaNyogCagAtIndex(part, index) {
-//     var currentNote = pokok[index];
-//     var previousNote = pokok[index - 1];
-//     if (!previousNote) {
-//         previousNote = pokok[pokok.length - 1];
-//     }
-//     if (currentNote !== previousNote) {
-//         return makeNyogCag.move([previousNote, currentNote], 0)
-//             .map(scaleDegreeToGangsaKey);
-//     } else {
-//         return makeNyogCag.stay([previousNote, currentNote], 0)
-//             .map(scaleDegreeToGangsaKey);
-//     }
-// }
+function getGangsaNyogCagAtIndex(pokokPair) {
+    if (pokokPair[0] !== pokokPair[1]) {
+        return makeNyogCag.move(pokokPair);
+    } else {
+        return makeNyogCag.stay(pokokPair);
+    }
+}
 //
 // function getGangsaEmpatAtIndex(part, index) {
 //     var currentNote = pokok[index];

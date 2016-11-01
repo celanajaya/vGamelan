@@ -147,7 +147,6 @@ p {
     border-radius: 5px;
     margin-top: 10px;
     box-shadow: 0.5px 0.5px 0.5px #555
-
 }
 
 #start {
@@ -214,16 +213,21 @@ p {
     margin:10px;
 }
 
+.up {
+    transform: rotate(0deg);
+    transition: transform 1s linear;
+}
+
+.down {
+    transform: rotate(180deg);
+    transition: transform 1s linear;
+}
+
 @keyframes example {
     from {background-color: #fff;
           box-shadow: inset 0px 0px 0px #E871E4;}
     to {background-color: #ED33CF;
         box-shadow: inset 0px 0px 40px #fff ;}
-}
-
-@keyframes rotate {
-    from {transform: rotate(0deg);}
-    to {transform: rotate(270deg);}
 }
 
 @keyframes show {
