@@ -62,7 +62,7 @@ function setLoop(instrument) {
             buffers.forEach(function(buffer){
                 //return if it's a rest value
                 if (buffer === "-" || players[instrument].mute) return;
-                players[instrument].start(buffer);
+                players[instrument].start(buffer, time);
                 players[instrument].stop(buffer, "+" + interval);
 
                 //add the note to be turned on

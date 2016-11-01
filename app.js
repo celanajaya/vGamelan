@@ -340,7 +340,7 @@ document.getElementsByClassName("playback")[0].addEventListener("click", functio
 function activateTransport() {
     Tone.Transport.loopStart = 0;
     Tone.Transport.loopEnd = (pokok.length / 2).toString() + "m";
-    Tone.Transport.start(0);
+    Tone.Transport.start();
 }
 
 
