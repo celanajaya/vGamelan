@@ -62,7 +62,6 @@ function init() {
     configurePokokEditor();
     instrumentConfig.forEach(buildInstrument);
     initializeMuteButtons();
-    addDropDowns();
     initializeTempoVolumeSliders()
     configureGong();
 };
@@ -97,7 +96,7 @@ function buildInstrument(config) {
     players[instrumentName].chain(analyzers[instrumentName], Tone.Master);
 
     //Controls Stuff
-    addControls(instrument);
+    addControlsForInstrument(instrument);
 
     //Volume Stuff
     players[instrumentName].volume.value = -50;
@@ -118,7 +117,7 @@ function buildInstrument(config) {
     analyzers[instrumentName].svg = createAnalyzer("#" + config[0], instrument.offsetHeight/2, instrument.offsetWidth);
 }
 
-function addControls(instrument) {
+function addControlsForInstrument(instrument) {
     var controls = document.createElement("div");
     controls.classList.add("controls");
     controls.id = instrument.id + "-controls";
@@ -143,6 +142,18 @@ function addControls(instrument) {
         }
         controlItemContainer.appendChild(cItem);
     }
+    //add elaboration dropdowns for elaborating instruments only
+    switch (instrument.id) {
+        case "pemade":
+        case "kantilan":
+        case "reyong":
+            var dropdownContainer = controlItemContainer.lastChild;
+            addDropDownContentForInstrument(instrument.id, dropdownContainer);
+            break;
+        default:
+            break;
+    }
+
     controls.appendChild(controlItemContainer);
     instrument.appendChild(controls);
     createEditor("#" + controls.id, controls.offsetHeight, controls.offsetWidth);
@@ -169,74 +180,72 @@ function createVolumeSliderForInstrument(instrument) {
     document.getElementById("mixer-controls").appendChild(volumeSliderContainer);
 }
 
-function addDropDowns() {
-    var containers = document.getElementsByClassName("dropdown-container");
-
-    for (var i = 0; i < 3; i++) {
-        //for the elaborating instruments
-        var container = containers[i];
-
-        var dropDown = document.createElement("div");
-        dropDown.className = "dropdown";
-        var dropDownText;
-        switch(i) {
-            case 0:
-                dropDownText = reyongPatternType;
-                break;
-            case 1:
-                dropDownText = kantilanPatternType;
-                break;
-            case 2:
-                dropDownText = pemadePatternType;
-                break;
-        }
-        // var caret = document.createElement("span");
-        // caret.classList.add("caret");
-        // caret.classList.add("up");
-        // caret.innerHTML = "▾";
-        // caret.addEventListener("click", function(){
-        //    if (caret.classList.contains("up")) {
-        //        caret.classList.remove("up");
-        //        caret.classList.add("down");
-        //    } else {
-        //        caret.classList.remove("down");
-        //        caret.classList.add("up");
-        //    }
-        // });
-
-        dropDown.textContent = dropDownText;
-        dropDown.appendChild(caret);
-        container.appendChild(dropDown);
-
-        var dropDownContent = document.createElement("div");
-        dropDownContent.className = "dropdown-content";
-        dropDown.appendChild(dropDownContent);
-
-
-        for (var j = 0; j < patternTypes.length; j++) {
-            var isReyongPattern = (i === 0 && j < 2);
-            var isGangsaPattern = (i > 0 && j > 0);
-            if (isReyongPattern || isGangsaPattern) {
-                var menuItem = document.createElement("p");
-                menuItem.isReyongPattern = isReyongPattern;
-                menuItem.isGangsaPattern = isGangsaPattern;
-                menuItem.innerHTML = patternTypes[j];
-                menuItem.addEventListener("click", function(event){
-                    var dropDownTextNode = event.target.parentElement.parentElement.childNodes[0];
-                    dropDownTextNode.data = event.target.textContent;
-                    if (event.target.isGangsaPattern) {
-                        pemadePatternType = event.target.textContent;
-                        kantilanPatternType = event.target.textContent;
-                        setGangsaPart("pemade", pokok);
-                        setGangsaPart("kantilan", pokok);
-                    } else {
-                        reyongPatternType = event.target.textContent;
-                    }
-                });
-                dropDownContent.appendChild(menuItem);
-            }
-        };
+function addDropDownContentForInstrument(instrumentName, container) {
+    var dropDown = document.createElement("div");
+    dropDown.className = "dropdown";
+    var dropDownText;
+    var pTypes;
+    switch(instrumentName) {
+        case "reyong":
+            dropDownText = reyongPatternType;
+            pTypes = patternTypes.slice(0, -3);
+            break;
+        case "kantilan":
+            pTypes = patternTypes.slice(1);
+            dropDownText = kantilanPatternType;
+            break;
+        case "pemade":
+            pTypes = patternTypes.slice(1);
+            dropDownText = pemadePatternType;
+            break;
     }
+
+    dropDown.textContent = dropDownText;
+    dropDown.appendChild(createCaret());
+    container.appendChild(dropDown);
+
+    var dropDownContent = document.createElement("div");
+    dropDownContent.className = "dropdown-content";
+    dropDownContent.id = dropDownContent.className + "-" + instrumentName;
+    dropDown.appendChild(dropDownContent);
+    dropDown.addEventListener("click", function(){
+        toggleClass(dropDownContent, "show");
+    })
+
+    pTypes.forEach(function(pType) {
+        var menuItem = document.createElement("p");
+        menuItem.innerHTML = pType;
+        menuItem.addEventListener("click", function (event) {
+            var dropDownTextNode = event.target.parentElement.parentElement.childNodes[0];
+            dropDownTextNode.data = event.target.textContent;
+            switch (instrumentName) {
+                case"reyong":
+                    reyongPatternType = event.target.textContent;
+                    setReyongPart(pokok);
+                    showPattern(instrumentName, reyong_part.reduce(toConcatedArrays), 12, reyongPatternLength * pokok.length);
+                    break;
+                case"kantilan":
+                    kantilanPatternType = event.target.textContent;
+                    setGangsaPart("kantilan", pokok);
+                    showPattern(instrumentName, kantilan_part.reduce(toConcatedArrays), 10, gangsaPatternLength * pokok.length);
+                    break;
+                case "pemade":
+                    pemadePatternType = event.target.textContent;
+                    setGangsaPart("pemade", pokok);
+                    showPattern(instrumentName, pemade_part.reduce(toConcatedArrays), 10, gangsaPatternLength * pokok.length);
+                    break;
+            }
+        });
+        dropDownContent.appendChild(menuItem);
+    });
+}
+
+function createCaret(){
+    var caret = document.createElement("span");
+    caret.className = "caret";
+    caret.classList.add("up");
+    caret.innerHTML = " ▾";
+    return caret;
 }
 
 function setSliderListener(slider, listenerFunction) {
@@ -364,6 +373,14 @@ function activateTransport() {
     Tone.Transport.loopStart = 0;
     Tone.Transport.loopEnd = (pokok.length / 2).toString() + "m";
     Tone.Transport.start();
+}
+
+function toggleClass(el, className) {
+    if (el.classList.contains(className)) {
+        el.classList.remove(className)
+    } else {
+        el.classList.add(className)
+    }
 }
 
 

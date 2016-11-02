@@ -1,57 +1,7 @@
 //These method deal with pattern logic at its most abstract
 //Should be flexible enough to handle any type of scale/tuning system
 
-//SPECIAL ARRAY METHODS
-
-//special method for rotating arrays
-Array.prototype.atRotation = function (index) {
-	//return a rotated version of the array
-	return this.slice(index, this.length).concat(this.slice(0, index));
-}
-
-//special hacky method for getting instrument ranges
-Array.prototype.instrumentRange = function(upperBound, lowerBound, mod) {
-	if (lowerBound) {
-        return Array.apply(null, Array(upperBound + lowerBound - 1)).map(function (_, i) {return (i%mod) + 1;}).slice(lowerBound - 1);
-	} else {
-		return Array.apply(null, Array(upperBound)).map(function (_, i) {return (i%mod) + 1;});
-	}
-}
-
-//use when converting a kotekan part to an audio buffer number
-Array.prototype.indexForValue = function(value) {
-    return value === "-" ? "-" : this.indexOf(value);
-};
-
-Array.prototype.toNotation = function(newLine) {
-    return this.map(function(item, index){
-        if (index % newLine === newLine - 1) {
-            return item.toString() + "<br>";
-        } else {
-            return item.toString()
-        }
-    }).join(" ");
-}
-
-//moves any extra items to a new gatra
-Array.prototype.toGatra = function(mod, parent) {
-    return this.reduce(function(gatras, item, index){
-        if (index % mod === 0) {
-            var newGatra = document.createElement("div");
-            newGatra.classList.add("gatra");
-            newGatra.innerHTML = item;
-            gatras.push(newGatra)
-        } else {
-            gatras[gatras.length - 1].innerHTML += item;
-        }
-        return gatras;
-    }, []);
-};
-
 //Kotekan Telu
-//Kotekan Pattern in buffers
-//consists of two pattern functions and
-//some state information (lastMove), which indicates the last moving pattern
 var makeTelu = 	{
     move: function(pokokBuffers) {
 		var x,y,z;
@@ -137,15 +87,66 @@ var makeTelu = 	{
 //Basic Norot (reyong norot is in a separate file)
 var makeNorot = {
     basicNorot: function(arr) {
-        var x = arr[0];
-        var y = (arr[0] + 1) > 5 ? 1:(arr[0] + 1);
-        var z = arr[1];
-        var w = (arr[1] + 1) > 5 ? 1:(arr[1] + 1);
+		//Norot Helpers
+//TODO: refactor indices to account for multiple elaboration pattern lengths
+		function fastMovingPolos(value, index) {
+			switch (index) {
+				case 1:
+				case 3:
+				case 4:
+				case 5:
+				case 7:
+					return value;
+				default:
+					return "-";
+			}
+		}
 
-        if (arr[0] === arr[1]) {
-            return [y, x, y, x, y, x, y, x];
-        }
-        return [y, x, y, x, z, z, w, z];
+		function fastStayingPolos(value, index) {
+			if (index % 2 != 0) {
+				return value;
+			} else {
+				return "-"
+			}
+		}
+
+		function fastMovingSangsih(value, index) {
+			switch (index) {
+				case 0:
+				case 2:
+				case 4:
+				case 5:
+				case 6:
+					return value;
+				default:
+					return "-";
+			}
+		}
+
+		function fastStayingSangsih(value, index) {
+			if (index % 2 === 0) {
+				return value;
+			} else {
+				return "-"
+			}
+		}
+
+        var x = arr[0];
+        var y = (arr[0] + 1);
+        var z = arr[1];
+        var w = (arr[1] + 1);
+
+		var composite = arr[0] === arr[1] ? [y, x, y, x, y, x, y, x] : [y, x, y, x, z, z, w, z];
+
+		//turn elaboration in to polos/sangsih
+		if (Tone.Transport.bpm.value > 90) {
+			if (arr[0] === arr[1]) {
+				return [composite.map(fastStayingPolos), composite.map(fastStayingSangsih)];
+			}
+			return [composite.map(fastMovingSangsih), composite.map(fastMovingPolos)];
+		} else {
+			return [composite, composite.map(getNgempat)];
+		}
     }
 }
 
@@ -217,122 +218,4 @@ var	makeNyogCag = {
 		if (!contourType) contourType = 0;
 		return options[contourType];
 	}
-}
-
-function makeNeliti(arr) {
-	//distance between any two pokok tones
-	var dif = Math.abs(arr[0] - arr[1]) % 5;
-
-	//bumps a note up or down by one scale degree
-	function bump(val,num) {
-		var newVal;
-		if (num) {
-			newVal = val + 1;
-			return newVal > 5 ? 1 : newVal
-		}
-		newVal = val - 1;
-		return newVal < 1 ? 5 : newVal
-	}
-
-	var n0;
-	var n1;
-
-	//layout contour choices based on distance between two pokok tones
-	switch (dif) {
-		case 0:
-			//same pitch - sinusoidal around note or upper/lower neighbor
-			r = rand();
-			if (rand()) {
-				//upper or lower neighbor
-				n0 = bump(arr[0], r);
-				n1 = bump(arr[1], r);
-			} else {
-				//sinusoid
-				n0 = bump(arr[0], !r);
-				n1 = bump(arr[1], r);
-			}
-			break;
-		case 1:
-			//adjacent - neighbors should surround pokok tones to create "gap fill"
-			r = arr[0] > arr[1] ? 1:0;
-			n0 = bump(arr[0], r);
-			n1 = bump(arr[1], !r);
-			break;
-		case 2:
-			//two apart - either spoon, or line contour
-			//bumps upper neighbors for descending contours, lower neighbors for ascending
-			r = arr[0] > arr[1] ? 1:0;
-
-			if (rand()) {
-				//line (all uppers or lowers)
-				n0 = bump(arr[0], r);
-				n1 = bump(arr[1], r);
-			} else {
-				//spoon (inner note, 'lower of upper' and vice versa)
-				n0 = bump(arr[0], !r);
-				n1 = bump(arr[1], r);
-			}
-
-			break;
-		case 3:
-		case 4:
-			//fill gaps for wide distances
-			var r = arr[0] > arr[1] ? 0:1;
-			n0 = bump(arr[0], r);
-			n1 = bump(arr[1], r);
-			break;
-	}
-	var initialTones = [n0, arr[0], n1, arr[1]];
-	return setBuffers(initialTones);
-}
-
-function rand() { return Math.floor(Math.random() * 2);}
-
-function nudge(val, inc, neg) {
-    if (neg) {
-        return val - inc;
-    } else {
-        return val + inc;
-    }
-}
-
-function setBuffers(tones){
-//choose which ugal buffers to assign the neliti to, to make the smoothest contour
-    if (tones[1] == 5 && tones[3] == 1) {
-        return [2,3,5,4];
-    }
-    for (var i = 0; i < tones.length; i++) {
-        var cur = tones[i];
-        var prev = i != 0 ? tones[i - 1] : tones[tones.length- 1];
-        var prevPrev;
-        if ((i - 1) != 0) {
-            prevPrev = tones[i - 2];
-        }
-        if (cur === 1) {
-            tones[i] = gangsaRange.indexOf(cur);
-
-            if (prev === 5) {
-
-                if (prevPrev && prevPrev === 4) {
-
-                    tones[i - 2] = gangsaRange.indexOf(prevPrev);
-                }
-                if (i % 2 == 0) {
-                    tones[i - 1] = gangsaRange.indexOf(2) + 5;
-                } else {
-                    tones[i - 1] = gangsaRange.indexOf(prev);
-                }
-            }
-        } else {
-            tones[i] = gangsaRange.indexOf(cur) + 5;
-        }
-    }
-    var neg = true;
-    //check for repeated tones between the 2nd and 3rd notes
-    while (tones[1] == tones[2]) {
-        neg = !neg;
-        tones[2] = nudge(tones[3], -1, neg);
-    }
-    // console.log("neliti buffers", tones);
-    return tones;
 }

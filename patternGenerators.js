@@ -116,76 +116,8 @@ function getReyongKilitanAtIndex(position, index) {
 }
 
 //Gangsa
-function getGangsaNorotAtIndex(part, index) {
-    var currentNote = pokok[index];
-    var previousNote = pokok[index - 1];
-    if (!previousNote) {
-        previousNote = pokok[pokok.length - 1];
-    }
-
-    var composite = makeNorot.basicNorot([previousNote, currentNote]);
-    if (Tone.Transport.bpm.value > 90) {
-        if (part === "sangsih") {
-            if (previousNote === currentNote) {
-                return composite.map(fastStayingSangsih);
-            }
-            return composite.map(fastMovingSangsih);
-        } else {
-            if (previousNote === currentNote) {
-                return composite.map(fastStayingPolos);
-            }
-            return composite.map(fastMovingPolos);
-        }
-    } else {
-        if (part === "sangsih"){
-            return composite.map(getNgempat);
-        }
-    }
-    return composite;
-}
-
-//Norot Helpers
-//TODO: refactor indices to account for multiple elaboration pattern lengths
-function fastMovingPolos(value, index) {
-    switch (index) {
-        case 1:
-        case 3:
-        case 4:
-        case 5:
-        case 7:
-            return value;
-        default:
-            return "-";
-    }
-}
-
-function fastStayingPolos(value, index) {
-    if (index % 2 != 0) {
-        return value;
-    } else {
-        return "-"
-    }
-}
-
-function fastMovingSangsih(value, index) {
-    switch (index) {
-        case 0:
-        case 2:
-        case 4:
-        case 5:
-        case 6:
-            return value;
-        default:
-            return "-";
-    }
-}
-
-function fastStayingSangsih(value, index) {
-    if (index % 2 === 0) {
-        return value;
-    } else {
-        return "-"
-    }
+function getGangsaNorotAtIndex(pokokPair) {
+    return makeNorot.basicNorot(pokokPair);
 }
 
 function getNgempat(num) {

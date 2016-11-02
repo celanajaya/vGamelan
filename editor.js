@@ -10,6 +10,7 @@ function createEditor(parent, totalHeight, totalWidth) {
     var emphasis;
 
     var svg = d3.select(parent).append('svg').attr('height', totalHeight).attr('width', totalWidth);
+    svg.attr("id", instrumentName + "-svg");
 
     //configure dimensions based on pattern/instrument properties
     switch (instrumentName) {
@@ -81,6 +82,7 @@ function createEditor(parent, totalHeight, totalWidth) {
 //takes a string for the instrument name, a flattened (polos and sangsih, etc...) array of buffers, the total range of the instrument, and the
 //actual length of the part
 function showPattern(instrumentName, part, rangeHeight, partLength) {
+    clearAllForInstrument(instrumentName);
     part.forEach(function (buffer, index) {
         // var color = index > partLength ? "rgb(0,255,127)" : "rgb(232, 113, 228)"
         if (buffer === "-") return;
@@ -90,10 +92,8 @@ function showPattern(instrumentName, part, rangeHeight, partLength) {
     });
 }
 
-function clearAllSvg(){
-    d3.selectAll("rect")
-        .attr('fill', "rgb(220, 220, 220)");
-
+function clearAllForInstrument(instrumentName){
+    d3.select("#" + instrumentName + "-svg").selectAll("rect").attr('fill', "rgb(220, 220, 220)");
 }
 
 function toConcatedArrays(a,b) {return a.concat(b)}
