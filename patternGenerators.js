@@ -23,18 +23,24 @@ function setGangsaPart(instrument, pokok) {
         kantilan_part = [];
     } else {
         patternType = pemadePatternType;
+        pemade_part = [];
     }
+    var type;
     switch (patternType) {
         case kTelu:
+            type = " telu";
             patternFunction = getGangsaTeluAtIndex;
             break;
         case kNorot:
+            type = " norot";
             patternFunction = getGangsaNorotAtIndex;
             break;
         case kNyogCag:
+            type = " nyogcag";
             patternFunction = getGangsaNyogCagAtIndex;
             break;
         case kEmpat:
+            type = " empat";
             patternFunction = getGangsaEmpatAtIndex;
             break;
     }
@@ -52,11 +58,11 @@ function setGangsaPart(instrument, pokok) {
 
     if (instrument === "pemade") {
         pemade_part = elab;
-        // console.log(instrument + " part set: ", pemade_part);
+        console.log(instrument + " part set: ", pemade_part, type);
 
     } else {
         kantilan_part = elab;
-        // console.log(instrument + " part set: ", kantilan_part);
+        console.log(instrument + " part set: ", kantilan_part, type);
     }
 }
 
@@ -128,9 +134,9 @@ function getGangsaTeluAtIndex(pokokPair) {
 
 function getGangsaNyogCagAtIndex(pokokPair) {
     if (pokokPair[0] !== pokokPair[1]) {
-        return makeNyogCag.move(pokokPair);
+        return makeNyogCag.move(pokokPair, nyogCagMovingPattern);
     } else {
-        return makeNyogCag.stay(pokokPair);
+        return makeNyogCag.stay(pokokPair, nyogCagStayingPattern);
     }
 }
 //

@@ -151,60 +151,61 @@ var makeNorot = {
 }
 
 var makeEmpat = {
-	move: function(arr, part) {
-		var teluArr = makeTelu.move(arr);
-		if (part === "polos") {
-			return teluArr;
-		} else {
-			var upperComposite = [];
-			var min = teluArr.reduce(function(a,b){return Math.min(a,b)});
-			for (var i = 0; i < teluArr.length; i++) {
-				if (teluArr[i] === min) {
-					var ngempat = (teluArr[i] + 3) % 5;
-					upperComposite.push(ngempat);
-				} else {
-					upperComposite.push(teluArr[i]);
-				}
-			}
-			return upperComposite;
-		}
+	move: function(arr) {
+		// var teluArr = makeTelu.move(arr);
+		// if (part === "polos") {
+		// 	return teluArr;
+		// } else {
+		// 	var upperComposite = [];
+		// 	var min = teluArr.reduce(function(a,b){return Math.min(a,b)});
+		// 	for (var i = 0; i < teluArr.length; i++) {
+		// 		if (teluArr[i] === min) {
+		// 			var ngempat = (teluArr[i] + 3) % 5;
+		// 			upperComposite.push(ngempat);
+		// 		} else {
+		// 			upperComposite.push(teluArr[i]);
+		// 		}
+		// 	}
+		// 	return upperComposite;
+		// }
 	},
-	stay: function(arr, part, contourType) {
-		var teluArr = makeTelu.stay(arr, contourType);
-		if (part === "polos") {
-			return teluArr;
-		} else {
-			var upperComposite = [];
-			var min = teluArr.reduce(function(a,b){return Math.min(a,b)});
-			for (var i = 0; i < teluArr.length; i++) {
-				if (teluArr[i] === min) {
-					var ngempat = (teluArr[i] + 3) % 5;
-					upperComposite.push(ngempat);
-				} else {
-					upperComposite.push(teluArr[i]);
-				}
-			}
-			return upperComposite;
-		}
+	stay: function(arr, contourType) {
+		// var teluArr = makeTelu.stay(arr, contourType);
+		// if (part === "polos") {
+		// 	return teluArr;
+		// } else {
+		// 	var upperComposite = [];
+		// 	var min = teluArr.reduce(function(a,b){return Math.min(a,b)});
+		// 	for (var i = 0; i < teluArr.length; i++) {
+		// 		if (teluArr[i] === min) {
+		// 			var ngempat = (teluArr[i] + 3) % 5;
+		// 			upperComposite.push(ngempat);
+		// 		} else {
+		// 			upperComposite.push(teluArr[i]);
+		// 		}
+		// 	}
+		// 	return upperComposite;
+		// }
 	}
 }
 
 var	makeNyogCag = {
 	move: function(arr, contourType) {
-		var z = arr[0];
+		var z = arr[1];
 		var w, x, y;
 		if (arr[0] > arr[1]) {
             console.log("descending");
-			y = (arr[1] - 1);
-			x = (arr[1] - 2);
-			w = (arr[1] - 3);
-		} else {
-            console.log("ascending");
-            y = (arr[1] + 1);
+			y = (arr[1] + 1);
 			x = (arr[1] + 2);
 			w = (arr[1] + 3);
+		} else {
+            console.log("ascending");
+            y = (arr[1] - 1);
+			x = (arr[1] - 2);
+			w = (arr[1] - 3);
 		}
-		var options = [[z,y,z,y,z,w,x,y], [z,y,z,x,y,w,x,y]];
+		var options = [[y,z,y,z,w,x,y,z],
+                       [y,z,x,y,w,x,y,z]];
 		return this.split(options[contourType]);
     },
 
@@ -215,15 +216,18 @@ var	makeNyogCag = {
 		var a = (arr[0] + 2);
 		var x = (arr[0] - 1);
 		var w = (arr[0] - 2);
-		var options = [[y,z,y,z,y,x,w,x], [y,z,a,z,y,x,w,x]];
-		return this.split(options[contourType]);
+		var options = [[z,y,z,y,x,w,x,y],
+                       [z,a,z,y,x,w,x,y]];
+        return this.split(options[contourType]);
 	},
 
 	split: function(composite) {
         return composite.reduce(function(k, note, i){
             if (i % 2 == 0) {
                 k[1].push(note);
+                k[0].push("-");
             } else {
+                k[1].push("-");
                 k[0].push(note);
             }
             return k

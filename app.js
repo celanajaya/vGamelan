@@ -300,6 +300,8 @@ function configurePokokEditor() {
             return;
         }
         var pArray = getPokokFromEditor();
+        setAllParts();
+        //TODO: update editor
         clearAllFromParent(editor, "gatra");
         pArray.toGatra(4, editor).forEach(function(g){editor.appendChild(g)});
         var r = document.createRange()
@@ -315,6 +317,7 @@ function clearAllFromParent(parent, className) {
     elementsToRemove.forEach(function(c){parent.removeChild(c)});
 }
 //**********User Interactions***********
+//returns the pokok as an array of strings
 function getPokokFromEditor(){
     var elements = Array.prototype.slice.call(document.getElementsByClassName("pokok-editor")[0].childNodes);
     var pArray = elements.reduce(function(p, element){
@@ -327,6 +330,7 @@ function getPokokFromEditor(){
     return pArray;
 }
 
+//set the pokok in data as an array of integers
 function setPokokArray() {
     pokok = getPokokFromEditor().map(function(n){return parseInt(n)});
 }
