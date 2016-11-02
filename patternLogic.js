@@ -87,50 +87,6 @@ var makeTelu = 	{
 //Basic Norot (reyong norot is in a separate file)
 var makeNorot = {
     basicNorot: function(arr) {
-		//Norot Helpers
-//TODO: refactor indices to account for multiple elaboration pattern lengths
-		function fastMovingPolos(value, index) {
-			switch (index) {
-				case 1:
-				case 3:
-				case 4:
-				case 5:
-				case 7:
-					return value;
-				default:
-					return "-";
-			}
-		}
-
-		function fastStayingPolos(value, index) {
-			if (index % 2 != 0) {
-				return value;
-			} else {
-				return "-"
-			}
-		}
-
-		function fastMovingSangsih(value, index) {
-			switch (index) {
-				case 0:
-				case 2:
-				case 4:
-				case 5:
-				case 6:
-					return value;
-				default:
-					return "-";
-			}
-		}
-
-		function fastStayingSangsih(value, index) {
-			if (index % 2 === 0) {
-				return value;
-			} else {
-				return "-"
-			}
-		}
-
         var x = arr[0];
         var y = (arr[0] + 1);
         var z = arr[1];
@@ -141,12 +97,56 @@ var makeNorot = {
 		//turn elaboration in to polos/sangsih
 		if (Tone.Transport.bpm.value > 90) {
 			if (arr[0] === arr[1]) {
-				return [composite.map(fastStayingPolos), composite.map(fastStayingSangsih)];
+				return [composite.map(this.fastStayingPolos), composite.map(this.fastStayingSangsih)];
 			}
-			return [composite.map(fastMovingSangsih), composite.map(fastMovingPolos)];
+			return [composite.map(this.fastMovingSangsih), composite.map(this.fastMovingPolos)];
 		} else {
-			return [composite, composite.map(getNgempat)];
+			return [composite, composite.map(Helpers.getNgempat)];
 		}
+    },
+
+    //helpers
+    //TODO: refactor indices to account for multiple elaboration pattern lengths
+    fastMovingPolos : function(value, index) {
+        switch (index) {
+            case 1:
+            case 3:
+            case 4:
+            case 5:
+            case 7:
+                return value;
+            default:
+                return "-";
+        }
+    },
+
+    fastStayingPolos: function(value, index) {
+        if (index % 2 != 0) {
+            return value;
+        } else {
+            return "-"
+        }
+    },
+
+    fastMovingSangsih: function(value, index) {
+        switch (index) {
+            case 0:
+            case 2:
+            case 4:
+            case 5:
+            case 6:
+                return value;
+            default:
+                return "-";
+        }
+    },
+
+    fastStayingSangsih: function(value, index) {
+        if (index % 2 === 0) {
+            return value;
+        } else {
+            return "-";
+        }
     }
 }
 
@@ -194,28 +194,39 @@ var	makeNyogCag = {
 		var z = arr[0];
 		var w, x, y;
 		if (arr[0] > arr[1]) {
-            console.log("descending", arr[0], arr[1]);
-			y = (arr[1] - 1) % 5;
-			x = (arr[1] - 2) % 5;
-			w = (arr[1] - 3) % 5;
+            console.log("descending");
+			y = (arr[1] - 1);
+			x = (arr[1] - 2);
+			w = (arr[1] - 3);
 		} else {
-			y = (arr[1] + 1) % 5;
-			x = (arr[1] + 2) % 5;
-			w = (arr[1] + 3) % 5;
+            console.log("ascending");
+            y = (arr[1] + 1);
+			x = (arr[1] + 2);
+			w = (arr[1] + 3);
 		}
 		var options = [[z,y,z,y,z,w,x,y], [z,y,z,x,y,w,x,y]];
-		if (!contourType) contourType = 0;
-		return options[contourType];
-		},
+		return this.split(options[contourType]);
+    },
 
 	stay: function(arr, contourType) {
+        console.log("staying");
 		var y = arr[0];
-		var z = (arr[0] + 1) % 5;
-		var a = (arr[0] + 2) % 5;
-		var x = (arr[0] - 1) % 5;
-		var w = (arr[0] - 2) % 5;
+		var z = (arr[0] + 1);
+		var a = (arr[0] + 2);
+		var x = (arr[0] - 1);
+		var w = (arr[0] - 2);
 		var options = [[y,z,y,z,y,x,w,x], [y,z,a,z,y,x,w,x]];
-		if (!contourType) contourType = 0;
-		return options[contourType];
-	}
+		return this.split(options[contourType]);
+	},
+
+	split: function(composite) {
+        return composite.reduce(function(k, note, i){
+            if (i % 2 == 0) {
+                k[1].push(note);
+            } else {
+                k[0].push(note);
+            }
+            return k
+        }, [[],[]])
+    }
 }

@@ -66,5 +66,13 @@ var Helpers = {
         }
         newVal = val - 1;
         return newVal < 1 ? 5 : newVal
+    },
+
+    getNgempat: function(num) {
+        var ngempat = num + 3;
+        if (ngempat > 5) {
+            ngempat = ngempat % 5;
+        }
+        return ngempat;
     }
 }

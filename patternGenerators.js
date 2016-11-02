@@ -68,9 +68,7 @@ function setNeliti(pokok) {
 }
 
 //************Pattern Calculation Methods*********************
-//TODO: add separate polos and sangsih outputs
-//TODO: create better methods for mapping an elaboration to an instrument
-//TODO: basic implementation for norot, telu, empat, and nyog cag for both reyong and gangsa
+//TODO: basic implementation for empat, and nyog cag
 
 //Reyong
 //Part parameter, is an integer from 0-3, corresponding to the positions on the reyong
@@ -120,17 +118,6 @@ function getGangsaNorotAtIndex(pokokPair) {
     return makeNorot.basicNorot(pokokPair);
 }
 
-function getNgempat(num) {
-    var ngempat = num + 3;
-    if (ngempat > 5) {
-        ngempat = ngempat % 5;
-    }
-    return ngempat;
-}
-
-//take each sub-array and make sure the pitches are adjacent to the pokokTone (which is always the last one)
-//TELU HELPERS
-//pair == POKOK tones
 function getGangsaTeluAtIndex(pokokPair) {
     if (pokokPair[0] != pokokPair[1]) { //moving or staying
         return makeTelu.move(pokokPair);

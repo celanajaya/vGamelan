@@ -3,7 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="d38b4af6-0d85-4834-9f25-5702e0762a3a" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpers.js" afterPath="$PROJECT_DIR$/helpers.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/neliti.js" afterPath="$PROJECT_DIR$/neliti.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/patternGenerators.js" afterPath="$PROJECT_DIR$/patternGenerators.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/patternLogic.js" afterPath="$PROJECT_DIR$/patternLogic.js" />
     </list>
     <ignored path="reyongify.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -46,11 +47,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="patternLogic.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="patternLogic.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/patternLogic.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1965">
-              <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+            <state relative-caret-position="-1299">
+              <caret line="108" column="80" selection-start-line="108" selection-start-column="80" selection-end-line="108" selection-end-column="80" />
               <folding />
             </state>
           </provider>
@@ -59,31 +60,11 @@
       <file leaf-file-name="patternGenerators.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/patternGenerators.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1785">
-              <caret line="119" column="11" selection-start-line="119" selection-start-column="11" selection-end-line="119" selection-end-column="11" />
+            <state relative-caret-position="531">
+              <caret line="132" column="43" selection-start-line="132" selection-start-column="43" selection-end-line="132" selection-end-column="43" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="helpers.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/helpers.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="243">
-              <caret line="47" column="5" selection-start-line="47" selection-start-column="5" selection-end-line="47" selection-end-column="5" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="neliti.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/neliti.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="2" column="44" selection-start-line="2" selection-start-column="44" selection-end-line="2" selection-end-column="44" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -113,12 +94,12 @@
         <option value="$PROJECT_DIR$/audio.js" />
         <option value="$PROJECT_DIR$/style.css" />
         <option value="$PROJECT_DIR$/editor.js" />
-        <option value="$PROJECT_DIR$/patternGenerators.js" />
         <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/index.html" />
-        <option value="$PROJECT_DIR$/patternLogic.js" />
-        <option value="$PROJECT_DIR$/helpers.js" />
         <option value="$PROJECT_DIR$/neliti.js" />
+        <option value="$PROJECT_DIR$/helpers.js" />
+        <option value="$PROJECT_DIR$/patternGenerators.js" />
+        <option value="$PROJECT_DIR$/patternLogic.js" />
       </list>
     </option>
   </component>
@@ -306,12 +287,12 @@
       <workItem from="1477668364948" duration="8836000" />
       <workItem from="1477716992032" duration="15230000" />
       <workItem from="1477979966535" duration="5809000" />
-      <workItem from="1478060999617" duration="7061000" />
+      <workItem from="1478060999617" duration="7930000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="284950000" />
+    <option name="totallyTimeSpent" value="285819000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="25" y="23" width="1400" height="833" extended-state="0" />
@@ -689,14 +670,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/patternLogic.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1965">
-          <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="243">
@@ -705,20 +678,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/patternGenerators.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1785">
-          <caret line="119" column="11" selection-start-line="119" selection-start-column="11" selection-end-line="119" selection-end-column="11" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/helpers.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="47" column="5" selection-start-line="47" selection-start-column="5" selection-end-line="47" selection-end-column="5" />
+        <state relative-caret-position="558">
+          <caret line="76" column="4" selection-start-line="76" selection-start-column="4" selection-end-line="76" selection-end-column="4" />
           <folding />
         </state>
       </provider>
@@ -727,6 +690,24 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
           <caret line="2" column="44" selection-start-line="2" selection-start-column="44" selection-end-line="2" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/patternGenerators.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="531">
+          <caret line="132" column="43" selection-start-line="132" selection-start-column="43" selection-end-line="132" selection-end-column="43" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/patternLogic.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1299">
+          <caret line="108" column="80" selection-start-line="108" selection-start-column="80" selection-end-line="108" selection-end-column="80" />
           <folding />
         </state>
       </provider>
