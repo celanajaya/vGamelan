@@ -45,7 +45,8 @@ Array.prototype.toGatra = function(mod, parent) {
     }, []);
 };
 
-var helpers = {
+var Helpers = {
+    //returns a number between 0 and 1
     rand: function() { return Math.floor(Math.random() * 2);},
 
     nudge: function(val, inc, neg) {
@@ -54,5 +55,16 @@ var helpers = {
         } else {
             return val + inc;
         }
+    },
+
+    //bumps a note up or down by one scale degree
+    bump : function(val,num) {
+        var newVal;
+        if (num) {
+            newVal = val + 1;
+            return newVal > 5 ? 1 : newVal
+        }
+        newVal = val - 1;
+        return newVal < 1 ? 5 : newVal
     }
 }
