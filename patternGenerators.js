@@ -140,17 +140,10 @@ function getGangsaNyogCagAtIndex(pokokPair) {
     }
 }
 //
-// function getGangsaEmpatAtIndex(part, index) {
-//     var currentNote = pokok[index];
-//     var previousNote = pokok[index - 1];
-//     if (!previousNote) {
-//         previousNote = pokok[pokok.length - 1];
-//     }
-//     if (currentNote !== previousNote) {
-//         return makeEmpat.move([previousNote, currentNote], part)
-//             .map(scaleDegreeToGangsaKey);
-//     } else {
-//         return makeEmpat.stay([previousNote, currentNote], part, empatStayingPattern)
-//             .map(scaleDegreeToGangsaKey);
-//     }
-// }
+function getGangsaEmpatAtIndex(pokokPair) {
+    if (pokokPair[0] != pokokPair[1]) { //moving or staying
+        return makeEmpat.move(pokokPair);
+    } else {
+        return makeEmpat.stay(pokokPair, teluStayingPattern);
+    }
+}

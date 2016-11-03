@@ -5,8 +5,7 @@
 var makeTelu = 	{
     move: function(pokokBuffers) {
 		var x,y,z;
-		//need to determine octaves for buffers
-        var z = pokokBuffers[1];
+        z = pokokBuffers[1];
 		if (pokokBuffers[0] > pokokBuffers[1]) {
             // console.log("descending");
             this["lastMove"] = "descending";
@@ -17,7 +16,7 @@ var makeTelu = 	{
 		} else {
 			//ascending
             // console.log("ascending");
-            this["lastMove"] = "descending";
+            this["lastMove"] = "ascending";
             y = z - 1;
 			x = z - 2;
 		}
@@ -48,18 +47,18 @@ var makeTelu = 	{
         switch (cValue) {
             case "x":
                 var x = goalTone;
-                var y = nudge(x, 1, neg);
-                var z = nudge(x, 2, neg);
+                var y = Helpers.nudge(x, 1, neg);
+                var z = Helpers.nudge(x, 2, neg);
                 break;
             case "y":
                 var y = goalTone;
-                var x = nudge(y, -1, neg);
-                var z = nudge(y, +1, neg);
+                var x = Helpers.nudge(y, -1, neg);
+                var z = Helpers.nudge(y, +1, neg);
                 break;
             case "z":
                 var z = goalTone;
-                var y = nudge(z, -1, neg);
-                var x = nudge(z, -2, neg);
+                var y = Helpers.nudge(z, -1, neg);
+                var x = Helpers.nudge(z, -2, neg);
                 break;
         }
         //maps them to composite
@@ -151,41 +150,123 @@ var makeNorot = {
 }
 
 var makeEmpat = {
-	move: function(arr) {
-		// var teluArr = makeTelu.move(arr);
-		// if (part === "polos") {
-		// 	return teluArr;
-		// } else {
-		// 	var upperComposite = [];
-		// 	var min = teluArr.reduce(function(a,b){return Math.min(a,b)});
-		// 	for (var i = 0; i < teluArr.length; i++) {
-		// 		if (teluArr[i] === min) {
-		// 			var ngempat = (teluArr[i] + 3) % 5;
-		// 			upperComposite.push(ngempat);
-		// 		} else {
-		// 			upperComposite.push(teluArr[i]);
-		// 		}
-		// 	}
-		// 	return upperComposite;
-		// }
+	move: function(pokokBuffers) {
+        //TODO: this is duplicate code from kotekan telu, should refactor
+        var x,y,z,k;
+        z = pokokBuffers[1];
+        if (pokokBuffers[0] > pokokBuffers[1]) {
+            console.log("descending");
+            this["lastMove"] = "descending";
+            //descending
+            y = z + 1;
+            x = z + 2;
+            k = z + 3;
+
+        } else {
+            //ascending
+            console.log("ascending");
+            this["lastMove"] = "ascending";
+            y = z - 1;
+            x = z - 2;
+            k = z + 1;
+        }
+
+        var composite = ["y","z","x","y","z","x","y","z"];
+        var self = this;
+        var kotekan = composite.reduce(function(e, val){
+            switch (val) {
+                case "x":
+                    if (self.lastMove === "ascending") {
+                        e[0].push(x);
+                        e[1].push(k);
+                    } else {
+                        e[0].push("-");
+                        e[1].push(x);
+                    }
+                    break;
+                case "y":
+                    e[0].push(y);
+                    e[1].push("-");
+                    break;
+                case "z":
+                    if (self.lastMove === "ascending") {
+                        e[0].push(z);
+                        e[1].push(k);
+                    } else {
+                        e[0].push("-");
+                        e[1].push(z);
+                    }
+                    break;
+            }
+            return e;
+        },[[],[]]);
+        return kotekan;
 	},
-	stay: function(arr, contourType) {
-		// var teluArr = makeTelu.stay(arr, contourType);
-		// if (part === "polos") {
-		// 	return teluArr;
-		// } else {
-		// 	var upperComposite = [];
-		// 	var min = teluArr.reduce(function(a,b){return Math.min(a,b)});
-		// 	for (var i = 0; i < teluArr.length; i++) {
-		// 		if (teluArr[i] === min) {
-		// 			var ngempat = (teluArr[i] + 3) % 5;
-		// 			upperComposite.push(ngempat);
-		// 		} else {
-		// 			upperComposite.push(teluArr[i]);
-		// 		}
-		// 	}
-		// 	return upperComposite;
-		// }
+	stay: function(pokokBuffers, stayingPattern) {
+        //TODO: consolidate with duplicate code from kotekan telu
+        console.log("static");
+        var x,y,z,k;
+        var stayingContours = [
+            ['x','y','z','x','z','y','x','z'],
+            ['y','x','z','y','z','x','y','z'],
+            ['x','y','x','z','y','x','y','z']
+        ];
+        var contour = stayingContours[stayingPattern[0]].atRotation(stayingPattern[1]);
+        var cValue = contour[contour.length - 1];
+        var goalTone = pokokBuffers[1];
+        //choose the three elaboration tones based whether we arrived at that note from above or below
+        var neg = this.lastMove === "descending";
+
+        //sets telu notes based on contour
+        switch (cValue) {
+            case "x":
+                x = goalTone;
+                y = Helpers.nudge(x, 1, neg);
+                z = Helpers.nudge(x, 2, neg);
+                break;
+            case "y":
+                y = goalTone;
+                x = Helpers.nudge(y, -1, neg);
+                z = Helpers.nudge(y, 1, neg);
+                break;
+            case "z":
+                z = goalTone;
+                y = Helpers.nudge(z, -1, neg);
+                x = Helpers.nudge(z, -2, neg);
+                break;
+        }
+        var min = [x,y,z].reduce(function(a,b){Math.min(a,b)});
+        k = min + 3;
+
+        //maps them to composite
+        var kotekan = contour.reduce(function(e,val){
+            switch (val) {
+                case "x":
+                    if (x === min) {
+                        e[0].push(x);
+                        e[1].push(k);
+                    } else {
+                        e[0].push("-");
+                        e[1].push(x);
+                    }
+                    break;
+                case "y":
+                    e[0].push(y);
+                    e[1].push("-");
+                    break;
+                case "z":
+                    if (z === min) {
+                        e[0].push(z);
+                        e[1].push(k);
+                    } else {
+                        e[0].push("-");
+                        e[1].push(z);
+                    }
+                    break;
+            }
+            return e;
+        },[[],[]]);
+        return kotekan;
 	}
 }
 
