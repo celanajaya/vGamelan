@@ -55,9 +55,8 @@ function setLoop(instrument) {
             q = [];
 
             //read the appropriate buffers for the index
-            if (instrument == "penyacah") {
-                return;
-            }
+            if (instrument == "penyacah") return;
+
             var buffers = readBuffers(instrument, i);
             buffers.forEach(function(buffer){
                 //return if it's a rest value

@@ -30,7 +30,7 @@ var makeTelu = 	{
     //parameter 1: the previous and goal tone of the pokok
     //parameter 2: an array indicating staying pattern contour and rotation
     stay: function(pokokBuffers, stayingPattern) {
-        console.log("static");
+        // console.log("static");
 		var x,y,z;
 		var stayingContours = [
 			['x','y','z','x','z','y','x','z'],
@@ -155,7 +155,7 @@ var makeEmpat = {
         var x,y,z,k;
         z = pokokBuffers[1];
         if (pokokBuffers[0] > pokokBuffers[1]) {
-            console.log("descending");
+            // console.log("descending");
             this["lastMove"] = "descending";
             //descending
             y = z + 1;
@@ -199,12 +199,11 @@ var makeEmpat = {
             }
             return e;
         },[[],[]]);
-        console.log(kotekan);
         return kotekan;
 	},
 	stay: function(pokokBuffers, stayingPattern) {
         //TODO: consolidate with duplicate code from kotekan telu
-        console.log("static");
+        // console.log("static");
         var x,y,z,k;
         var stayingContours = [
             ['x','y','z','x','z','y','x','z'],
@@ -275,12 +274,12 @@ var	makeNyogCag = {
 		var z = arr[1];
 		var w, x, y;
 		if (arr[0] > arr[1]) {
-            console.log("descending");
+            // console.log("descending");
 			y = (arr[1] + 1);
 			x = (arr[1] + 2);
 			w = (arr[1] + 3);
 		} else {
-            console.log("ascending");
+            // console.log("ascending");
             y = (arr[1] - 1);
 			x = (arr[1] - 2);
 			w = (arr[1] - 3);
@@ -291,7 +290,7 @@ var	makeNyogCag = {
     },
 
 	stay: function(arr, contourType) {
-        console.log("staying");
+        // console.log("staying");
 		var y = arr[0];
 		var z = (arr[0] + 1);
 		var a = (arr[0] + 2);

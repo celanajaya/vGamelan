@@ -92,6 +92,52 @@ function showPattern(instrumentName, part, rangeHeight, partLength) {
     });
 }
 
+function updateAllSvgs() {
+    var allInstruments = instrumentConfig.map(function(item) {return item[0]});
+
+    allInstruments.forEach(function(instrumentName){
+        var part, rangeHeight, partLength;
+        switch (instrumentName) {
+            case "jegogan":
+                part = jegogan;
+                rangeHeight = jegoganRange.length;
+                partLength = jegogan.length;
+                break;
+            case "jublag":
+                part= pokok;
+                rangeHeight = jublagRange.length;
+                partLength = pokok.length;
+                break;
+            case"penyacah":
+                part= neliti;
+                rangeHeight = jublagRange.length;
+                partLength = neliti.length;
+            case "ugal":
+                part = neliti;
+                rangeHeight = gangsaRange.length;
+                partLength = neliti.length;
+                break;
+            case"pemade":
+                part = pemade_part.reduce(toConcatedArrays,[]);
+                rangeHeight = gangsaRange.length;
+                partLength = pokok.length * gangsaPatternLength;
+                break;
+            case"kantilan":
+                part = kantilan_part.reduce(toConcatedArrays, []);
+                partLength = pokok.length * gangsaPatternLength;
+                rangeHeight = gangsaRange.length;
+                break;
+            case"reyong":
+                part = reyong_part.reduce(toConcatedArrays, []);
+                rangeHeight = 12;
+                partLength = pokok.length * reyongPatternLength;
+                break;
+            }
+
+        showPattern(instrumentName, part, rangeHeight, partLength);
+    });
+}
+
 function clearAllForInstrument(instrumentName){
     d3.select("#" + instrumentName + "-svg").selectAll("rect").attr('fill', "rgb(220, 220, 220)");
 }

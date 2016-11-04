@@ -1,15 +1,33 @@
 //*********Pattern Generation**************
 //Setting the elaborations to globally defined arrays
 function setReyongPart(pokok) {
-    reyong_part = [];
     var patternFunction = (reyongPatternType === "norot") ? getReyongNorotAtIndex : getReyongKilitanAtIndex;
-    for (var i = 0; i < 4; i++) {
-        var rPattern = [];
-        for (var j = 0; j < pokok.length; j++) {
-            rPattern = rPattern.concat(patternFunction(i,j));
+    reyong_part = neliti.reduce(function(elab, cur, i){
+        if (i % 2 != 0) {
+            //use the last one for the first
+            var prev = i > 1 ? neliti[i - 2] : neliti[neliti.length - 1];
+            //convert to reyong buffers
+            prev = reyongRange.indexOf(gangsaRange[prev]);
+            cur =  reyongRange.indexOf(gangsaRange[cur]);
+            var lowPattern = patternFunction([prev, cur]);
+            var highPattern = lowPattern.map(function(part) {
+                return part.map(function(note){
+                    if (note === "-") return note;
+                    var newNote = note + 5;
+                    if (newNote > 11) {
+                        throw new Error("Reyong part out of range");
+                    }
+                    return newNote;
+                });
+            });
+            var pattern = lowPattern.concat(highPattern);
+            pattern[0].forEach(function (note) {elab[0].push(note)});
+            pattern[1].forEach(function (note) {elab[1].push(note)});
+            pattern[2].forEach(function (note) {elab[2].push(note)});
+            pattern[3].forEach(function (note) {elab[3].push(note)});
         }
-        reyong_part[i] = rPattern;
-    }
+        return elab
+    }, [[],[],[],[]]);
     console.log("reyong part set:", reyong_part);
 }
 
@@ -70,7 +88,7 @@ function setNeliti(pokok) {
     for (var i = 1; i < pokok.length; i+=2) {
         neliti = neliti.concat(makeNeliti([pokok[i-1], pokok[i]]));
     }
-    // console.log("neliti set: ", neliti);
+    console.log("neliti set: ", neliti);
 }
 
 //************Pattern Calculation Methods*********************
@@ -85,13 +103,11 @@ function getReyongNorotAtIndex(position, index){
     return firstHalf.concat(secondHalf);
 }
 
-function getReyongKilitanAtIndex(position, index) {
-
-    if (currentNote !== previousNote) {
-
-    } else {
-        var e = makeEmpat.stay([previousNote, currentNote], part, empatStayingPattern)
+function getReyongKilitanAtIndex(pokokPair) {
+    if (pokokPair[0] != pokokPair[1]) {
+        return makeEmpat.move(pokokPair);
     }
+    return makeEmpat.stay(pokokPair, empatStayingPattern);
 }
 
 //Gangsa

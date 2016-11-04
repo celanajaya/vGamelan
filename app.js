@@ -45,7 +45,7 @@ function resetElaborations() {
 //default settings
 var pemadePatternType = patternTypes[1];
 var kantilanPatternType = patternTypes[1];
-var reyongPatternType = patternTypes[1];
+var reyongPatternType = patternTypes[0];
 var teluStayingPattern = [0,0];
 var empatStayingPattern = [0,0];
 var nyogCagMovingPattern = 0;
@@ -301,7 +301,7 @@ function configurePokokEditor() {
         }
         var pArray = getPokokFromEditor();
         setAllParts();
-        //TODO: update editor
+        updateAllSvgs();
         clearAllFromParent(editor, "gatra");
         pArray.toGatra(4, editor).forEach(function(g){editor.appendChild(g)});
         var r = document.createRange()
