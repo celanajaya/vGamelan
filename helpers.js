@@ -70,7 +70,7 @@ var Helpers = {
 
     getNgempat: function(num) {
         var ngempat = num + 3;
-        if (ngempat > 5) {
+        if (ngempat > 9) {
             ngempat = ngempat % 5;
         }
         return ngempat;

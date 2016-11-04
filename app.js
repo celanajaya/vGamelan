@@ -99,7 +99,7 @@ function buildInstrument(config) {
     addControlsForInstrument(instrument);
 
     //Volume Stuff
-    players[instrumentName].volume.value = -50;
+    players[instrumentName].volume.value = -25;
     createVolumeSliderForInstrument(instrument);
 
     //generate keys/pots and add listeners

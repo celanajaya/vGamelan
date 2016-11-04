@@ -10,7 +10,7 @@ function setReyongPart(pokok) {
         }
         reyong_part[i] = rPattern;
     }
-    // console.log("reyong part set:", reyong_part);
+    console.log("reyong part set:", reyong_part);
 }
 
 function setGangsaPart(instrument, pokok) {
@@ -86,36 +86,11 @@ function getReyongNorotAtIndex(position, index){
 }
 
 function getReyongKilitanAtIndex(position, index) {
-    var currentNote = pokok[index];
-    var previousNote = pokok[index - 1];
-    if (!previousNote) {
-        previousNote = pokok[pokok.length - 1];
-    }
-
-    //determine whether to assign the buffer polos or sangsih
-    var part = position % 2 === 0 ? "polos":"sangsih";
-    var ambitus = position < 2 ? reyongRange.slice(0,6):reyongRange.slice(6, reyongRange.length);
 
     if (currentNote !== previousNote) {
-        var e = makeEmpat.move([previousNote, currentNote], part).map(function(scaleDegree){
-            var index = ambitus.indexOf(scaleDegree);
-            //hack to fix out of bounds issues
-            if (index === -1 && position < 2) {
-                index += 3;
-            }
-            return position < 2 ? index:index + 5;
-        });
-        return e;
+
     } else {
-        var e = makeEmpat.stay([previousNote, currentNote], part, empatStayingPattern).map(function(scaleDegree){
-            var index = ambitus.indexOf(scaleDegree);
-            //hack to fix out of bounds issues;
-            if (index === -1 && position < 2) {
-                index += 3;
-            }
-            return position < 2 ? index:index + 5;
-        });
-        return e;
+        var e = makeEmpat.stay([previousNote, currentNote], part, empatStayingPattern)
     }
 }
 

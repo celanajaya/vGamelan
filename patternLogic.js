@@ -24,7 +24,7 @@ var makeTelu = 	{
 		var variations = [[["-",z,"-",y,z,"-",y,z],[y,"-",x,y,"-",x,y,"-"]],
                           [["-",z,"-",y,z,"-",y,z],[x,"-",x,y,"-",x,y,"-"]]];
 
-        return variations[rand()];
+        return variations[Helpers.rand()];
     },
 
     //parameter 1: the previous and goal tone of the pokok
@@ -160,7 +160,6 @@ var makeEmpat = {
             //descending
             y = z + 1;
             x = z + 2;
-            k = z + 3;
 
         } else {
             //ascending
@@ -168,8 +167,8 @@ var makeEmpat = {
             this["lastMove"] = "ascending";
             y = z - 1;
             x = z - 2;
-            k = z + 1;
         }
+        k = y + 2;
 
         var composite = ["y","z","x","y","z","x","y","z"];
         var self = this;
@@ -189,7 +188,7 @@ var makeEmpat = {
                     e[1].push("-");
                     break;
                 case "z":
-                    if (self.lastMove === "ascending") {
+                    if (self.lastMove === "descending") {
                         e[0].push(z);
                         e[1].push(k);
                     } else {
@@ -200,6 +199,7 @@ var makeEmpat = {
             }
             return e;
         },[[],[]]);
+        console.log(kotekan);
         return kotekan;
 	},
 	stay: function(pokokBuffers, stayingPattern) {
@@ -235,8 +235,8 @@ var makeEmpat = {
                 x = Helpers.nudge(z, -2, neg);
                 break;
         }
-        var min = [x,y,z].reduce(function(a,b){Math.min(a,b)});
-        k = min + 3;
+        var min = Math.min.apply(Math,[x,y,z]);
+        k = y + 2;
 
         //maps them to composite
         var kotekan = contour.reduce(function(e,val){
