@@ -15,7 +15,9 @@ function setReyongPart(pokok) {
                     if (note === "-") return note;
                     var newNote = note + 5;
                     if (newNote > 11) {
-                        throw new Error("Reyong part out of range");
+                        var e = new Error("Reyong part out of range");
+                        throw e;
+                        alert(e);
                     }
                     return newNote;
                 });
