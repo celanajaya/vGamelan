@@ -22,9 +22,7 @@ var nyogCagMovingPattern = 0;
 var nyogCagStayingPattern = 0;
 
 //TODO: support polyrhythmic elaborations
-var gangsaPatternLength = 8;
-var reyongPatternLength = 8;
-var meter = 8;
+
 
 //******Building UI**********
 function init() {
@@ -342,10 +340,11 @@ function start(event) {
 }
 
 function setAllParts() {
-    Instrument.resetElaborations();
+    Instrument.resetAllParts();
 
     //set basic melody parts
     setPokokParts();
+
     //set elaborations
     setReyongPart();
     setGangsaPart("kantilan");

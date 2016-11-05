@@ -78,6 +78,14 @@ var Helpers = {
 }
 
 var Instrument = {
+    patternLength: {
+        "pemade" : 8,
+        "kantilan": 8,
+        "reyong" : 8
+    },
+
+    meter : 8,
+
     config: [["reyong", 12, "pot"],
             ["kantilan", 10, "key"],
             ["pemade", 10, "key"],
@@ -110,16 +118,16 @@ var Instrument = {
     },
 
     getPartLength : {
-        "reyong": function(){return Instrument.parts.pokok.length * reyongPatternLength},
-        "pemade" : function(){return Instrument.parts.pokok.length * gangsaPatternLength},
-        "kantilan" : function(){return Instrument.parts.pokok.length * gangsaPatternLength},
+        "reyong": function(){return Instrument.parts.pokok.length * Instrument.patternLength.reyong},
+        "pemade" : function(){return Instrument.parts.pokok.length * Instrument.patternLength.pemade},
+        "kantilan" : function(){return Instrument.parts.pokok.length * Instrument.patternLength.kantilan},
         "ugal" : function(){return Instrument.parts.neliti.length},
         "penyacah" : function(){return Instrument.parts.neliti.length},
         "jublag" : function(){return Instrument.parts.pokok.length},
         "jegogan" : function(){return Instrument.parts.jegogan.length}
     },
 
-    resetElaborations: function() {
+    resetAllParts: function() {
         this.parts = {
             "reyong": [[],[],[],[]],
             "pemade" : [[],[]],
@@ -130,7 +138,6 @@ var Instrument = {
             "pokok":[],
             "neliti":[],
             "penyacah" : [],
-            "ugal" : []
         }
     }
 }
