@@ -50,11 +50,10 @@ function makeNeliti(arr) {
             break;
     }
     var initialTones = [n0, arr[0], n1, arr[1]];
-    return setNelitiBuffers(initialTones);
+    return setUgalBuffers(initialTones);
 
     //helper function
-    function setNelitiBuffers(tones){
-//choose which ugal buffers to assign the Instrument.parts.neliti to, to make the smoothest contour
+    function setUgalBuffers(tones){
         if (tones[1] == 5 && tones[3] == 1) {
             return [2,3,5,4];
         }
@@ -66,22 +65,22 @@ function makeNeliti(arr) {
                 prevPrev = tones[i - 2];
             }
             if (cur === 1) {
-                tones[i] = gangsaRange.indexOf(cur);
+                tones[i] = Instrument.range["ugal"].indexOf(cur);
 
                 if (prev === 5) {
 
                     if (prevPrev && prevPrev === 4) {
 
-                        tones[i - 2] = gangsaRange.indexOf(prevPrev);
+                        tones[i - 2] = Instrument.range.ugal.indexOf(prevPrev);
                     }
                     if (i % 2 == 0) {
-                        tones[i - 1] = gangsaRange.indexOf(2) + 5;
+                        tones[i - 1] = Instrument.range.ugal.indexOf(2) + 5;
                     } else {
-                        tones[i - 1] = gangsaRange.indexOf(prev);
+                        tones[i - 1] = Instrument.range.ugal.indexOf(prev);
                     }
                 }
             } else {
-                tones[i] = gangsaRange.indexOf(cur) + 5;
+                tones[i] = Instrument.range.ugal.indexOf(cur) + 5;
             }
         }
         var neg = true;
@@ -90,7 +89,6 @@ function makeNeliti(arr) {
             neg = !neg;
             tones[2] = Helpers.nudge(tones[3], -1, neg);
         }
-        // console.log("Instrument.parts.neliti buffers", tones);
         return tones;
     }
 }

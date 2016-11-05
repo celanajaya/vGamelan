@@ -314,9 +314,23 @@ function getPokokFromEditor(){
 }
 
 //set the Instrument.parts.pokok in data as an array of integers
-function setPokokArray() {
+function setPokokParts() {
+    //set pokok, jublag and jegogan
+    //pokok is in scale degrees, instrument parts are in buffers
     Instrument.parts.pokok = getPokokFromEditor().map(function(n){return parseInt(n)});
+    Instrument.parts.jublag = Instrument.parts.pokok.map(function(v){return v - 1});
+    Instrument.parts.jegogan = Instrument.parts.pokok.filter(function(n, i){return i%2 != 0});
+    console.log("pokok set:", Instrument.parts.pokok);
+
+    //set neliti ugal and penyacah
+    for (var i = 1; i < Instrument.parts.pokok.length; i+=2) {
+        Instrument.parts.ugal = Instrument.parts.ugal.concat(makeNeliti([Instrument.parts.pokok[i-1], Instrument.parts.pokok[i]]));
+    }
+    Instrument.parts.neliti = Instrument.parts.ugal.map(function(v){return Instrument.range.pemade[v]});
+    Instrument.parts.penyacah = Instrument.parts.neliti.map(function(v){return Instrument.range.penyacah[v]});
+    console.log("Neliti set: ", Instrument.parts.neliti);
 }
+
 
 function start(event) {
     event.target.id = "stop";
@@ -331,14 +345,11 @@ function setAllParts() {
     Instrument.resetElaborations();
 
     //set basic melody parts
-    setPokokArray();
-    setNeliti(Instrument.parts.pokok);
-    Instrument.parts.jegogan = Instrument.parts.pokok.filter(function(n, i){return i%2 != 0});
-
+    setPokokParts();
     //set elaborations
-    setReyongPart(Instrument.parts.pokok);
-    setGangsaPart("kantilan", Instrument.parts.pokok);
-    setGangsaPart("pemade", Instrument.parts.pokok);
+    setReyongPart();
+    setGangsaPart("kantilan");
+    setGangsaPart("pemade");
 }
 
 function stop(event) {

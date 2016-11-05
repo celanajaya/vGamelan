@@ -1,14 +1,14 @@
 //*********Pattern Generation**************
 //Setting the elaborations to globally defined arrays
-function setReyongPart(Instrument.parts.pokok) {
+function setReyongPart() {
     var patternFunction = (reyongPatternType === "norot") ? getReyongNorotAtIndex : getReyongKilitanAtIndex;
     Instrument.parts.reyong = Instrument.parts.neliti.reduce(function(elab, cur, i){
         if (i % 2 != 0) {
             //use the last one for the first
             var prev = i > 1 ? Instrument.parts.neliti[i - 2] : Instrument.parts.neliti[Instrument.parts.neliti.length - 1];
             //convert to reyong buffers
-            prev = reyongRange.indexOf(gangsaRange[prev]);
-            cur =  reyongRange.indexOf(gangsaRange[cur]);
+            prev = Instrument.range.reyong.indexOf(Instrument.range.ugal[prev]);
+            cur =  Instrument.range.reyong.indexOf(Instrument.range.ugal[cur]);
             var lowPattern = patternFunction([prev, cur]);
             var highPattern = lowPattern.map(function(part) {
                 return part.map(function(note){
@@ -33,7 +33,7 @@ function setReyongPart(Instrument.parts.pokok) {
     console.log("reyong part set:", Instrument.parts.reyong);
 }
 
-function setGangsaPart(instrument, Instrument.parts.pokok) {
+function setGangsaPart(instrument) {
     //take the Instrument.parts.pokok and convert to polos and sangsih arrays
     var patternType;
     var patternFunction;
@@ -85,14 +85,6 @@ function setGangsaPart(instrument, Instrument.parts.pokok) {
         console.log(instrument + " part set: ", Instrument.parts.kantilan, type);
     }
 }
-
-function setNeliti(Instrument.parts.pokok) {
-    for (var i = 1; i < Instrument.parts.pokok.length; i+=2) {
-        Instrument.parts.neliti = Instrument.parts.neliti.concat(makeNeliti([Instrument.parts.pokok[i-1], Instrument.parts.pokok[i]]));
-    }
-    console.log("Instrument.parts.neliti set: ", Instrument.parts.neliti);
-}
-
 //************Pattern Calculation Methods*********************
 //TODO: basic implementation for empat, and nyog cag
 

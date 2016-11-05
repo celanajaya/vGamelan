@@ -86,37 +86,37 @@ var Instrument = {
             ["jublag", 5, "key"],
             ["jegogan", 5, "key"]],
 
-    gangsaRange: [].instrumentRange(10, 2, 5),
-    reyongRange: [].instrumentRange(12, 3, 5),
-    jublagRange: [].instrumentRange(5, 0, 5),
-    jegoganRange: [].instrumentRange(5, 0, 5),
-
     //initial arrays of buffer indices
     parts: {
         "reyong": [[],[],[],[]],
         "pemade" : [[],[]],
         "kantilan" : [[],[]],
-        "neliti" : [],
-        "pokok" : [],
-        "jegogan" : []
+        "ugal" : [],
+        "penyacah" : [],
+        "jublag" : [],
+        "jegogan" : [],
+        "pokok":[],
+        "neliti":[]
     },
 
     range: {
-        "reyong": this.reyongRange,
-        "pemade" : this.gangsaRange,
-        "kantilan" : this.gangsaRange,
-        "ugal" : this.gangsaRange,
-        "jublag" : this.jublagRange,
-        "jegogan" : this.jegoganRange
+        "reyong": [].instrumentRange(12, 3, 5),
+        "pemade" : [].instrumentRange(10, 2, 5),
+        "kantilan" : [].instrumentRange(10, 2, 5),
+        "ugal" : [].instrumentRange(10, 2, 5),
+        "jublag" : [].instrumentRange(5, 0, 5),
+        "penyacah" : [].instrumentRange(5, 0, 5),
+        "jegogan" : [].instrumentRange(5, 0, 5)
     },
 
-    patternLength : {
-        "reyong": function(){return this.parts.pokok.length * reyongPatternLength},
-        "pemade" : function(){return this.parts.pokok.length * pemadePatternLength},
-        "kantilan" : function(){return this.parts.pokok.length * kantilanPatternLength},
-        "ugal" : function(){return this.parts.neliti.length},
-        "jublag" : function(){return this.parts.pokok.length},
-        "jegogan" : function(){return this.parts.jegogan.length}
+    getPartLength : {
+        "reyong": function(){return Instrument.parts.pokok.length * reyongPatternLength},
+        "pemade" : function(){return Instrument.parts.pokok.length * gangsaPatternLength},
+        "kantilan" : function(){return Instrument.parts.pokok.length * gangsaPatternLength},
+        "ugal" : function(){return Instrument.parts.neliti.length},
+        "penyacah" : function(){return Instrument.parts.neliti.length},
+        "jublag" : function(){return Instrument.parts.pokok.length},
+        "jegogan" : function(){return Instrument.parts.jegogan.length}
     },
 
     resetElaborations: function() {
@@ -124,9 +124,13 @@ var Instrument = {
             "reyong": [[],[],[],[]],
             "pemade" : [[],[]],
             "kantilan" : [[],[]],
-            "neliti" : [],
-            "pokok" : [],
-            "jegogan" : []
+            "ugal" : [],
+            "jublag" : [],
+            "jegogan" : [],
+            "pokok":[],
+            "neliti":[],
+            "penyacah" : [],
+            "ugal" : []
         }
     }
 }

@@ -5,7 +5,7 @@ function createEditor(parent, totalHeight, totalWidth) {
     //number of keys/pots, used as y value
     var rangeHeight = Instrument.range[instrumentName].length;
     //total length of pattern, used as x value
-    var partLength = Instrument.patternLength[instrumentName]();
+    var partLength = Instrument.getPartLength[instrumentName]();
 
     var svg = d3.select(parent).append('svg').attr('height', totalHeight).attr('width', totalWidth);
     svg.attr("id", instrumentName + "-svg");
@@ -35,6 +35,7 @@ function createEditor(parent, totalHeight, totalWidth) {
                 .attr('id', instrumentName + "-" + y.toString() + "-" + x.toString())
         }
     }
+    console.log(instrumentName, part);
     showPattern(instrumentName, part, rangeHeight, partLength);
     return svg;
 }
@@ -58,7 +59,7 @@ function updateAllSvgs() {
     allInstruments.forEach(function(instrumentName){
         var part = Instrument.parts[instrumentName];
         var rangeHeight = Instrument.range[instrumentName].length;
-        var partLength = Instrument.patternLength[instrumentName]();
+        var partLength = Instrument.getPartLength[instrumentName]();
 
         switch (instrumentName) {
             case"pemade":
@@ -67,12 +68,14 @@ function updateAllSvgs() {
                 part = part.reduce(toConcatedArrays, []);
                 break;
         }
-        
+
         showPattern(instrumentName, part, rangeHeight, partLength);
     });
 }
 
 function clearAllForInstrument(instrumentName){
+    var rangeHeight = Instrument.range[instrumentName].length;
+    var partLength = Instrument.getPartLength[instrumentName]();
     for (var y = 0; y < rangeHeight; y++) {
         for (var x = 0; x < partLength; x++) {
             var boxColor = x % meter === meter - 1 ? 'rgb(200, 200, 200)':'rgb(220, 220, 220)';
