@@ -1,11 +1,5 @@
 //*************"Class" variables
-var instrumentConfig = [["reyong", 12, "pot"],
-                        ["kantilan", 10, "key"],
-                        ["pemade", 10, "key"],
-                        ["ugal", 10, "key"],
-                        ["penyacah", 5, "key"],
-                        ["jublag", 5, "key"],
-                        ["jegogan", 5, "key"]];
+
 //"Constants"
 var kNorot = "norot";
 var kNyogCag = "nyog cag";
@@ -14,33 +8,9 @@ var kTelu = "kotekan telu";
 var kEmpat = "kotekan empat";
 var patternTypes = [kKilitan, kNorot, kTelu, kEmpat, kNyogCag];
 
-//Instrument Ranges
-//an array showing the scale tones on the instrument
-var gangsaRange = [].instrumentRange(10, 2, 5);
-var reyongRange = [].instrumentRange(12, 3, 5);
-var jublagRange = [].instrumentRange(5, 0, 5);
-var jegoganRange = [].instrumentRange(5, 0, 5)
-
 //Audio Players
 var players = {};
 var analyzers = {};
-
-//initial arrays of buffer indices
-var reyong_part = [[],[],[],[]];
-var pemade_part = [[],[]];
-var kantilan_part = [[],[]];
-var neliti = [];
-var pokok = [];
-var jegogan = [];
-
-function resetElaborations() {
-    reyong_part = [];
-    pemade_part = [];
-    kantilan_part = [];
-    neliti = [];
-    pokok = [];
-    jegogan = [];
-}
 
 //default settings
 var pemadePatternType = patternTypes[1];
@@ -60,7 +30,7 @@ var meter = 8;
 function init() {
     setAllParts();
     configurePokokEditor();
-    instrumentConfig.forEach(buildInstrument);
+    Instrument.config.forEach(buildInstrument);
     initializeMuteButtons();
     initializeTempoVolumeSliders()
     configureGong();
@@ -135,10 +105,12 @@ function addControlsForInstrument(instrument) {
                 break;
             case 1:
                 cItem.innerHTML = instrument.id;
+                cItem.classList.add("instrument-name");
+                cItem.addEventListener("click", openInstrumentEditor);
                 break;
             case 2:
                 cItem.classList.add("dropdown-container");
-                break;
+                break
         }
         controlItemContainer.appendChild(cItem);
     }
@@ -221,18 +193,18 @@ function addDropDownContentForInstrument(instrumentName, container) {
             switch (instrumentName) {
                 case"reyong":
                     reyongPatternType = event.target.textContent;
-                    setReyongPart(pokok);
-                    showPattern(instrumentName, reyong_part.reduce(toConcatedArrays), 12, reyongPatternLength * pokok.length);
+                    setReyongPart(Instrument.parts.pokok);
+                    showPattern(instrumentName, Instrument.parts.reyong.reduce(toConcatedArrays), 12, reyongPatternLength * Instrument.parts.pokok.length);
                     break;
                 case"kantilan":
                     kantilanPatternType = event.target.textContent;
-                    setGangsaPart("kantilan", pokok);
-                    showPattern(instrumentName, kantilan_part.reduce(toConcatedArrays), 10, gangsaPatternLength * pokok.length);
+                    setGangsaPart("kantilan", Instrument.parts.pokok);
+                    showPattern(instrumentName, Instrument.parts.kantilan.reduce(toConcatedArrays), 10, gangsaPatternLength * Instrument.parts.pokok.length);
                     break;
                 case "pemade":
                     pemadePatternType = event.target.textContent;
-                    setGangsaPart("pemade", pokok);
-                    showPattern(instrumentName, pemade_part.reduce(toConcatedArrays), 10, gangsaPatternLength * pokok.length);
+                    setGangsaPart("pemade", Instrument.parts.pokok);
+                    showPattern(instrumentName, Instrument.parts.pemade.reduce(toConcatedArrays), 10, gangsaPatternLength * Instrument.parts.pokok.length);
                     break;
             }
         });
@@ -285,7 +257,7 @@ function initializeMuteButtons() {
 }
 //TODO: fix cursor placement
 function configurePokokEditor() {
-    var editor = document.getElementsByClassName("pokok-editor")[0];
+    var editor = document.getElementsByClassName("Instrument.parts.pokok-editor")[0];
     var val = editor.innerHTML;
     var savedOffset = 0;
 
@@ -304,7 +276,7 @@ function configurePokokEditor() {
         updateAllSvgs();
         clearAllFromParent(editor, "gatra");
         pArray.toGatra(4, editor).forEach(function(g){editor.appendChild(g)});
-        var r = document.createRange()
+        var r = document.createRange();
         r.setStart(editor.lastChild, savedOffset);
         window.getSelection().removeAllRanges();
         window.getSelection().addRange(r)
@@ -316,10 +288,21 @@ function clearAllFromParent(parent, className) {
     var elementsToRemove = children.filter(function(item) {return item.className === className});
     elementsToRemove.forEach(function(c){parent.removeChild(c)});
 }
+
+function openInstrumentEditor() {
+    var hider = document.getElementById("hider")
+    var editorPopup = document.getElementById("editor-popup");
+    toggleClass(editorPopup, "show-popup");
+    toggleClass(hider, "show-popup");
+    if (editorPopup.classList.contains("show-popup")) {
+        //a clone of the instrument
+    } else {
+    }
+}
 //**********User Interactions***********
-//returns the pokok as an array of strings
+//returns the Instrument.parts.pokok as an array of strings
 function getPokokFromEditor(){
-    var elements = Array.prototype.slice.call(document.getElementsByClassName("pokok-editor")[0].childNodes);
+    var elements = Array.prototype.slice.call(document.getElementsByClassName("Instrument.parts.pokok-editor")[0].childNodes);
     var pArray = elements.reduce(function(p, element){
         if (element.className === 'gatra') {
             var a = element.innerHTML.split("");
@@ -330,9 +313,9 @@ function getPokokFromEditor(){
     return pArray;
 }
 
-//set the pokok in data as an array of integers
+//set the Instrument.parts.pokok in data as an array of integers
 function setPokokArray() {
-    pokok = getPokokFromEditor().map(function(n){return parseInt(n)});
+    Instrument.parts.pokok = getPokokFromEditor().map(function(n){return parseInt(n)});
 }
 
 function start(event) {
@@ -345,17 +328,17 @@ function start(event) {
 }
 
 function setAllParts() {
-    resetElaborations();
+    Instrument.resetElaborations();
 
     //set basic melody parts
     setPokokArray();
-    setNeliti(pokok);
-    jegogan = pokok.filter(function(n, i){return i%2 != 0});
+    setNeliti(Instrument.parts.pokok);
+    Instrument.parts.jegogan = Instrument.parts.pokok.filter(function(n, i){return i%2 != 0});
 
     //set elaborations
-    setReyongPart(pokok);
-    setGangsaPart("kantilan", pokok);
-    setGangsaPart("pemade", pokok);
+    setReyongPart(Instrument.parts.pokok);
+    setGangsaPart("kantilan", Instrument.parts.pokok);
+    setGangsaPart("pemade", Instrument.parts.pokok);
 }
 
 function stop(event) {
@@ -375,7 +358,7 @@ document.getElementsByClassName("playback")[0].addEventListener("click", functio
 
 function activateTransport() {
     Tone.Transport.loopStart = 0;
-    Tone.Transport.loopEnd = (pokok.length / 2).toString() + "m";
+    Tone.Transport.loopEnd = (Instrument.parts.pokok.length / 2).toString() + "m";
     Tone.Transport.start();
 }
 

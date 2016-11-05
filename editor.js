@@ -18,42 +18,35 @@ function createEditor(parent, totalHeight, totalWidth) {
             part = jegogan;
             rangeHeight = jegoganRange.length;
             partLength = jegogan.length;
-            emphasis = meter;
             break;
         case "jublag":
-            part= pokok;
+            part= Instrument.parts.pokok;
             rangeHeight = jublagRange.length;
-            partLength = pokok.length;
-            emphasis = meter;
+            partLength = Instrument.parts.pokok.length;
             break;
         case"penyacah":
-            part= neliti;
+            part= Instrument.parts.neliti;
             rangeHeight = jublagRange.length;
-            partLength = neliti.length;
-            emphasis = meter;
+            partLength = Instrument.parts.neliti.length;
         case "ugal":
-            part = neliti;
+            part = Instrument.parts.neliti;
             rangeHeight = gangsaRange.length;
-            partLength = neliti.length;
-            emphasis = meter;
+            partLength = Instrument.parts.neliti.length;
             break;
         case"pemade":
-            part = pemade_part.reduce(toConcatedArrays,[]);
+            part = Instrument.parts.pemade.reduce(toConcatedArrays,[]);
             rangeHeight = gangsaRange.length;
-            partLength = pokok.length * gangsaPatternLength;
-            emphasis = gangsaPatternLength;
+            partLength = Instrument.parts.pokok.length * gangsaPatternLength;
             break;
         case"kantilan":
-            part = kantilan_part.reduce(toConcatedArrays, []);
-            partLength = pokok.length * gangsaPatternLength;
+            part = Instrument.parts.kantilan.reduce(toConcatedArrays, []);
+            partLength = Instrument.parts.pokok.length * gangsaPatternLength;
             emphasis = gangsaPatternLength;
-            rangeHeight = gangsaRange.length;
             break;
         case"reyong":
-            part = reyong_part.reduce(toConcatedArrays, []);
+            part = Instrument.parts.reyong.reduce(toConcatedArrays, []);
             rangeHeight = 12;
-            partLength = pokok.length * reyongPatternLength;
-            emphasis = reyongPatternLength;
+            partLength = Instrument.parts.pokok.length * reyongPatternLength;
             break;
     }
 
@@ -62,12 +55,10 @@ function createEditor(parent, totalHeight, totalWidth) {
         for (var x = 0; x < partLength; x++) {
             var squareWidth = totalWidth / partLength;
             var squareHeight = totalHeight / rangeHeight;
-            //every 4th or 8th column is a little darker
-            var boxColor = x % meter === meter - 1 ? 'rgb(200, 200, 200)':'rgb(220, 220, 220)';
             svg.append('rect')
                 .attr('width', squareWidth)
                 .attr('height', squareHeight)
-                .attr('fill', boxColor)
+                .attr('fill', 'rgb(220, 220, 220)')
                 .attr('stroke', 'black')
                 .attr('stroke-width', 0.05)
                 .attr('x',squareWidth * x)
@@ -93,7 +84,7 @@ function showPattern(instrumentName, part, rangeHeight, partLength) {
 }
 
 function updateAllSvgs() {
-    var allInstruments = instrumentConfig.map(function(item) {return item[0]});
+    var allInstruments = Instrument.config.map(function(item) {return item[0]});
 
     allInstruments.forEach(function(instrumentName){
         var part, rangeHeight, partLength;
@@ -104,33 +95,33 @@ function updateAllSvgs() {
                 partLength = jegogan.length;
                 break;
             case "jublag":
-                part= pokok;
+                part= Instrument.parts.pokok;
                 rangeHeight = jublagRange.length;
-                partLength = pokok.length;
+                partLength = Instrument.parts.pokok.length;
                 break;
             case"penyacah":
-                part= neliti;
+                part= Instrument.parts.neliti;
                 rangeHeight = jublagRange.length;
-                partLength = neliti.length;
+                partLength = Instrument.parts.neliti.length;
             case "ugal":
-                part = neliti;
+                part = Instrument.parts.neliti;
                 rangeHeight = gangsaRange.length;
-                partLength = neliti.length;
+                partLength = Instrument.parts.neliti.length;
                 break;
             case"pemade":
-                part = pemade_part.reduce(toConcatedArrays,[]);
+                part = Instrument.parts.pemade.reduce(toConcatedArrays,[]);
                 rangeHeight = gangsaRange.length;
-                partLength = pokok.length * gangsaPatternLength;
+                partLength = Instrument.parts.pokok.length * gangsaPatternLength;
                 break;
             case"kantilan":
-                part = kantilan_part.reduce(toConcatedArrays, []);
-                partLength = pokok.length * gangsaPatternLength;
+                part = Instrument.parts.kantilan.reduce(toConcatedArrays, []);
+                partLength = Instrument.parts.pokok.length * gangsaPatternLength;
                 rangeHeight = gangsaRange.length;
                 break;
             case"reyong":
-                part = reyong_part.reduce(toConcatedArrays, []);
+                part = Instrument.parts.reyong.reduce(toConcatedArrays, []);
                 rangeHeight = 12;
-                partLength = pokok.length * reyongPatternLength;
+                partLength = Instrument.parts.pokok.length * reyongPatternLength;
                 break;
             }
 
@@ -139,7 +130,14 @@ function updateAllSvgs() {
 }
 
 function clearAllForInstrument(instrumentName){
-    d3.select("#" + instrumentName + "-svg").selectAll("rect").attr('fill', "rgb(220, 220, 220)");
+    for (var y = 0; y < rangeHeight; y++) {
+        for (var x = 0; x < partLength; x++) {
+            var boxColor = x % meter === meter - 1 ? 'rgb(200, 200, 200)':'rgb(220, 220, 220)';
+            d3.select("#" + instrumentName + "-svg")
+                .select(instrumentName + "-" + y.toString() + "-" + x.toString())
+                .attr('fill',boxColor);
+        }
+    }
 }
 
 function toConcatedArrays(a,b) {return a.concat(b)}

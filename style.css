@@ -1,3 +1,32 @@
+#hider {
+    position:absolute;
+    display: none;
+    top: 0%;
+    left: 0%;
+    width:2400px;
+    height:2000px;
+    margin-top: -800px; /*set to a negative number 1/2 of your height*/
+    margin-left: -500px; /*set to a negative number 1/2 of your width*/
+    /*
+    z- index must be lower than pop up box
+   */
+    z-index: 99;
+    background-color:Black;
+    opacity:0.6;
+}
+
+#editor-popup {
+    position:absolute;
+    display: none;
+    flex-direction: row;  /* make main axis horizontal */
+    justify-content: space-between; /* center items vertically, in this case */
+    top: 10%;
+    left: 5%;
+    width: 70%;
+    height:70%;
+    z-index:100;
+}
+
 .container {
     display: flex;           /* establish flex container */
     flex-direction: row;  /* make main axis horizontal */
@@ -41,7 +70,7 @@ p {
     font-weight: 500;
 }
 
-.pokok-editor {
+.Instrument.parts.pokok-editor {
     margin: 5px;
     border: 1px solid #ED33CF;
     border-radius: 15px;
@@ -49,6 +78,7 @@ p {
 }
 
 .instrument {
+    background: white;
     border: 1px solid #ED33CF;
     margin: 5px;
     border-radius: 15px;
@@ -157,6 +187,13 @@ p {
     background-color: #ED33CF;
 }
 
+.instrument-name:hover {
+    animation-name: instrument-name-animation;
+    animation-duration: 0.5s;
+    color: #ED33CF;
+    cursor: pointer;
+}
+
 .dropdown-container {
     align-self: flex-end;
     width: 50%;
@@ -228,6 +265,11 @@ p {
           box-shadow: inset 0px 0px 0px #E871E4;}
     to {background-color: #ED33CF;
         box-shadow: inset 0px 0px 40px #fff ;}
+}
+
+@keyframes instrument-name-animation {
+    from {color: black;}
+    to {color: #ED33CF;}
 }
 
 @keyframes show {

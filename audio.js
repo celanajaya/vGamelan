@@ -75,25 +75,25 @@ function setLoop(instrument) {
 }
 
 //returns an array of buffers to be played simultaneously (takes a instrument name and an index)
-//TODO: turn 8s into a variable representing the length of the elaboration pattern per pokok tone
+//TODO: turn 8s into a variable representing the length of the elaboration pattern per Instrument.parts.pokok tone
 function readBuffers(instrument, index) {
     switch (instrument) {
         case "jegogan":
             return [jegogan[index % jegogan.length] - 1];
         case "jublag":
-            return [pokok[index % pokok.length] - 1];
+            return [Instrument.parts.pokok[index % Instrument.parts.pokok.length] - 1];
         case "penyacah":
-            return [neliti[index % neliti.length]];
+            return [Instrument.parts.neliti[index % Instrument.parts.neliti.length]];
         case "ugal":
-            return [neliti[index % neliti.length]];
+            return [Instrument.parts.neliti[index % Instrument.parts.neliti.length]];
         case "pemade":
-            return [pemade_part[0][index % (pokok.length * gangsaPatternLength)],
-                    pemade_part[1][index % (pokok.length * gangsaPatternLength)]];
+            return [Instrument.parts.pemade[0][index % (Instrument.parts.pokok.length * gangsaPatternLength)],
+                    Instrument.parts.pemade[1][index % (Instrument.parts.pokok.length * gangsaPatternLength)]];
         case "kantilan":
-            return [kantilan_part[0][index % (pokok.length * gangsaPatternLength)],
-                    kantilan_part[1][index % (pokok.length * gangsaPatternLength)]];
+            return [Instrument.parts.kantilan[0][index % (Instrument.parts.pokok.length * gangsaPatternLength)],
+                    Instrument.parts.kantilan[1][index % (Instrument.parts.pokok.length * gangsaPatternLength)]];
         case "reyong":
-            return reyong_part.map(function(arr){return arr[index % (pokok.length * reyongPatternLength)]});
+            return Instrument.parts.reyong.map(function(arr){return arr[index % (Instrument.parts.pokok.length * reyongPatternLength)]});
     }
 }
 
@@ -105,10 +105,10 @@ function configureGong() {
                 i++;
                 return;
             }
-            if (i % pokok.length === pokok.length / 2 - 1) {
+            if (i % Instrument.parts.pokok.length === Instrument.parts.pokok.length / 2 - 1) {
                 players["gong"].start(1);
             }
-            if (i % pokok.length === pokok.length - 1) {
+            if (i % Instrument.parts.pokok.length === Instrument.parts.pokok.length - 1) {
                 players["gong"].start(0);
             }
             i++;

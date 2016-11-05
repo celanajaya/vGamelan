@@ -1,10 +1,10 @@
 function makeNeliti(arr) {
-    //distance between any two pokok tones
+    //distance between any two Instrument.parts.pokok tones
     var dif = Math.abs(arr[0] - arr[1]) % 5;
     var n0;
     var n1;
 
-    //layout contour choices based on distance between two pokok tones
+    //layout contour choices based on distance between two Instrument.parts.pokok tones
     switch (dif) {
         case 0:
             //same pitch - sinusoidal around note or upper/lower neighbor
@@ -20,7 +20,7 @@ function makeNeliti(arr) {
             }
             break;
         case 1:
-            //adjacent - neighbors should surround pokok tones to create "gap fill"
+            //adjacent - neighbors should surround Instrument.parts.pokok tones to create "gap fill"
             r = arr[0] > arr[1] ? 1:0;
             n0 = Helpers.bump(arr[0], r);
             n1 = Helpers.bump(arr[1], !r);
@@ -54,7 +54,7 @@ function makeNeliti(arr) {
 
     //helper function
     function setNelitiBuffers(tones){
-//choose which ugal buffers to assign the neliti to, to make the smoothest contour
+//choose which ugal buffers to assign the Instrument.parts.neliti to, to make the smoothest contour
         if (tones[1] == 5 && tones[3] == 1) {
             return [2,3,5,4];
         }
@@ -90,7 +90,7 @@ function makeNeliti(arr) {
             neg = !neg;
             tones[2] = Helpers.nudge(tones[3], -1, neg);
         }
-        // console.log("neliti buffers", tones);
+        // console.log("Instrument.parts.neliti buffers", tones);
         return tones;
     }
 }

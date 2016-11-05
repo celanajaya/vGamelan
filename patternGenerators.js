@@ -1,11 +1,11 @@
 //*********Pattern Generation**************
 //Setting the elaborations to globally defined arrays
-function setReyongPart(pokok) {
+function setReyongPart(Instrument.parts.pokok) {
     var patternFunction = (reyongPatternType === "norot") ? getReyongNorotAtIndex : getReyongKilitanAtIndex;
-    reyong_part = neliti.reduce(function(elab, cur, i){
+    Instrument.parts.reyong = Instrument.parts.neliti.reduce(function(elab, cur, i){
         if (i % 2 != 0) {
             //use the last one for the first
-            var prev = i > 1 ? neliti[i - 2] : neliti[neliti.length - 1];
+            var prev = i > 1 ? Instrument.parts.neliti[i - 2] : Instrument.parts.neliti[Instrument.parts.neliti.length - 1];
             //convert to reyong buffers
             prev = reyongRange.indexOf(gangsaRange[prev]);
             cur =  reyongRange.indexOf(gangsaRange[cur]);
@@ -30,20 +30,20 @@ function setReyongPart(pokok) {
         }
         return elab
     }, [[],[],[],[]]);
-    console.log("reyong part set:", reyong_part);
+    console.log("reyong part set:", Instrument.parts.reyong);
 }
 
-function setGangsaPart(instrument, pokok) {
-    //take the pokok and convert to polos and sangsih arrays
+function setGangsaPart(instrument, Instrument.parts.pokok) {
+    //take the Instrument.parts.pokok and convert to polos and sangsih arrays
     var patternType;
     var patternFunction;
 
     if (instrument === "kantilan") {
         patternType = kantilanPatternType;
-        kantilan_part = [];
+        Instrument.parts.kantilan = [];
     } else {
         patternType = pemadePatternType;
-        pemade_part = [];
+        Instrument.parts.pemade = [];
     }
     var type;
     switch (patternType) {
@@ -65,9 +65,9 @@ function setGangsaPart(instrument, pokok) {
             break;
     }
 
-    var elab = neliti.reduce(function(elab, cur, i){
+    var elab = Instrument.parts.neliti.reduce(function(elab, cur, i){
         if (i % 2 != 0) {
-            var prev = i > 1 ? neliti[i - 2] : neliti[neliti.length - 1];
+            var prev = i > 1 ? Instrument.parts.neliti[i - 2] : Instrument.parts.neliti[Instrument.parts.neliti.length - 1];
             var pattern = patternFunction([prev, cur]);
             //reduce/concat??
             pattern[0].forEach(function (v) {elab[0].push(v)});
@@ -77,20 +77,20 @@ function setGangsaPart(instrument, pokok) {
     }, [[],[]]);
 
     if (instrument === "pemade") {
-        pemade_part = elab;
-        console.log(instrument + " part set: ", pemade_part, type);
+        Instrument.parts.pemade = elab;
+        console.log(instrument + " part set: ", Instrument.parts.pemade, type);
 
     } else {
-        kantilan_part = elab;
-        console.log(instrument + " part set: ", kantilan_part, type);
+        Instrument.parts.kantilan = elab;
+        console.log(instrument + " part set: ", Instrument.parts.kantilan, type);
     }
 }
 
-function setNeliti(pokok) {
-    for (var i = 1; i < pokok.length; i+=2) {
-        neliti = neliti.concat(makeNeliti([pokok[i-1], pokok[i]]));
+function setNeliti(Instrument.parts.pokok) {
+    for (var i = 1; i < Instrument.parts.pokok.length; i+=2) {
+        Instrument.parts.neliti = Instrument.parts.neliti.concat(makeNeliti([Instrument.parts.pokok[i-1], Instrument.parts.pokok[i]]));
     }
-    console.log("neliti set: ", neliti);
+    console.log("Instrument.parts.neliti set: ", Instrument.parts.neliti);
 }
 
 //************Pattern Calculation Methods*********************
@@ -99,9 +99,9 @@ function setNeliti(pokok) {
 //Reyong
 //Part parameter, is an integer from 0-3, corresponding to the positions on the reyong
 function getReyongNorotAtIndex(position, index){
-    var firstHalfPatternType = (pokok[index] !== pokok[index - 1]) ? "moving":"staying"
-    var firstHalf = reyongNorotBank[pokok[index] - 1][position][firstHalfPatternType];
-    var secondHalf = reyongNorotBank[pokok[index] - 1][position].staying;
+    var firstHalfPatternType = (Instrument.parts.pokok[index] !== Instrument.parts.pokok[index - 1]) ? "moving":"staying"
+    var firstHalf = reyongNorotBank[Instrument.parts.pokok[index] - 1][position][firstHalfPatternType];
+    var secondHalf = reyongNorotBank[Instrument.parts.pokok[index] - 1][position].staying;
     return firstHalf.concat(secondHalf);
 }
 

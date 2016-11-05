@@ -27,7 +27,7 @@ var makeTelu = 	{
         return variations[Helpers.rand()];
     },
 
-    //parameter 1: the previous and goal tone of the pokok
+    //parameter 1: the previous and goal tone of the Instrument.parts.pokok
     //parameter 2: an array indicating staying pattern contour and rotation
     stay: function(pokokBuffers, stayingPattern) {
         // console.log("static");

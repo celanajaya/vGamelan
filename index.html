@@ -11,11 +11,15 @@
 </head>
 
 <body>
+<div id="hider"></div>
+<div id="editor-popup" class="">
+    <div class="instrument"></div>
+</div>
 	<div class="container">
         <div class="sub-container main">
             <h1>gamelan_komposer</h1>
 		    <div class="row">
-                <div contenteditable="true" class="pokok-editor">
+                <div contenteditable="true" class="Instrument.parts.pokok-editor">
 				    <div class='gatra'>2223</div>
 				    <div class="gatra">5153</div>
 			    </div>
@@ -69,7 +73,7 @@
 <script src="/node_modules/d3/build/d3.min.js"></script>
 <script src="/node_modules/tone/build/Tone.min.js"></script>
 <script src ="helpers.js"></script>
-<script src="neliti.js"></script>
+<script src="Instrument.parts.neliti.js"></script>
 <script src="editor.js"></script>
 <script src="visualizer.js"></script>
 <script src="audio.js"></script>

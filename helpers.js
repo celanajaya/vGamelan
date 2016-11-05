@@ -76,3 +76,77 @@ var Helpers = {
         return ngempat;
     }
 }
+
+var Instrument = {
+    config: [["reyong", 12, "pot"],
+            ["kantilan", 10, "key"],
+            ["pemade", 10, "key"],
+            ["ugal", 10, "key"],
+            ["penyacah", 5, "key"],
+            ["jublag", 5, "key"],
+            ["jegogan", 5, "key"]],
+
+    gangsaRange: [].instrumentRange(10, 2, 5),
+    reyongRange: [].instrumentRange(12, 3, 5),
+    jublagRange: [].instrumentRange(5, 0, 5),
+    jegoganRange: [].instrumentRange(5, 0, 5),
+
+    //initial arrays of buffer indices
+    parts: {
+        "reyong": [[],[],[],[]],
+        "pemade" : [[],[]],
+        "kantilan" : [[],[]],
+        "neliti" : [],
+        "pokok" : [],
+        "jegogan" : []
+    },
+
+    resetElaborations: function() {
+        this.parts = {
+            "reyong": [[],[],[],[]],
+            "pemade" : [[],[]],
+            "kantilan" : [[],[]],
+            "neliti" : [],
+            "pokok" : [],
+            "jegogan" : []
+        }
+    },
+
+    getPatternLengthForInstrument: function(instrumentName) {
+        switch (instrumentName) {
+            case "jegogan":
+                return jegogan.length;
+            case "jublag":
+                return Instrument.parts.pokok.length;
+            case"penyacah":
+                return Instrument.parts.neliti.length;
+            case "ugal":
+                return Instrument.parts.neliti.length;
+            case"pemade":
+                return Instrument.parts.pokok.length * gangsaPatternLength;
+            case"kantilan":
+                return Instrument.parts.pokok.length * gangsaPatternLength;
+            case"reyong":
+                return Instrument.parts.pokok.length * reyongPatternLength;
+        }
+    },
+
+    getRangeForInstrument: function(instrumentName) {
+        switch (instrumentName) {
+            case "jegogan":
+                return this.jegoganRange;
+            case "jublag":
+                return this.jublagRange;
+            case"penyacah":
+                return this.jublagRange;
+            case "ugal":
+                return this.gangsaRange;
+            case"pemade":
+                return this.gangsaRange;
+            case"kantilan":
+                return this.gangsaRange;
+            case"reyong":
+                return this.reyongRange;
+        }
+    }
+}
