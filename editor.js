@@ -1,52 +1,21 @@
 function createEditor(parent, totalHeight, totalWidth) {
     var instrumentName = parent.split("-")[0].slice(1);
     //instrumental part
-    var part;
+    var part = Instrument.parts[instrumentName];
     //number of keys/pots, used as y value
-    var rangeHeight;
+    var rangeHeight = Instrument.range[instrumentName].length;
     //total length of pattern, used as x value
-    var partLength;
-    //how often to show an emphasized beat (aka length of individual sub-patterns)
-    var emphasis;
+    var partLength = Instrument.patternLength[instrumentName]();
 
     var svg = d3.select(parent).append('svg').attr('height', totalHeight).attr('width', totalWidth);
     svg.attr("id", instrumentName + "-svg");
 
     //configure dimensions based on pattern/instrument properties
     switch (instrumentName) {
-        case "jegogan":
-            part = jegogan;
-            rangeHeight = jegoganRange.length;
-            partLength = jegogan.length;
-            break;
-        case "jublag":
-            part= Instrument.parts.pokok;
-            rangeHeight = jublagRange.length;
-            partLength = Instrument.parts.pokok.length;
-            break;
-        case"penyacah":
-            part= Instrument.parts.neliti;
-            rangeHeight = jublagRange.length;
-            partLength = Instrument.parts.neliti.length;
-        case "ugal":
-            part = Instrument.parts.neliti;
-            rangeHeight = gangsaRange.length;
-            partLength = Instrument.parts.neliti.length;
-            break;
         case"pemade":
-            part = Instrument.parts.pemade.reduce(toConcatedArrays,[]);
-            rangeHeight = gangsaRange.length;
-            partLength = Instrument.parts.pokok.length * gangsaPatternLength;
-            break;
         case"kantilan":
-            part = Instrument.parts.kantilan.reduce(toConcatedArrays, []);
-            partLength = Instrument.parts.pokok.length * gangsaPatternLength;
-            emphasis = gangsaPatternLength;
-            break;
         case"reyong":
-            part = Instrument.parts.reyong.reduce(toConcatedArrays, []);
-            rangeHeight = 12;
-            partLength = Instrument.parts.pokok.length * reyongPatternLength;
+            part = part.reduce(toConcatedArrays, []);
             break;
     }
 
@@ -87,44 +56,18 @@ function updateAllSvgs() {
     var allInstruments = Instrument.config.map(function(item) {return item[0]});
 
     allInstruments.forEach(function(instrumentName){
-        var part, rangeHeight, partLength;
-        switch (instrumentName) {
-            case "jegogan":
-                part = jegogan;
-                rangeHeight = jegoganRange.length;
-                partLength = jegogan.length;
-                break;
-            case "jublag":
-                part= Instrument.parts.pokok;
-                rangeHeight = jublagRange.length;
-                partLength = Instrument.parts.pokok.length;
-                break;
-            case"penyacah":
-                part= Instrument.parts.neliti;
-                rangeHeight = jublagRange.length;
-                partLength = Instrument.parts.neliti.length;
-            case "ugal":
-                part = Instrument.parts.neliti;
-                rangeHeight = gangsaRange.length;
-                partLength = Instrument.parts.neliti.length;
-                break;
-            case"pemade":
-                part = Instrument.parts.pemade.reduce(toConcatedArrays,[]);
-                rangeHeight = gangsaRange.length;
-                partLength = Instrument.parts.pokok.length * gangsaPatternLength;
-                break;
-            case"kantilan":
-                part = Instrument.parts.kantilan.reduce(toConcatedArrays, []);
-                partLength = Instrument.parts.pokok.length * gangsaPatternLength;
-                rangeHeight = gangsaRange.length;
-                break;
-            case"reyong":
-                part = Instrument.parts.reyong.reduce(toConcatedArrays, []);
-                rangeHeight = 12;
-                partLength = Instrument.parts.pokok.length * reyongPatternLength;
-                break;
-            }
+        var part = Instrument.parts[instrumentName];
+        var rangeHeight = Instrument.range[instrumentName].length;
+        var partLength = Instrument.patternLength[instrumentName]();
 
+        switch (instrumentName) {
+            case"pemade":
+            case"kantilan":
+            case"reyong":
+                part = part.reduce(toConcatedArrays, []);
+                break;
+        }
+        
         showPattern(instrumentName, part, rangeHeight, partLength);
     });
 }
