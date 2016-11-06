@@ -65,22 +65,22 @@ function makeNeliti(arr) {
                 prevPrev = tones[i - 2];
             }
             if (cur === 1) {
-                tones[i] = Instrument.range["ugal"].indexOf(cur);
+                tones[i] = Gamelan.range["ugal"].indexOf(cur);
 
                 if (prev === 5) {
 
                     if (prevPrev && prevPrev === 4) {
 
-                        tones[i - 2] = Instrument.range.ugal.indexOf(prevPrev);
+                        tones[i - 2] = Gamelan.range.ugal.indexOf(prevPrev);
                     }
                     if (i % 2 == 0) {
-                        tones[i - 1] = Instrument.range.ugal.indexOf(2) + 5;
+                        tones[i - 1] = Gamelan.range.ugal.indexOf(2) + 5;
                     } else {
-                        tones[i - 1] = Instrument.range.ugal.indexOf(prev);
+                        tones[i - 1] = Gamelan.range.ugal.indexOf(prev);
                     }
                 }
             } else {
-                tones[i] = Instrument.range.ugal.indexOf(cur) + 5;
+                tones[i] = Gamelan.range.ugal.indexOf(cur) + 5;
             }
         }
         var neg = true;
@@ -89,6 +89,7 @@ function makeNeliti(arr) {
             neg = !neg;
             tones[2] = Helpers.nudge(tones[3], -1, neg);
         }
+        console.log(tones);
         return tones;
     }
 }

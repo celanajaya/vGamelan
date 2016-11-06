@@ -28,7 +28,7 @@ var nyogCagStayingPattern = 0;
 function init() {
     setAllParts();
     configurePokokEditor();
-    Instrument.config.forEach(buildInstrument);
+    Gamelan.config.forEach(buildInstrument);
     initializeMuteButtons();
     initializeTempoVolumeSliders()
     configureGong();
@@ -191,20 +191,20 @@ function addDropDownContentForInstrument(instrumentName, container) {
             switch (instrumentName) {
                 case"reyong":
                     reyongPatternType = event.target.textContent;
-                    setReyongPart(Instrument.parts.pokok);
-                    showPattern(instrumentName, Instrument.parts.reyong.reduce(toConcatedArrays), 12, reyongPatternLength * Instrument.parts.pokok.length);
+                    setReyongPart();
                     break;
                 case"kantilan":
                     kantilanPatternType = event.target.textContent;
-                    setGangsaPart("kantilan", Instrument.parts.pokok);
-                    showPattern(instrumentName, Instrument.parts.kantilan.reduce(toConcatedArrays), 10, gangsaPatternLength * Instrument.parts.pokok.length);
+                    setGangsaPart("kantilan");
                     break;
                 case "pemade":
                     pemadePatternType = event.target.textContent;
-                    setGangsaPart("pemade", Instrument.parts.pokok);
-                    showPattern(instrumentName, Instrument.parts.pemade.reduce(toConcatedArrays), 10, gangsaPatternLength * Instrument.parts.pokok.length);
+                    setGangsaPart("pemade");
                     break;
             }
+            showPattern(instrumentName, Gamelan.parts[instrumentName].reduce(toConcatedArrays),
+                                        Gamelan.range[instrumentName].length,
+                                        Gamelan.getPartLength[instrumentName]());
         });
         dropDownContent.appendChild(menuItem);
     });
@@ -315,18 +315,18 @@ function getPokokFromEditor(){
 function setPokokParts() {
     //set pokok, jublag and jegogan
     //pokok is in scale degrees, instrument parts are in buffers
-    Instrument.parts.pokok = getPokokFromEditor().map(function(n){return parseInt(n)});
-    Instrument.parts.jublag = Instrument.parts.pokok.map(function(v){return v - 1});
-    Instrument.parts.jegogan = Instrument.parts.pokok.filter(function(n, i){return i%2 != 0});
-    console.log("pokok set:", Instrument.parts.pokok);
+    Gamelan.parts.pokok = getPokokFromEditor().map(function(n){return parseInt(n)});
+    Gamelan.parts.jublag = Gamelan.parts.pokok.map(function(v){return v - 1});
+    Gamelan.parts.jegogan = Gamelan.parts.pokok.filter(function(n, i){return i%2 != 0});
+    console.log("pokok set:", Gamelan.parts.pokok);
 
     //set neliti ugal and penyacah
-    for (var i = 1; i < Instrument.parts.pokok.length; i+=2) {
-        Instrument.parts.ugal = Instrument.parts.ugal.concat(makeNeliti([Instrument.parts.pokok[i-1], Instrument.parts.pokok[i]]));
+    for (var i = 1; i < Gamelan.parts.pokok.length; i+=2) {
+        Gamelan.parts.ugal = Gamelan.parts.ugal.concat(makeNeliti([Gamelan.parts.pokok[i-1], Gamelan.parts.pokok[i]]));
     }
-    Instrument.parts.neliti = Instrument.parts.ugal.map(function(v){return Instrument.range.pemade[v]});
-    Instrument.parts.penyacah = Instrument.parts.neliti.map(function(v){return Instrument.range.penyacah[v]});
-    console.log("Neliti set: ", Instrument.parts.neliti);
+    Gamelan.parts.neliti = Gamelan.parts.ugal.map(function(v){return Gamelan.range.pemade[v]});
+    Gamelan.parts.penyacah = Gamelan.parts.neliti.map(function(v){return Gamelan.range.penyacah[v]});
+    console.log("Neliti set: ", Gamelan.parts.neliti);
 }
 
 
@@ -340,7 +340,7 @@ function start(event) {
 }
 
 function setAllParts() {
-    Instrument.resetAllParts();
+    Gamelan.resetAllParts();
 
     //set basic melody parts
     setPokokParts();
@@ -368,7 +368,7 @@ document.getElementsByClassName("playback")[0].addEventListener("click", functio
 
 function activateTransport() {
     Tone.Transport.loopStart = 0;
-    Tone.Transport.loopEnd = (Instrument.parts.pokok.length / 2).toString() + "m";
+    Tone.Transport.loopEnd = (Gamelan.parts.pokok.length / 2).toString() + "m";
     Tone.Transport.start();
 }
 

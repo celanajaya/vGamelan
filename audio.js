@@ -20,35 +20,6 @@ function setLoop(instrument) {
     return function () {
         var i = 0;
         var q = [];
-        var interval;
-        var offset = 0;
-
-        //determine the rate of play and the initial offset for an instrumetn
-        switch (instrument) {
-            case "jegogan":
-                interval = "1n";
-                offset += "1:0:0";
-                break;
-            case "jublag":
-                interval = "2n";
-                offset += "0:1:4";
-                break;
-            case "penyacah":
-            case "ugal":
-                interval = "4n";
-                offset += "0:0:4";
-                break;
-            case "pemade":
-            case "kantilan":
-                interval = "16n";
-                offset += "0:0:4";
-                break;
-            case "reyong":
-                interval = "16n";
-                offset += "0:1:1";
-                break;
-        }
-
         new Tone.Loop(function (time) {
             //handle UI state for keys/pots
             q.forEach(toggleActive);
@@ -62,7 +33,7 @@ function setLoop(instrument) {
                 //return if it's a rest value
                 if (buffer === "-" || players[instrument].mute) return;
                 players[instrument].start(buffer, time);
-                players[instrument].stop(buffer, "+" + interval);
+                players[instrument].stop(buffer, "+" + Gamelan.interval[instrument]);
 
                 //add the note to be turned on
                 q.push(document.getElementById(instrument + " " + buffer));
@@ -70,30 +41,28 @@ function setLoop(instrument) {
 
             q.forEach(toggleActive);
             i++;
-        }, interval).start(offset);
+        }, Gamelan.interval[instrument]).start(Gamelan.offset[instrument]);
     }
 }
 
 //returns an array of buffers to be played simultaneously (takes a instrument name and an index)
-//TODO: turn 8s into a variable representing the length of the elaboration pattern per Instrument.parts.pokok tone
 function readBuffers(instrument, index) {
     switch (instrument) {
+        //melody instruments
         case "jegogan":
-            return [jegogan[index % jegogan.length] - 1];
         case "jublag":
-            return [Instrument.parts.pokok[index % Instrument.parts.pokok.length] - 1];
         case "penyacah":
-            return [Instrument.parts.neliti[index % Instrument.parts.neliti.length]];
         case "ugal":
-            return [Instrument.parts.neliti[index % Instrument.parts.neliti.length]];
+            return [Gamelan.parts[instrument][index % Gamelan.getPartLength[instrument]]];
+
+        //elaborating instruments
         case "pemade":
-            return [Instrument.parts.pemade[0][index % (Instrument.parts.pokok.length * gangsaPatternLength)],
-                    Instrument.parts.pemade[1][index % (Instrument.parts.pokok.length * gangsaPatternLength)]];
         case "kantilan":
-            return [Instrument.parts.kantilan[0][index % (Instrument.parts.pokok.length * gangsaPatternLength)],
-                    Instrument.parts.kantilan[1][index % (Instrument.parts.pokok.length * gangsaPatternLength)]];
         case "reyong":
-            return Instrument.parts.reyong.map(function(arr){return arr[index % (Instrument.parts.pokok.length * reyongPatternLength)]});
+            //TODO: this is elegant but not very fast. find a faster way
+            return Gamelan.parts[instrument].map(function(arr){
+                return arr[index % Gamelan.getPartLength[instrument]()];
+            });
     }
 }
 
@@ -105,10 +74,10 @@ function configureGong() {
                 i++;
                 return;
             }
-            if (i % Instrument.parts.pokok.length === Instrument.parts.pokok.length / 2 - 1) {
+            if (i % Gamelan.parts.pokok.length === Gamelan.parts.pokok.length / 2 - 1) {
                 players["gong"].start(1);
             }
-            if (i % Instrument.parts.pokok.length === Instrument.parts.pokok.length - 1) {
+            if (i % Gamelan.parts.pokok.length === Gamelan.parts.pokok.length - 1) {
                 players["gong"].start(0);
             }
             i++;
@@ -116,7 +85,7 @@ function configureGong() {
     }).toMaster();
     players["gong"].fadeIn = 0.1;
     players["gong"].fadeOut = 0.3;
-    players["gong"].volume.value = -40;
+    players["gong"].volume.value = 0;
 }
 
 //handle animations

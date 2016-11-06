@@ -2,13 +2,13 @@
 //Setting the elaborations to globally defined arrays
 function setReyongPart() {
     var patternFunction = (reyongPatternType === "norot") ? getReyongNorotAtIndex : getReyongKilitanAtIndex;
-    Instrument.parts.reyong = Instrument.parts.neliti.reduce(function(elab, cur, i){
+    Gamelan.parts.reyong = Gamelan.parts.neliti.reduce(function(elab, cur, i){
         if (i % 2 != 0) {
             //use the last one for the first
-            var prev = i > 1 ? Instrument.parts.neliti[i - 2] : Instrument.parts.neliti[Instrument.parts.neliti.length - 1];
+            var prev = i > 1 ? Gamelan.parts.neliti[i - 2] : Gamelan.parts.neliti[Gamelan.parts.neliti.length - 1];
             //convert to reyong buffers
-            prev = Instrument.range.reyong.indexOf(Instrument.range.ugal[prev]);
-            cur =  Instrument.range.reyong.indexOf(Instrument.range.ugal[cur]);
+            prev = Gamelan.range.reyong.indexOf(Gamelan.range.ugal[prev]);
+            cur =  Gamelan.range.reyong.indexOf(Gamelan.range.ugal[cur]);
             var lowPattern = patternFunction([prev, cur]);
             var highPattern = lowPattern.map(function(part) {
                 return part.map(function(note){
@@ -30,7 +30,7 @@ function setReyongPart() {
         }
         return elab
     }, [[],[],[],[]]);
-    console.log("reyong part set:", Instrument.parts.reyong);
+    console.log("reyong part set:", Gamelan.parts.reyong);
 }
 
 function setGangsaPart(instrument) {
@@ -40,10 +40,10 @@ function setGangsaPart(instrument) {
 
     if (instrument === "kantilan") {
         patternType = kantilanPatternType;
-        Instrument.parts.kantilan = [];
+        Gamelan.parts.kantilan = [];
     } else {
         patternType = pemadePatternType;
-        Instrument.parts.pemade = [];
+        Gamelan.parts.pemade = [];
     }
     var type;
     switch (patternType) {
@@ -65,9 +65,9 @@ function setGangsaPart(instrument) {
             break;
     }
 
-    var elab = Instrument.parts.neliti.reduce(function(elab, cur, i){
+    var elab = Gamelan.parts.neliti.reduce(function(elab, cur, i){
         if (i % 2 != 0) {
-            var prev = i > 1 ? Instrument.parts.neliti[i - 2] : Instrument.parts.neliti[Instrument.parts.neliti.length - 1];
+            var prev = i > 1 ? Gamelan.parts.neliti[i - 2] : Gamelan.parts.neliti[Gamelan.parts.neliti.length - 1];
             var pattern = patternFunction([prev, cur]);
             //reduce/concat??
             pattern[0].forEach(function (v) {elab[0].push(v)});
@@ -77,12 +77,12 @@ function setGangsaPart(instrument) {
     }, [[],[]]);
 
     if (instrument === "pemade") {
-        Instrument.parts.pemade = elab;
-        console.log(instrument + " part set: ", Instrument.parts.pemade, type);
+        Gamelan.parts.pemade = elab;
+        console.log(instrument + " part set: ", Gamelan.parts.pemade, type);
 
     } else {
-        Instrument.parts.kantilan = elab;
-        console.log(instrument + " part set: ", Instrument.parts.kantilan, type);
+        Gamelan.parts.kantilan = elab;
+        console.log(instrument + " part set: ", Gamelan.parts.kantilan, type);
     }
 }
 //************Pattern Calculation Methods*********************
@@ -91,9 +91,9 @@ function setGangsaPart(instrument) {
 //Reyong
 //Part parameter, is an integer from 0-3, corresponding to the positions on the reyong
 function getReyongNorotAtIndex(position, index){
-    var firstHalfPatternType = (Instrument.parts.pokok[index] !== Instrument.parts.pokok[index - 1]) ? "moving":"staying"
-    var firstHalf = reyongNorotBank[Instrument.parts.pokok[index] - 1][position][firstHalfPatternType];
-    var secondHalf = reyongNorotBank[Instrument.parts.pokok[index] - 1][position].staying;
+    var firstHalfPatternType = (Gamelan.parts.pokok[index] !== Gamelan.parts.pokok[index - 1]) ? "moving":"staying"
+    var firstHalf = reyongNorotBank[Gamelan.parts.pokok[index] - 1][position][firstHalfPatternType];
+    var secondHalf = reyongNorotBank[Gamelan.parts.pokok[index] - 1][position].staying;
     return firstHalf.concat(secondHalf);
 }
 
