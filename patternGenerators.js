@@ -45,29 +45,23 @@ function setGangsaPart(instrument) {
         patternType = pemadePatternType;
         Gamelan.parts.pemade = [];
     }
-    var type;
     switch (patternType) {
         case kTelu:
-            type = " telu";
             patternFunction = getGangsaTeluAtIndex;
             break;
         case kNorot:
-            type = " norot";
             patternFunction = getGangsaNorotAtIndex;
             break;
         case kNyogCag:
-            type = " nyogcag";
             patternFunction = getGangsaNyogCagAtIndex;
             break;
         case kEmpat:
-            type = " empat";
             patternFunction = getGangsaEmpatAtIndex;
             break;
     }
-
-    var elab = Gamelan.parts.neliti.reduce(function(elab, cur, i){
+    var elab = Gamelan.parts.ugal.reduce(function(elab, cur, i){
         if (i % 2 != 0) {
-            var prev = i > 1 ? Gamelan.parts.neliti[i - 2] : Gamelan.parts.neliti[Gamelan.parts.neliti.length - 1];
+            var prev = i > 1 ? Gamelan.parts.ugal[i - 2] : Gamelan.parts.ugal[Gamelan.parts.ugal.length - 1];
             var pattern = patternFunction([prev, cur]);
             //reduce/concat??
             pattern[0].forEach(function (v) {elab[0].push(v)});
@@ -78,11 +72,11 @@ function setGangsaPart(instrument) {
 
     if (instrument === "pemade") {
         Gamelan.parts.pemade = elab;
-        console.log(instrument + " part set: ", Gamelan.parts.pemade, type);
+        console.log(instrument + " part set: ", Gamelan.parts.pemade, patternType);
 
     } else {
         Gamelan.parts.kantilan = elab;
-        console.log(instrument + " part set: ", Gamelan.parts.kantilan, type);
+        console.log(instrument + " part set: ", Gamelan.parts.kantilan, patternType);
     }
 }
 //************Pattern Calculation Methods*********************

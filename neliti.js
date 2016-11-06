@@ -89,7 +89,6 @@ function makeNeliti(arr) {
             neg = !neg;
             tones[2] = Helpers.nudge(tones[3], -1, neg);
         }
-        console.log(tones);
         return tones;
     }
 }

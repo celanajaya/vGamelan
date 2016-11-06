@@ -269,13 +269,19 @@ function configurePokokEditor() {
             editor.innerHTML = val;
             return;
         }
+
+        //recreate patterns and update the editor
         var pArray = getPokokFromEditor();
         setAllParts();
         updateAllSvgs();
+
+        //update the editor
         clearAllFromParent(editor, "gatra");
         pArray.toGatra(4, editor).forEach(function(g){editor.appendChild(g)});
         var r = document.createRange();
         r.setStart(editor.lastChild, savedOffset);
+
+        //reset the cursor
         window.getSelection().removeAllRanges();
         window.getSelection().addRange(r)
     });
@@ -311,14 +317,13 @@ function getPokokFromEditor(){
     return pArray;
 }
 
-//set the Instrument.parts.pokok in data as an array of integers
 function setPokokParts() {
-    //set pokok, jublag and jegogan
     //pokok is in scale degrees, instrument parts are in buffers
     Gamelan.parts.pokok = getPokokFromEditor().map(function(n){return parseInt(n)});
-    Gamelan.parts.jublag = Gamelan.parts.pokok.map(function(v){return v - 1});
-    Gamelan.parts.jegogan = Gamelan.parts.pokok.filter(function(n, i){return i%2 != 0});
     console.log("pokok set:", Gamelan.parts.pokok);
+
+    Gamelan.parts.jublag = Gamelan.parts.pokok.map(function(v){return v - 1});
+    Gamelan.parts.jegogan = Gamelan.parts.jublag.filter(function(n, i){return i%2 != 0});
 
     //set neliti ugal and penyacah
     for (var i = 1; i < Gamelan.parts.pokok.length; i+=2) {
