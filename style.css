@@ -70,11 +70,16 @@ p {
     font-weight: 500;
 }
 
-.Gamelan.parts.pokok-editor {
-    margin: 5px;
+#pokok-editor {
+    margin: 0 auto;
     border: 1px solid #ED33CF;
     border-radius: 15px;
-    box-shadow: 0.5px 0.5px 0.5px #555
+    box-shadow: 0.5px 0.5px 0.5px #555;
+    text-align: center;
+
+    font-size: 40px;
+    padding: 10px;
+    display: inline-block;
 }
 
 .instrument {
@@ -113,13 +118,6 @@ p {
 
 .mute-button:hover{
     cursor: pointer;
-}
-
-.gatra {
-    font-size: 40px;
-    width: 50%;
-    padding: 10px;
-    display: inline-block;
 }
 
 .reyong {

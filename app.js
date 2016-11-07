@@ -29,8 +29,12 @@ function init() {
     setAllParts();
     configurePokokEditor();
     Gamelan.config.forEach(buildInstrument);
+
+    //TODO: move these two to inside the build instrument methods?
     initializeMuteButtons();
     initializeTempoVolumeSliders()
+
+
     configureGong();
 };
 
@@ -89,6 +93,7 @@ function addControlsForInstrument(instrument) {
     var controls = document.createElement("div");
     controls.classList.add("controls");
     controls.id = instrument.id + "-controls";
+    console.log("controlsIDD", controls.id);
     var controlItemContainer = document.createElement("div");
     controlItemContainer.classList.add("control-item-container");
     for (var i = 0; i < 3; i++) {
@@ -244,53 +249,18 @@ function initializeMuteButtons() {
             players[key].mute = !players[key].mute
 
             //toggle class for UI
-            if (event.target.classList.contains("active")) {
-                event.target.classList.remove("active");
-            } else {
-                event.target.classList.add("active");
-            }
+            toggleClass(event.target, "active");
 
         })
     }
 }
 //TODO: fix cursor placement
 function configurePokokEditor() {
-    var editor = document.getElementsByClassName("Instrument.parts.pokok-editor")[0];
-    var val = editor.innerHTML;
-    var savedOffset = 0;
-
-    editor.addEventListener("keydown", function(e){
-        var r = window.getSelection().getRangeAt(0);
-        savedOffset = [r.offsetStart];
-    });
-
+    var editor = document.getElementById("pokok-editor");
     editor.addEventListener("keyup", function(e){
-        if (e.keyCode < 49 || e.keyCode > 54) {
-            editor.innerHTML = val;
-            return;
-        }
-
-        //recreate patterns and update the editor
-        var pArray = getPokokFromEditor();
         setAllParts();
         updateAllSvgs();
-
-        //update the editor
-        clearAllFromParent(editor, "gatra");
-        pArray.toGatra(4, editor).forEach(function(g){editor.appendChild(g)});
-        var r = document.createRange();
-        r.setStart(editor.lastChild, savedOffset);
-
-        //reset the cursor
-        window.getSelection().removeAllRanges();
-        window.getSelection().addRange(r)
     });
-}
-
-function clearAllFromParent(parent, className) {
-    var children = Array.prototype.slice.call(parent.childNodes)
-    var elementsToRemove = children.filter(function(item) {return item.className === className});
-    elementsToRemove.forEach(function(c){parent.removeChild(c)});
 }
 
 function openInstrumentEditor() {
@@ -306,15 +276,9 @@ function openInstrumentEditor() {
 //**********User Interactions***********
 //returns the Instrument.parts.pokok as an array of strings
 function getPokokFromEditor(){
-    var elements = Array.prototype.slice.call(document.getElementsByClassName("Instrument.parts.pokok-editor")[0].childNodes);
-    var pArray = elements.reduce(function(p, element){
-        if (element.className === 'gatra') {
-            var a = element.innerHTML.split("");
-            p = p.concat(a);
-        }
-        return p;
-    },[]);
-    return pArray;
+    var textArr = (document.getElementById("pokok-editor").value.split(""));
+    var reg = new RegExp(/^\d+$/);
+    return textArr.filter(function(item) {return  reg.test(item)});
 }
 
 function setPokokParts() {
