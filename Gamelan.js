@@ -15,7 +15,8 @@ var Gamelan = {
         ["ugal", 10, "key"],
         ["penyacah", 5, "key"],
         ["jublag", 5, "key"],
-        ["jegogan", 5, "key"]],
+        ["jegogan", 5, "key"]
+    ],
 
     //initial arrays of buffer indices
     parts: {

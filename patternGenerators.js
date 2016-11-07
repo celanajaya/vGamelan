@@ -9,20 +9,25 @@ function setReyongPart() {
             //convert to reyong buffers
             prev = Gamelan.range.reyong.indexOf(Gamelan.range.ugal[prev]);
             cur =  Gamelan.range.reyong.indexOf(Gamelan.range.ugal[cur]);
-            var lowPattern = patternFunction([prev, cur]);
-            var highPattern = lowPattern.map(function(part) {
-                return part.map(function(note){
-                    if (note === "-") return note;
-                    var newNote = note + 5;
-                    if (newNote > 11) {
-                        var e = new Error("Reyong part out of range");
-                        throw e;
-                        alert(e);
-                    }
-                    return newNote;
+            var pattern;
+            if (reyongPatternType === "kilitan") {
+                var lowPattern = patternFunction([prev, cur]);
+                var highPattern = lowPattern.map(function (part) {
+                    return part.map(function (note) {
+                        if (note === "-") return note;
+                        var newNote = note + 5;
+                        if (newNote > 11) {
+                            var e = new Error("Reyong part out of range");
+                            throw e;
+                            alert(e);
+                        }
+                        return newNote;
+                    });
                 });
-            });
-            var pattern = lowPattern.concat(highPattern);
+                pattern = lowPattern.concat(highPattern);
+            } else {
+                pattern = patternFunction([prev, cur]);
+            }
             pattern[0].forEach(function (note) {elab[0].push(note)});
             pattern[1].forEach(function (note) {elab[1].push(note)});
             pattern[2].forEach(function (note) {elab[2].push(note)});
