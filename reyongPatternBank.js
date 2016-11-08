@@ -4,16 +4,16 @@
 var makeReyongNorot = {
     "move" : function(pokokPair) {
         pokokPair = pokokPair.map(function(i){return i - 1});
-        var prevStaying = this.patternBank[pokokPair[0]].map(Helpers.getStaying);
-        var nextMoving = this.patternBank[pokokPair[1]].map(Helpers.getMoving);
+        var prevStaying = Improv.randomize(this.patternBank[pokokPair[0]].map(Helpers.getStaying));
+        var nextMoving = Improve.randomize(this.patternBank[pokokPair[1]].map(Helpers.getMoving));
         var d = Helpers.deepConcat(prevStaying, nextMoving);
         return d
     },
 
     "stay" : function(pokokPair) {
         pokokPair = pokokPair.map(function(i){return i - 1});
-        var prevStaying = this.patternBank[pokokPair[0]].map(Helpers.getStaying);
-        var nextStaying = this.patternBank[pokokPair[1]].map(Helpers.getStaying);
+        var prevStaying = Improv.randomize(this.patternBank[pokokPair[0]].map(Helpers.getStaying));
+        var nextStaying = Improv.randomize(this.patternBank[pokokPair[1]].map(Helpers.getStaying));
         var d = Helpers.deepConcat(prevStaying, nextStaying);
         return d
     },
@@ -43,15 +43,19 @@ var makeReyongNorot = {
 
 }
 
-var improv = {
+var Improv = {
+    //run the array through a random combination of the other functions
+    "randomize":function(arr){
+        return arr;
+    },
     "double": function(arr) {
-
+        return arr;
     },
     "subtract": function(arr) {
-
+        return arr;
     },
     "kilit" : function(arr) {
-
+        return arr;
     },
 }
 

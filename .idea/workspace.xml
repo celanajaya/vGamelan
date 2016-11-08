@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d38b4af6-0d85-4834-9f25-5702e0762a3a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helpers.js" afterPath="$PROJECT_DIR$/helpers.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/patternGenerators.js" afterPath="$PROJECT_DIR$/patternGenerators.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/reyongPatternBank.js" afterPath="$PROJECT_DIR$/reyongPatternBank.js" />
     </list>
     <ignored path="reyongify.iws" />
@@ -53,8 +50,8 @@
       <file leaf-file-name="reyongPatternBank.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/reyongPatternBank.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="915">
-              <caret line="61" column="31" selection-start-line="61" selection-start-column="31" selection-end-line="61" selection-end-column="31" />
+            <state relative-caret-position="-105">
+              <caret line="15" column="16" selection-start-line="15" selection-start-column="16" selection-end-line="15" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -309,12 +306,12 @@
       <workItem from="1478322017765" duration="4939000" />
       <workItem from="1478360901712" duration="23558000" />
       <workItem from="1478577147068" duration="642000" />
-      <workItem from="1478587001746" duration="3644000" />
+      <workItem from="1478587001746" duration="3935000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="330826000" />
+    <option name="totallyTimeSpent" value="331117000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="25" y="23" width="1400" height="833" extended-state="0" />
@@ -715,8 +712,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/reyongPatternBank.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="915">
-          <caret line="61" column="31" selection-start-line="61" selection-start-column="31" selection-end-line="61" selection-end-column="31" />
+        <state relative-caret-position="-105">
+          <caret line="15" column="16" selection-start-line="15" selection-start-column="16" selection-end-line="15" selection-end-column="16" />
           <folding />
         </state>
       </provider>
