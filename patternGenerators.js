@@ -6,11 +6,11 @@ function setReyongPart() {
         if (i % 2 != 0) {
             //use the last one for the first
             var prev = i > 1 ? Gamelan.parts.neliti[i - 2] : Gamelan.parts.neliti[Gamelan.parts.neliti.length - 1];
-            //convert to reyong buffers
-            prev = Gamelan.range.reyong.indexOf(Gamelan.range.ugal[prev]);
-            cur =  Gamelan.range.reyong.indexOf(Gamelan.range.ugal[cur]);
             var pattern;
             if (reyongPatternType === "kilitan") {
+                //convert to reyong buffers
+                prev = Gamelan.range.reyong.indexOf(Gamelan.range.ugal[prev]);
+                cur =  Gamelan.range.reyong.indexOf(Gamelan.range.ugal[cur]);
                 var lowPattern = patternFunction([prev, cur]);
                 var highPattern = lowPattern.map(function (part) {
                     return part.map(function (note) {
@@ -89,11 +89,11 @@ function setGangsaPart(instrument) {
 
 //Reyong
 //Part parameter, is an integer from 0-3, corresponding to the positions on the reyong
-function getReyongNorotAtIndex(position, index){
-    var firstHalfPatternType = (Gamelan.parts.pokok[index] !== Gamelan.parts.pokok[index - 1]) ? "moving":"staying"
-    var firstHalf = reyongNorotBank[Gamelan.parts.pokok[index] - 1][position][firstHalfPatternType];
-    var secondHalf = reyongNorotBank[Gamelan.parts.pokok[index] - 1][position].staying;
-    return firstHalf.concat(secondHalf);
+function getReyongNorotAtIndex(pokokPair){
+    if (pokokPair[0] != pokokPair[1]) {
+        return makeReyongNorot.move(pokokPair);
+    }
+    return makeReyongNorot.stay(pokokPair, empatStayingPattern);
 }
 
 function getReyongKilitanAtIndex(pokokPair) {

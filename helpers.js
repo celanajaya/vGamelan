@@ -74,5 +74,20 @@ var Helpers = {
             ngempat = ngempat % 5;
         }
         return ngempat;
+    },
+
+    getStaying: function(obj){
+        return obj.staying;
+    },
+
+    getMoving: function(obj) {
+        return obj.moving;
+    },
+
+    deepConcat: function(arr1, arr2) {
+        return arr1.reduce(function (a, b, i) {
+            a[i] = b.concat(arr2[i]);
+            return a;
+        }, [])
     }
 }
