@@ -15,7 +15,7 @@ var analyzers = {};
 //default settings
 var pemadePatternType = patternTypes[1];
 var kantilanPatternType = patternTypes[1];
-var reyongPatternType = patternTypes[0];
+var reyongPatternType = patternTypes[1];
 var teluStayingPattern = [0,0];
 var empatStayingPattern = [0,0];
 var nyogCagMovingPattern = 0;
@@ -63,7 +63,7 @@ function buildInstrument(config) {
     //during the Tone.Transport timeline
     players[instrumentName] = new Tone.MultiPlayer(getSamples(instrumentName, numKeys), setLoop(instrumentName)).toMaster();
     players[instrumentName].fadeIn = 0.05;
-    players[instrumentName].fadeOut = 0.3;
+    players[instrumentName].fadeOut = 0.1;
     analyzers[instrumentName] = new Tone.Analyser("fft", 32);
     players[instrumentName].chain(analyzers[instrumentName], Tone.Master);
 
@@ -93,7 +93,6 @@ function addControlsForInstrument(instrument) {
     var controls = document.createElement("div");
     controls.classList.add("controls");
     controls.id = instrument.id + "-controls";
-    console.log("controlsIDD", controls.id);
     var controlItemContainer = document.createElement("div");
     controlItemContainer.classList.add("control-item-container");
     for (var i = 0; i < 3; i++) {

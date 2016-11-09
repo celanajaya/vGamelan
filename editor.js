@@ -9,7 +9,6 @@ function createEditor(parent, totalHeight, totalWidth) {
 
     var svg = d3.select(parent).append('svg').attr('height', totalHeight).attr('width', totalWidth);
     svg.attr("id", instrumentName + "-svg");
-    console.log(svg.attr('id'));
     //configure dimensions based on pattern/instrument properties
     var meter = Gamelan.meter;
     switch (instrumentName) {

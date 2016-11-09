@@ -24,7 +24,7 @@ var makeTelu = 	{
 		var variations = [[["-",z,"-",y,z,"-",y,z],[y,"-",x,y,"-",x,y,"-"]],
                           [["-",z,"-",y,z,"-",y,z],[x,"-",x,y,"-",x,y,"-"]]];
 
-        return variations[Helpers.rand()];
+        return variations[Helpers.rand(2)];
     },
 
     //parameter 1: the previous and goal tone of the Instrument.parts.pokok

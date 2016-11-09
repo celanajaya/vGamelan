@@ -47,7 +47,7 @@ Array.prototype.toGatra = function(mod, parent) {
 
 var Helpers = {
     //returns a number between 0 and 1
-    rand: function() { return Math.floor(Math.random() * 2);},
+    rand: function(limit) { return Math.floor(Math.random() * limit);},
 
     nudge: function(val, inc, neg) {
         if (neg) {

@@ -8,8 +8,8 @@ function makeNeliti(arr) {
     switch (dif) {
         case 0:
             //same pitch - sinusoidal around note or upper/lower neighbor
-            r = Helpers.rand();
-            if (Helpers.rand()) {
+            r = Helpers.rand(2);
+            if (Helpers.rand(2)) {
                 //upper or lower neighbor
                 n0 = Helpers.bump(arr[0], r);
                 n1 = Helpers.bump(arr[1], r);
@@ -30,7 +30,7 @@ function makeNeliti(arr) {
             //bumps upper neighbors for descending contours, lower neighbors for ascending
             r = arr[0] > arr[1] ? 1:0;
 
-            if (Helpers.rand()) {
+            if (Helpers.rand(2)) {
                 //line (all uppers or lowers)
                 n0 = Helpers.bump(arr[0], r);
                 n1 = Helpers.bump(arr[1], r);
