@@ -25,9 +25,6 @@ function setLoop(instrument) {
             q.forEach(toggleActive);
             q = [];
 
-            //read the appropriate buffers for the index
-            if (instrument == "penyacah") return;
-
             var buffers = readBuffers(instrument, i);
             buffers.forEach(function(buffer){
                 //return if it's a rest value
@@ -53,13 +50,12 @@ function readBuffers(instrument, index) {
         case "jublag":
         case "penyacah":
         case "ugal":
-            return [Gamelan.parts[instrument][index % Gamelan.getPartLength[instrument]]];
+            return [Gamelan.parts[instrument][index % Gamelan.getPartLength[instrument]()]];
 
         //elaborating instruments
         case "pemade":
         case "kantilan":
         case "reyong":
-            //TODO: this is elegant but not very fast. find a faster way
             return Gamelan.parts[instrument].map(function(arr){
                 return arr[index % Gamelan.getPartLength[instrument]()];
             });

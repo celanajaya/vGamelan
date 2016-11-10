@@ -49,17 +49,17 @@ var Gamelan = {
         "ugal" : "4n",
         "jublag" : "2n",
         "penyacah" : "4n",
-        "jegogan" : "2n"
+        "jegogan" : "1n"
     },
 
     offset: {
-        "reyong": "0:0:4",
-        "pemade": "0:0:4",
-        "kantilan": "0:0:4",
-        "ugal": "0:0:4",
-        "jublag":"0:1:4",
-        "penyacah": "0:0:4",
-        "jegogan": "1:0:0"
+        "reyong": "0:0:0",
+        "pemade": "0:0:0",
+        "kantilan": "0:0:0",
+        "ugal": "0:0:3",
+        "jublag":"0:1:3",
+        "penyacah": "0:0:3",
+        "jegogan": "0:3:3"
     },
 
     //returns the total numbers notes for that part

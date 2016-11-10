@@ -28,6 +28,7 @@ var nyogCagStayingPattern = 0;
 function init() {
     setAllParts();
     configurePokokEditor();
+    Tone.Transport.bpm.value = 60;
     Gamelan.config.forEach(buildInstrument);
 
     //TODO: move these two to inside the build instrument methods?
@@ -293,7 +294,7 @@ function setPokokParts() {
         Gamelan.parts.ugal = Gamelan.parts.ugal.concat(makeNeliti([Gamelan.parts.pokok[i-1], Gamelan.parts.pokok[i]]));
     }
     Gamelan.parts.neliti = Gamelan.parts.ugal.map(function(v){return Gamelan.range.pemade[v]});
-    Gamelan.parts.penyacah = Gamelan.parts.neliti.map(function(v){return Gamelan.range.penyacah[v]});
+    Gamelan.parts.penyacah = Gamelan.parts.neliti.map(function(v){return v - 1});
     console.log("Neliti set: ", Gamelan.parts.neliti);
 }
 

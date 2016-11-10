@@ -45,15 +45,13 @@ function showPattern(instrumentName, part, rangeHeight, partLength) {
     clearAllForInstrument(instrumentName);
     part.forEach(function (buffer, index) {
         if (buffer === "-") return;
-        var id = instrumentName + "-" + (rangeHeight - buffer).toString() + "-" + (index % partLength).toString();
-        d3.select("#" + id)
-            .attr('fill', "rgb(232, 113, 228)");
+        var id = instrumentName + "-" + ((rangeHeight - 1) - buffer).toString() + "-" + (index % partLength).toString();
+        d3.select("#" + id).attr('fill', "rgb(232, 113, 228)");
     });
 }
 
 function updateAllSvgs() {
     var allInstruments = Gamelan.config.map(function(item) {return item[0]});
-
     allInstruments.forEach(function(instrumentName){
         var part = Gamelan.parts[instrumentName];
         var rangeHeight = Gamelan.range[instrumentName].length;

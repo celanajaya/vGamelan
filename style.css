@@ -72,13 +72,12 @@ p {
 
 #pokok-editor {
     margin: 0 auto;
+    width: 80%;
     border: 1px solid #ED33CF;
     border-radius: 15px;
     box-shadow: 0.5px 0.5px 0.5px #555;
     text-align: center;
-
     font-size: 40px;
-    padding: 10px;
     display: inline-block;
 }
 
@@ -134,8 +133,7 @@ p {
     display: inline-flex;
 }
 
-.active:before,
-.active:after {
+.pot.active:after {
     content:" ";
     top:0; right:0; bottom:0; left:0;
     width:100%;
@@ -152,9 +150,19 @@ p {
     display: inline-flex;
 }
 
+.key.active:after {
+    content:" ";
+    top:0; right:0; bottom:0; left:0;
+    width:100%;
+    border-radius:25%;
+    border: 1px solid #ED33CF;
+    animation: ripple 0.3s linear infinite;
+}
+
 .button {
     width:30%;
     margin: 0 auto;
+    margin-top: 10px;
     height:5vh;
     line-height: 5vh;
     text-align: center;
@@ -162,8 +170,7 @@ p {
     color: white;
     font-size: 18px;
     border-radius: 5px;
-    margin-top: 10px;
-    box-shadow: 0.5px 0.5px 0.5px #555
+    box-shadow: 1px 1px 1px #555
 }
 
 #start {
@@ -183,7 +190,6 @@ p {
 
 
 /*Dropdowns*/
-
 .dropdown-container {
     align-self: flex-end;
     width: 50%;
@@ -213,8 +219,8 @@ p {
     color: black;
     text-align: left;
     min-width: 40px;
-    padding: 0px 10px 0px 10px;
-    box-shadow: 0px 8px 8px 0px rgba(0,0,0,0.2);
+    padding: 0 10px 0 10px;
+    box-shadow: 0 8px 8px 0 rgba(0,0,0,0.2);
     z-index: 0;
     visibility: hidden;
     opacity: 0;
