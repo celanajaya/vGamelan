@@ -130,24 +130,18 @@ p {
     height: 40px;
     margin: 5px;
     border: 1px solid #ED33CF;
-    -moz-border-radius: 40px;
-    -webkit-border-radius: 40px;
     border-radius: 25px;
     display: inline-flex;
-    /*box-shadow: inset 0px 0px 10px #ED33CF;*/
 }
 
-
-.pot:hover {
-    background-color: springgreen;
-}
-
-.active {
-    animation-name: example;
-    animation-duration: 0.1s;
-    background-color: #ED33CF;
-    box-shadow: inset 0px 0px 10px #fff;
-    color: #fff;
+.active:before,
+.active:after {
+    content:" ";
+    top:0; right:0; bottom:0; left:0;
+    width:100%;
+    border-radius:50%;
+    border: 1px solid #ED33CF;
+    animation: ripple 0.3s linear infinite;
 }
 
 .key {
@@ -156,11 +150,6 @@ p {
     margin: 5px;
     border: 1px solid #ED33CF;
     display: inline-flex;
-    /*box-shadow: inset 0px 0px 10px #ED33CF;*/
-}
-
-.key:hover {
-    background-color: springgreen;
 }
 
 .button {
@@ -192,6 +181,9 @@ p {
     cursor: pointer;
 }
 
+
+/*Dropdowns*/
+
 .dropdown-container {
     align-self: flex-end;
     width: 50%;
@@ -208,11 +200,14 @@ p {
 }
 
 .dropdown-content.show {
-    display: block;
+    visibility: visible; /* shows sub-menu */
+    opacity: 1;
+    z-index: 1;
+    transform: translateY(0%);
+    transition-delay: 0s, 0s, 0.3s;
 }
 
 .dropdown-content {
-    display: none;
     position: absolute;
     background-color: #fff;
     color: black;
@@ -220,7 +215,11 @@ p {
     min-width: 40px;
     padding: 0px 10px 0px 10px;
     box-shadow: 0px 8px 8px 0px rgba(0,0,0,0.2);
-    z-index: 1;
+    z-index: 0;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-2em);
+    transition: all 0.3s ease-in-out 0s, visibility 0s linear 0.3s, z-index 0s linear 0.01s;
 }
 
 .dropdown-content p:hover {
@@ -250,19 +249,12 @@ p {
 
 .caret.up {
     transform: rotate(-90deg);
-    transition: transform 1s linear;
+    transition: transform 0.3s linear;
 }
 
 .caret.down {
     transform: rotate(0deg);
-    transition: transform 1s linear;
-}
-
-@keyframes example {
-    from {background-color: #fff;
-          box-shadow: inset 0px 0px 0px #E871E4;}
-    to {background-color: #ED33CF;
-        box-shadow: inset 0px 0px 40px #fff ;}
+    transition: transform 0.3s linear;
 }
 
 @keyframes instrument-name-animation {
@@ -273,4 +265,10 @@ p {
 @keyframes show {
     from {display: none;}
     to {display:flex}
+}
+
+@keyframes ripple {
+    0% {transform:scale(.10);}
+    75% {transform:scale(.75); opacity:1;}
+    100% {transform:scale(1); opacity:0;}
 }
