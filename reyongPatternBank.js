@@ -51,7 +51,7 @@ var makeReyongNorot = {
     cadentialPatterns : {
         "2-beat" : function(){},
         "4-beat" : function(){},
-        "dongSpecial": [[1,1,2,"-",1,2,3,"-"],[4,3,"-",3,4,5,"-",4],[6,6,7,"-",6,7,8,"-"],[9,8,"-",8,9,10,"-",9]],
+        "dongSpecial": [[2,1,2,"-",1,2,3,"-"],[4,3,"-",3,4,5,"-",4],[7,6,7,"-",6,7,8,"-"],[9,8,"-",8,9,10,"-",9]],
         "dangSpecial": [[2,1,2,"-",1,2,"-",2],[4,3,"-",3,"-",4,3,5],[7,6,7,"-",6,7,"-",7],[9,8,"-",8,"-",9,8,10]]
     }
 }
@@ -80,12 +80,14 @@ var Improv = {
         })
     },
 
+    //one or two times per pattern, take a random index and put a rest there
     "subtract": function(arr) {
         return arr.map(function(innerArr){
-            for (var i = 0; i < arr.length; i++){
-                if ((innerArr[i + 1] && innerArr[i+1] != "-")&&(innerArr[i-1] && innerArr[i-1] != "-")) {
-                    innerArr[i] = "-";
-                }
+            var count = Helpers.rand(2) + 1;
+            while (count > 0) {
+                var r = Helpers.rand(4);
+                innerArr[r] = "-";
+                count--
             }
             return innerArr;
         });
