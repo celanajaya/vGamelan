@@ -1,31 +1,3 @@
-#hider {
-    position:absolute;
-    display: none;
-    top: 0%;
-    left: 0%;
-    width:2400px;
-    height:2000px;
-    margin-top: -800px; /*set to a negative number 1/2 of your height*/
-    margin-left: -500px; /*set to a negative number 1/2 of your width*/
-    /*
-    z- index must be lower than pop up box
-   */
-    z-index: 99;
-    background-color:Black;
-    opacity:0.6;
-}
-
-#editor-popup {
-    position:absolute;
-    display: none;
-    flex-direction: row;  /* make main axis horizontal */
-    justify-content: space-between; /* center items vertically, in this case */
-    top: 10%;
-    left: 5%;
-    width: 70%;
-    height:70%;
-    z-index:100;
-}
 
 .container {
     display: flex;           /* establish flex container */
@@ -34,8 +6,8 @@
     align-items: flex-start;     /* center items horizontally, in this case */
     height: 100%;
     width: 100%;
-    margin: 0 auto;
     font-family: 'Open Sans';
+    margin: 0 auto;
     border: 1px dotted cornflowerblue;
 }
 
@@ -47,6 +19,10 @@
     height: 100%;
     width: 80%;
     margin: 0 auto;
+}
+
+i {
+    font-family: 'FontAwesome';
 }
 
 svg {
@@ -69,6 +45,16 @@ p {
     font-size: large;
     font-weight: 500;
 }
+
+.fa-cog {
+    font-size: large;
+}
+
+.fa-cog:hover {
+    color: #ED33CF;
+    animation: rotate 5s linear infinite;
+}
+
 
 #pokok-editor {
     margin: 0 auto;
@@ -108,15 +94,29 @@ p {
     width: 50%;
 }
 
+.dropdown-container:hover,
+.instrument-name:hover {
+    animation: glow 0.2s linear;
+    color:#ED33CF;
+    cursor: pointer;
+}
+
 .mute-button {
     border: 1px solid #ED33CF;
     border-radius: 3px;
     padding:3px;
-    box-shadow: 0.5px 0.5px 0.5px #555
+    box-shadow: 1px 1px 1px #555
 }
 
 .mute-button:hover{
     cursor: pointer;
+}
+
+.mute-button.active {
+    border: 1px solid black;
+    color:white;
+    background-color: #ED33CF;
+    animation: blink 1s linear infinite;
 }
 
 .reyong {
@@ -133,13 +133,22 @@ p {
     display: inline-flex;
 }
 
-.pot.active:after {
+.pot:hover::after {
     content:" ";
     top:0; right:0; bottom:0; left:0;
     width:100%;
     border-radius:50%;
     border: 1px solid #ED33CF;
-    animation: ripple 0.3s linear infinite;
+    animation: ripple 0.3s normal infinite;
+}
+
+.pot.active::after {
+    content:" ";
+    top:0; right:0; bottom:0; left:0;
+    width:100%;
+    border-radius:50%;
+    border: 1px solid #ED33CF;
+    animation: ripple 0.2s linear infinite;
 }
 
 .key {
@@ -156,7 +165,7 @@ p {
     width:100%;
     border-radius:25%;
     border: 1px solid #ED33CF;
-    animation: ripple 0.3s linear infinite;
+    animation: ripple 0.2s linear infinite;
 }
 
 .button {
@@ -173,19 +182,16 @@ p {
     box-shadow: 1px 1px 1px #555
 }
 
+.button.close {
+    background-color: cornflowerblue;
+}
+
 #start {
     background-color: springgreen;
 }
 
 #stop {
     background-color: #ED33CF;
-}
-
-.instrument-name:hover {
-    animation-name: instrument-name-animation;
-    animation-duration: 0.5s;
-    color: #ED33CF;
-    cursor: pointer;
 }
 
 
@@ -229,7 +235,7 @@ p {
 }
 
 .dropdown-content p:hover {
-    background-color: #fff;
+    color: #ED33CF;
 }
 
 .slider-container {
@@ -253,17 +259,7 @@ p {
     margin:10px;
 }
 
-.caret.up {
-    transform: rotate(-90deg);
-    transition: transform 0.3s linear;
-}
-
-.caret.down {
-    transform: rotate(0deg);
-    transition: transform 0.3s linear;
-}
-
-@keyframes instrument-name-animation {
+@keyframes glow {
     from {color: black;}
     to {color: #ED33CF;}
 }
@@ -274,7 +270,22 @@ p {
 }
 
 @keyframes ripple {
-    0% {transform:scale(.10);}
-    75% {transform:scale(.75); opacity:1;}
-    100% {transform:scale(1); opacity:0;}
+    0% {transform:scale(.10); opacity: 0;}
+    50% {transform:scale(.75); opacity:1;}
+}
+
+@keyframes blink {
+    0%{opacity:1}
+    50%{opacity: 0}
+}
+
+@keyframes rotate {
+    50% {transform:rotate(180deg);}
+    100% {transform:rotate(360deg);}
+}
+
+@keyframes showInstrument {
+    0% {transform:scale(.50); opacity: 0;}
+    50% {transform:scale(.75); opacity:.5;}
+    100% {transform:scale(1); opacity:1;}
 }

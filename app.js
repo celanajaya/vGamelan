@@ -28,14 +28,14 @@ var nyogCagStayingPattern = 0;
 function init() {
     setAllParts();
     configurePokokEditor();
+    configurePartEditor();
+    Tone.Master.connect(new Tone.Normalize(2,4));
     Tone.Transport.bpm.value = 60;
     Gamelan.config.forEach(buildInstrument);
 
     //TODO: move these two to inside the build instrument methods?
     initializeMuteButtons();
-    initializeTempoVolumeSliders()
-
-
+    initializeTempoVolumeSliders();
     configureGong();
 };
 
@@ -48,8 +48,8 @@ function initializeTempoVolumeSliders(){
 
     var vSlider = document.getElementById("master-volume-slider");
     setSliderListener(vSlider, function() {
-        document.getElementById("masterVolume").innerHTML = vSlider.value;
-        Tone.Master.volume = tSlider.value;
+        // document.getElementById("masterVolume").innerHTML = vSlider.value;
+        // Tone.Master.volume.value = tSlider.value;
     });
 }
 
@@ -72,10 +72,19 @@ function buildInstrument(config) {
     addControlsForInstrument(instrument);
 
     //Volume Stuff
-    players[instrumentName].volume.value = -25;
+    players[instrumentName].volume.value = 0;
     createVolumeSliderForInstrument(instrument);
 
     //generate keys/pots and add listeners
+    createKeysForInstrument(config);
+
+    //hacky way of connecting svg to analyzer
+    analyzers[instrumentName].svg = createAnalyzer("#" + config[0], instrument.offsetHeight/2, instrument.offsetWidth);
+}
+
+function createKeysForInstrument(config) {
+    var numKeys = config[1];
+    var instrument = document.getElementById(config[0]);
     for (var i = 0; i < numKeys; i++) {
         var key = document.createElement("div");
         instrument.appendChild(key).className = config[2];
@@ -85,18 +94,16 @@ function buildInstrument(config) {
             players[id[0]].start(parseInt(id[1]));
         });
     }
-
-    //hacky way of connecting svg to analyzer
-    analyzers[instrumentName].svg = createAnalyzer("#" + config[0], instrument.offsetHeight/2, instrument.offsetWidth);
 }
 
 function addControlsForInstrument(instrument) {
+    var elaboratingPart = (instrument.id === "reyong" || instrument.id === "kantilan" || instrument.id === "pemade");
     var controls = document.createElement("div");
     controls.classList.add("controls");
     controls.id = instrument.id + "-controls";
     var controlItemContainer = document.createElement("div");
     controlItemContainer.classList.add("control-item-container");
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < 4; i++) {
         var cItem = document.createElement("div");
         cItem.classList.add("control-item");
         switch (i) {
@@ -105,24 +112,34 @@ function addControlsForInstrument(instrument) {
                 muteButton.classList.add("mute-button");
                 muteButton.innerHTML = "mute";
                 cItem.appendChild(muteButton);
+                controlItemContainer.appendChild(cItem);
                 break;
             case 1:
                 cItem.innerHTML = instrument.id;
                 cItem.classList.add("instrument-name");
-                cItem.addEventListener("click", openInstrumentEditor);
+                controlItemContainer.appendChild(cItem);
+                break;
+            case 3:
+                cItem = document.createElement("i");
+                cItem.className = "control-item fa fa-cog";
+                cItem.id = instrument.id + "-editor";
+                cItem.addEventListener("click", openInstrumentEditor(instrument.id));
+                controlItemContainer.appendChild(cItem);
                 break;
             case 2:
-                cItem.classList.add("dropdown-container");
-                break
+                if (elaboratingPart) {
+                    cItem.classList.add("dropdown-container");
+                    controlItemContainer.appendChild(cItem);
+                }
+                break;
         }
-        controlItemContainer.appendChild(cItem);
     }
     //add elaboration dropdowns for elaborating instruments only
     switch (instrument.id) {
         case "pemade":
         case "kantilan":
         case "reyong":
-            var dropdownContainer = controlItemContainer.lastChild;
+            var dropdownContainer = controlItemContainer.lastChild.previousSibling;
             addDropDownContentForInstrument(instrument.id, dropdownContainer);
             break;
         default:
@@ -134,14 +151,22 @@ function addControlsForInstrument(instrument) {
     createEditor("#" + controls.id, controls.offsetHeight, controls.offsetWidth);
 }
 
+function configurePartEditor() {
+    var editor = document.getElementById("part-editor")
+    //TODO: add tabs programmatically
+    var closeButton = document.getElementById("close");
+    closeButton.addEventListener("click", closePartEditor);
+
+}
+
 function createVolumeSliderForInstrument(instrument) {
     var volumeSlider = document.createElement("input");
     volumeSlider.type = "range";
-    volumeSlider.min = -100;
-    volumeSlider.max = 0;
-    volumeSlider.step = 1;
+    volumeSlider.min = -10;
+    volumeSlider.max = 10;
+    volumeSlider.step = 0.1;
     volumeSlider.id = instrument.id + "-slider";
-    volumeSlider.value = -50;
+    volumeSlider.value = 0;
     setSliderListener(volumeSlider, function(){
         players[instrument.id].volume.value = volumeSlider.value;
         console.log(instrument.id + " volume: " + players[instrument.id].volume.value);
@@ -176,7 +201,8 @@ function addDropDownContentForInstrument(instrumentName, container) {
     }
 
     dropDown.textContent = dropDownText;
-    dropDown.appendChild(createCaret());
+    var caret = createCaret();
+    dropDown.appendChild(caret);
     container.appendChild(dropDown);
 
     var dropDownContent = document.createElement("div");
@@ -185,6 +211,8 @@ function addDropDownContentForInstrument(instrumentName, container) {
     dropDown.appendChild(dropDownContent);
     dropDown.addEventListener("click", function(){
         toggleClass(dropDownContent, "show");
+        toggleClass(caret, "fa-caret-down")
+        toggleClass(caret, "fa-caret-left")
     })
 
     pTypes.forEach(function(pType) {
@@ -216,10 +244,8 @@ function addDropDownContentForInstrument(instrumentName, container) {
 }
 
 function createCaret(){
-    var caret = document.createElement("span");
-    caret.className = "caret";
-    caret.classList.add("up");
-    caret.innerHTML = " ▾";
+    var caret = document.createElement("i");
+    caret.className = "fa-caret-left";
     return caret;
 }
 
@@ -263,16 +289,50 @@ function configurePokokEditor() {
     });
 }
 
-function openInstrumentEditor() {
+function openInstrumentEditor(instrumentName) {
+    return function() {
+        clearAllEditorKeys();
+        var hider = document.getElementById("hider")
+        var editorPopup = document.getElementById("editor-popup");
+        toggleClass(editorPopup, "show-popup");
+        toggleClass(hider, "show-popup");
+
+        var editor = document.getElementById("part-editor");
+        editor.id = instrumentName + "-part-editor";
+
+        var row = document.createElement("div");
+        row.className = "row";
+        row.id = "key-row";
+        editor.insertBefore(row, document.getElementById("content"));
+        var config = Gamelan.config.filter(function(c){return c[0] === instrumentName})[0];
+        for (var i = 0; i < config[1]; i++) {
+            var key = document.createElement("div");
+            row.appendChild(key).className = config[2];
+            key.id = config[0] + " " + i.toString() + "-editor";
+            key.addEventListener("click", function(event){
+                var id = event.target.id.split(" ");
+                players[id[0]].start(parseInt(id[1]));
+            });
+        }
+
+        createEditor("#"+ editor.id, editor.offsetHeight*1.5, editor.offsetWidth*3.5);
+    }
+}
+
+function clearAllEditorKeys(){
+    var keyRow = document.getElementById("key-row");
+    if (keyRow) {
+        keyRow.parentNode.removeChild(keyRow);
+    }
+}
+
+function closePartEditor(){
     var hider = document.getElementById("hider")
     var editorPopup = document.getElementById("editor-popup");
     toggleClass(editorPopup, "show-popup");
     toggleClass(hider, "show-popup");
-    if (editorPopup.classList.contains("show-popup")) {
-        //a clone of the instrument
-    } else {
-    }
 }
+
 //**********User Interactions***********
 //returns the Instrument.parts.pokok as an array of strings
 function getPokokFromEditor(){

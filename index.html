@@ -3,8 +3,10 @@
 <head>
 <meta charset="UTF-8">
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="part-editor.css">
     <link rel="stylesheet" type="text/css" href="slider.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
 <title>gamelan komposer</title>
@@ -12,13 +14,25 @@
 
 <body>
 <div id="hider"></div>
-<div id="editor-popup" class="">
-    <div class="instrument"></div>
+<div id="editor-popup"i>
+    <div class="instrument" id="part-editor">
+        <div class="row">
+            <div id="tab-container">
+                <ul>
+                    <li>Static Pattern Selector</li>
+                    <li>Part Editor</li>
+                    <li>General Settings</li>
+                </ul>
+            </div>
+            <div id="tab-content"></div>
+        </div>
+        <div class="button close" id="close">Close</div>
+    </div>
 </div>
 	<div class="container">
         <div class="sub-container main">
             <h1>gamelan komposer</h1>
-		    <div class="row">
+            <div class="row">
                 <textarea id="pokok-editor">4553 1243</textarea>
 		    </div>
             <div class="row" id="mixer">

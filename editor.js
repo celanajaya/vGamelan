@@ -1,5 +1,7 @@
 function createEditor(parent, totalHeight, totalWidth) {
+    console.log("create editor, parent", parent);
     var instrumentName = parent.split("-")[0].slice(1);
+    console.log(instrumentName);
     //instrumental part
     var part = Gamelan.parts[instrumentName];
     //number of keys/pots, used as y value
@@ -33,6 +35,7 @@ function createEditor(parent, totalHeight, totalWidth) {
                 .attr('stroke-width', 0.05)
                 .attr('x',squareWidth * x)
                 .attr('y', squareHeight * y)
+                .on('click', rectClick)
                 .attr('id', instrumentName + "-" + y.toString() + "-" + x.toString())
         }
     }
@@ -48,6 +51,16 @@ function showPattern(instrumentName, part, rangeHeight, partLength) {
         var id = instrumentName + "-" + ((rangeHeight - 1) - buffer).toString() + "-" + (index % partLength).toString();
         d3.select("#" + id).attr('fill', "rgb(232, 113, 228)");
     });
+}
+
+function rectClick(){
+    var components = this.id.split("-");
+    var instrumentName = components[0];
+    var buffer = components[1];
+    var partIndex = components[2];
+    players[instrumentName].start(buffer);
+    Gamelan.parts[instrumentName][partIndex] = partIndex;
+    d3.select("#"+ this.id).attr('fill', "rgb(232, 113, 228)");
 }
 
 function updateAllSvgs() {

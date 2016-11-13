@@ -1,0 +1,71 @@
+#hider {
+    position:absolute;
+    top: 0%;
+    left: 0%;
+    width:2400px;
+    height:2000px;
+    margin-top: -800px; /*set to a negative number 1/2 of your height*/
+    margin-left: -500px; /*set to a negative number 1/2 of your width*/
+    z-index: 99;
+    background-color:Black;
+    opacity:0.6;
+    visibility: hidden;
+}
+
+#editor-popup {
+    position:absolute;
+    justify-content: space-between; /* center items vertically, in this case */
+    margin: 0 auto;
+    z-index:100;
+    padding:10%;
+    visibility: hidden;
+}
+
+#hider.show-popup {
+    visibility: visible;
+}
+
+#editor-popup.show-popup {
+    visibility: visible;
+    animation: showInstrument 0.1s linear;
+}
+
+#tab-container {
+    display: inline-flex;
+}
+
+#tab-container ul {
+    list-style: none;
+    text-align: left;
+}
+
+#tab-container ul li {
+    background-color: white;
+    border-radius: 10%;
+}
+
+#tab-container ul li a,
+#tab-container ul li a:visited {
+    text-decoration: none;
+    color: #666;
+    display: block;
+}
+
+#tab-container ul li:hover {
+    background-color: whitesmoke;
+}
+
+#tab-container ul li a:hover {
+    color: #000;
+}
+
+#tab-container ul li.selected {
+    border-right: none;
+    background-color: #fff;
+    border-left: 8px solid #006699;
+}
+
+#tab-content {
+    background-color: #fff;
+    display: inline-flex;
+}
