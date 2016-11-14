@@ -27,7 +27,13 @@
 
 #editor-popup.show-popup {
     visibility: visible;
-    animation: showInstrument 0.1s linear;
+    animation: popupInstrument 0.1s linear;
+}
+
+.left-row {
+    flex-direction: row;
+    width: 100%;
+    text-align: left; /* will center text in <p>, which is not a flex item */
 }
 
 #tab-container {
@@ -66,6 +72,43 @@
 }
 
 #tab-content {
+
     background-color: #fff;
+    width: 100%;
+    border: 1px solid black;
+    border-radius: 10%;
     display: inline-flex;
+}
+
+.part-editor {
+    visibility: hidden;
+
+}
+.part-editor.show{
+    z-index: 100;
+    visibility: visible;
+}
+
+.part-settings {
+    visibility: hidden;
+
+}
+.part-settings.show{
+    z-index: 100;
+    visibility: visible;
+}
+
+.static-pattern-selector {
+    visibility: hidden;
+}
+.static-pattern-selector.show{
+    z-index: 100;
+    visibility: visible;
+}
+.instrument-info {
+    visibility: hidden;
+}
+.instrument-info.show {
+    z-index: 100;
+    visibility: visible;
 }

@@ -152,12 +152,45 @@ function addControlsForInstrument(instrument) {
 }
 
 function configurePartEditor() {
-    var editor = document.getElementById("part-editor")
     //TODO: add tabs programmatically
-    var closeButton = document.getElementById("close");
-    closeButton.addEventListener("click", closePartEditor);
+    var staticPatternSelector = document.getElementById("static-pattern-selector-li");
+    StaticPatternSelector.build();
+    staticPatternSelector.addEventListener('click', function(){
+        hideAll();
+        StaticPatternSelector.show();
+    });
 
+    var editPart = document.getElementById('edit-part-li');
+    PartEditor.build();
+    editPart.addEventListener('click', function(){
+        hideAll();
+        PartEditor.show();
+    });
+
+    var partSettings = document.getElementById('part-settings-li');
+    PartSettings.build();
+    partSettings.addEventListener('click', function(){
+        hideAll();
+        PartSettings.show();
+    });
+
+    var instrumentInfo = document.getElementById('info-li');
+    InstrumentInfo.build();
+    instrumentInfo.addEventListener('click', function(){
+        hideAll();
+        InstrumentInfo.show();
+    });
+
+    function hideAll(){
+        [StaticPatternSelector, PartEditor, PartSettings, InstrumentInfo].forEach(function(obj){
+            if (obj.isShowing) {
+                obj.hide();
+            }
+        })
+    }
 }
+
+
 
 function createVolumeSliderForInstrument(instrument) {
     var volumeSlider = document.createElement("input");
@@ -291,7 +324,7 @@ function configurePokokEditor() {
 
 function openInstrumentEditor(instrumentName) {
     return function() {
-        clearAllEditorKeys();
+        clearEditor()
         var hider = document.getElementById("hider")
         var editorPopup = document.getElementById("editor-popup");
         toggleClass(editorPopup, "show-popup");
@@ -315,22 +348,28 @@ function openInstrumentEditor(instrumentName) {
             });
         }
 
-        createEditor("#"+ editor.id, editor.offsetHeight*1.5, editor.offsetWidth*3.5);
+        var editorSVG = createEditor("#"+ editor.id, editor.offsetHeight*1.5, editor.offsetWidth*3.5);
+        //TODO: hack to toggle the class of the svg
+        editorSVG._groups[0][0].classList.add('edit-mode');
+
+        var closeButton = document.getElementById("close")
+        closeButton.addEventListener('click', function(){
+            var hider = document.getElementById("hider")
+            var editorPopup = document.getElementById("editor-popup");
+            toggleClass(editorPopup, "show-popup");
+            toggleClass(hider, "show-popup");
+            editor.id = instrumentName + "part-editor";
+            editorSVG.classList.remove('edit-mode');
+        })
     }
 }
 
-function clearAllEditorKeys(){
+function clearEditor(){
     var keyRow = document.getElementById("key-row");
     if (keyRow) {
         keyRow.parentNode.removeChild(keyRow);
     }
-}
 
-function closePartEditor(){
-    var hider = document.getElementById("hider")
-    var editorPopup = document.getElementById("editor-popup");
-    toggleClass(editorPopup, "show-popup");
-    toggleClass(hider, "show-popup");
 }
 
 //**********User Interactions***********

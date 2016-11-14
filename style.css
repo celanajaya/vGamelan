@@ -55,6 +55,9 @@ p {
     animation: rotate 5s linear infinite;
 }
 
+rect.active {
+    fill: #ED33CF;
+}
 
 #pokok-editor {
     margin: 0 auto;
@@ -284,7 +287,7 @@ p {
     100% {transform:rotate(360deg);}
 }
 
-@keyframes showInstrument {
+@keyframes popupInstrument {
     0% {transform:scale(.50); opacity: 0;}
     50% {transform:scale(.75); opacity:.5;}
     100% {transform:scale(1); opacity:1;}

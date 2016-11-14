@@ -1,7 +1,5 @@
 function createEditor(parent, totalHeight, totalWidth) {
-    console.log("create editor, parent", parent);
     var instrumentName = parent.split("-")[0].slice(1);
-    console.log(instrumentName);
     //instrumental part
     var part = Gamelan.parts[instrumentName];
     //number of keys/pots, used as y value
@@ -35,8 +33,8 @@ function createEditor(parent, totalHeight, totalWidth) {
                 .attr('stroke-width', 0.05)
                 .attr('x',squareWidth * x)
                 .attr('y', squareHeight * y)
-                .on('click', rectClick)
                 .attr('id', instrumentName + "-" + y.toString() + "-" + x.toString())
+                .on('click', rectClick)
         }
     }
     showPattern(instrumentName, part, rangeHeight, partLength);
@@ -49,18 +47,21 @@ function showPattern(instrumentName, part, rangeHeight, partLength) {
     part.forEach(function (buffer, index) {
         if (buffer === "-") return;
         var id = instrumentName + "-" + ((rangeHeight - 1) - buffer).toString() + "-" + (index % partLength).toString();
-        d3.select("#" + id).attr('fill', "rgb(232, 113, 228)");
+        d3.select("#" + id).attr('class', 'active');
     });
 }
 
 function rectClick(){
-    var components = this.id.split("-");
-    var instrumentName = components[0];
-    var buffer = components[1];
-    var partIndex = components[2];
-    players[instrumentName].start(buffer);
-    Gamelan.parts[instrumentName][partIndex] = partIndex;
-    d3.select("#"+ this.id).attr('fill', "rgb(232, 113, 228)");
+    if (this.parentNode.classList.contains('edit-mode')) {
+        var components = this.id.split("-");
+        var instrumentName = components[0];
+        var buffer = components[1];
+        var partIndex = components[2];
+        players[instrumentName].start(buffer);
+        Gamelan.parts[instrumentName][partIndex] = partIndex;
+        var rect = d3.select("#" + this.id)
+        rect.classed('active', !rect.classed('active'));
+    }
 }
 
 function updateAllSvgs() {
@@ -87,13 +88,17 @@ function clearAllForInstrument(instrumentName){
     var part = Gamelan.getPartLength[instrumentName]();
     for (var y = 0; y < range; y++) {
         for (var x = 0; x < part; x++) {
-            var boxColor = x % Gamelan.meter === Gamelan.meter - 1 ? 'rgb(200, 200, 200)':'rgb(220, 220, 220)';
             var i_Selector = "#" + instrumentName;
             d3.select(i_Selector + "-svg")
                 .select(i_Selector + "-" + y.toString() + "-" + x.toString())
-                .attr('fill',boxColor);
+                .classed('active', false);
+
         }
     }
+}
+
+function makeSVGEditable(){
+
 }
 
 function toConcatedArrays(a,b) {return a.concat(b)}
