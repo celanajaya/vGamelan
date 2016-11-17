@@ -1,11 +1,9 @@
 #hider {
     position:absolute;
-    top: 0%;
-    left: 0%;
-    width:2400px;
-    height:2000px;
-    margin-top: -800px; /*set to a negative number 1/2 of your height*/
-    margin-left: -500px; /*set to a negative number 1/2 of your width*/
+    top: 0;
+    left: 0;
+    width:130%;
+    height:130%;
     z-index: 99;
     background-color:Black;
     opacity:0.6;
@@ -14,10 +12,11 @@
 
 #editor-popup {
     position:absolute;
-    justify-content: space-between; /* center items vertically, in this case */
-    margin: 0 auto;
+    height: 80%;
+    width: 80%;
+    top: 10%;
+    left: 10%;
     z-index:100;
-    padding:10%;
     visibility: hidden;
 }
 
@@ -28,6 +27,12 @@
 #editor-popup.show-popup {
     visibility: visible;
     animation: popupInstrument 0.1s linear;
+    font-family: "Open Sans";
+}
+
+#editor-button-row p {
+    display: inline-block;
+    padding: 0;
 }
 
 .left-row {
@@ -72,11 +77,10 @@
 }
 
 #tab-content {
-
     background-color: #fff;
-    width: 100%;
-    border: 1px solid black;
-    border-radius: 10%;
+    width: 80%;
+    border: 1px solid #ed33cf;
+    padding: 10px;
     display: inline-flex;
 }
 
@@ -111,4 +115,91 @@
 .instrument-info.show {
     z-index: 100;
     visibility: visible;
+}
+
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    margin: 10px;
+    width: 60px;
+    height: 34px;
+}
+
+.switch::before {
+    content:"Edit Mode";
+    display: inline;
+}
+
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0 auto;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+td {
+    border:1px solid white;
+
+}
+
+td svg {
+    display: inline-table;
+    margin: 5px;
+}
+
+td:hover {
+    border-color: #ed33cf;
+    outline: none;
+    border-radius: 15px;
+    box-shadow: 0 0 2px #ed33cf;
+}
+
+#editor-button-row {
+    margin: 10px;
 }

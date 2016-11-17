@@ -59,7 +59,7 @@ function rectClick(){
         var partIndex = components[2];
         players[instrumentName].start(buffer);
         Gamelan.parts[instrumentName][partIndex] = partIndex;
-        var rect = d3.select("#" + this.id)
+        var rect = d3.select("#" + this.id);
         rect.classed('active', !rect.classed('active'));
     }
 }
@@ -95,10 +95,6 @@ function clearAllForInstrument(instrumentName){
 
         }
     }
-}
-
-function makeSVGEditable(){
-
 }
 
 function toConcatedArrays(a,b) {return a.concat(b)}
