@@ -121,13 +121,12 @@
 .switch {
     position: relative;
     display: inline-block;
-    margin: 10px;
-    width: 60px;
+    width: 70px;
     height: 34px;
 }
 
 .switch::before {
-    content:"Edit Mode";
+    content:"-";
     display: inline;
 }
 

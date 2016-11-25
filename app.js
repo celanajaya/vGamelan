@@ -73,7 +73,6 @@ function buildInstrument(config) {
 
     //Volume Stuff
     players[instrumentName].volume.value = 0;
-    createVolumeSliderForInstrument(instrument);
 
     //generate keys/pots and add listeners
     createKeysForInstrument(config);
@@ -158,20 +157,6 @@ function configurePartEditor() {
     editorButtonRow.className = 'row';
     editorButtonRow.id = 'editor-button-row';
 
-    var label = document.createElement('p');
-    label.innerHTML = "Edit Mode:";
-    editorButtonRow.appendChild(label);
-
-    //edit mode switch
-    var editModeSwitch = document.createElement('label');
-    editModeSwitch.className = 'switch';
-    var checkBox = document.createElement('input');
-    checkBox.type = 'checkbox'
-    var slider = document.createElement('div');
-    slider.className = 'slider round';
-    editModeSwitch.appendChild(checkBox);
-    editModeSwitch.appendChild(slider);
-
     //close button
     var closeButton = document.createElement('div')
     closeButton.className = 'button close';
@@ -183,7 +168,6 @@ function configurePartEditor() {
         editor.id = 'part-editor';
     });
 
-    editorButtonRow.appendChild(editModeSwitch);
     editorButtonRow.appendChild(closeButton);
     editor.appendChild(editorButtonRow);
 }
@@ -194,19 +178,19 @@ function createVolumeSliderForInstrument(instrument) {
     volumeSlider.min = -10;
     volumeSlider.max = 10;
     volumeSlider.step = 0.1;
-    volumeSlider.id = instrument.id + "-slider";
+    volumeSlider.id = instrument + "-slider";
     volumeSlider.value = 0;
     setSliderListener(volumeSlider, function(){
-        players[instrument.id].volume.value = volumeSlider.value;
-        console.log(instrument.id + " volume: " + players[instrument.id].volume.value);
+        players[instrument].volume.value = volumeSlider.value;
+        console.log(instrument + " volume: " + players[instrument].volume.value);
     });
     var volumeSliderContainer = document.createElement("div");
     volumeSliderContainer.classList.add("volume-slider-container");
     var label = document.createElement("p");
-    label.innerHTML = instrument.id;
+    label.innerHTML = instrument;
     volumeSliderContainer.appendChild(label);
     volumeSliderContainer.appendChild(volumeSlider);
-    document.getElementById("mixer-controls").appendChild(volumeSliderContainer);
+    document.getElementById("editor-button-row").appendChild(volumeSliderContainer);
 }
 
 function addDropDownContentForInstrument(instrumentName, container) {
@@ -358,6 +342,7 @@ function openInstrumentEditor(instrumentName) {
                 players[id[0]].start(parseInt(id[1]));
             });
         }
+        createVolumeSliderForInstrument(instrumentName);
         editor.insertBefore(keyRow, document.getElementById('editor-button-row'));
         editor.insertBefore(svg_DOM, keyRow);
         showPopup(instrumentName);
