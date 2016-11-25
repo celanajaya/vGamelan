@@ -43,13 +43,21 @@ var Gamelan = {
     },
 
     interval: {
-        "reyong": "16n",
-        "pemade" : "16n",
-        "kantilan" : "16n",
-        "ugal" : "4n",
-        "jublag" : "2n",
-        "penyacah" : "4n",
-        "jegogan" : "1n"
+        "reyong": function(){return"16n"},
+        "pemade" : function(){
+            if (pemadePatternType == kMalPal) {
+                return "8n";
+            }
+            return"16n"},
+        "kantilan" : function(){
+            if (kantilanPatternType == kMalPal) {
+                return "8n";
+            }
+            return"16n"},
+        "ugal" : function(){return"4n"},
+        "jublag" : function(){return"2n"},
+        "penyacah" : function(){return"4n"},
+        "jegogan" : function(){return"1n"}
     },
 
     offset: {

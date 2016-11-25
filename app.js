@@ -6,7 +6,8 @@ var kNyogCag = "nyog cag";
 var kKilitan = "kilitan";
 var kTelu = "kotekan telu";
 var kEmpat = "kotekan empat";
-var patternTypes = [kKilitan, kNorot, kTelu, kEmpat, kNyogCag];
+var kMalPal = "malpal";
+var patternTypes = [kKilitan, kNorot, kTelu, kEmpat, kNyogCag, kMalPal];
 
 //Audio Players
 var players = {};

@@ -155,15 +155,13 @@ var makeEmpat = {
         var x,y,z,k;
         z = pokokBuffers[1];
         if (pokokBuffers[0] > pokokBuffers[1]) {
-            // console.log("descending");
-            this["lastMove"] = "descending";
             //descending
+            this["lastMove"] = "descending";
             y = z + 1;
             x = z + 2;
 
         } else {
             //ascending
-            console.log("ascending");
             this["lastMove"] = "ascending";
             y = z - 1;
             x = z - 2;
@@ -313,4 +311,4 @@ var	makeNyogCag = {
             return k
         }, [[],[]])
     }
-}
+};

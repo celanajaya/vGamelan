@@ -30,7 +30,7 @@ function setLoop(instrument) {
                 //return if it's a rest value
                 if (buffer === "-" || players[instrument].mute) return;
                 players[instrument].start(buffer, time);
-                players[instrument].stop(buffer, "+" + Gamelan.interval[instrument]);
+                players[instrument].stop(buffer, "+" + Gamelan.interval[instrument]());
 
                 //add the note to be turned on
                 q.push(document.getElementById(instrument + " " + buffer));
@@ -38,7 +38,7 @@ function setLoop(instrument) {
 
             q.forEach(toggleActive);
             i++;
-        }, Gamelan.interval[instrument]).start(Gamelan.offset[instrument]);
+        }, Gamelan.interval[instrument]()).start(Gamelan.offset[instrument]);
     }
 }
 

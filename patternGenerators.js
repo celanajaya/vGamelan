@@ -11,6 +11,7 @@ function setReyongPart() {
                 //convert to reyong buffers
                 prev = Gamelan.range.reyong.indexOf(Gamelan.range.ugal[prev]);
                 cur =  Gamelan.range.reyong.indexOf(Gamelan.range.ugal[cur]);
+                
                 var lowPattern = patternFunction([prev, cur]);
                 var highPattern = lowPattern.map(function (part) {
                     return part.map(function (note) {
@@ -65,12 +66,18 @@ function setGangsaPart(instrument) {
             break;
     }
     var elab = Gamelan.parts.ugal.reduce(function(elab, cur, i){
-        if (i % 2 != 0) {
+        if (i % 2 != 0 && patternType != kMalPal) {
             var prev = i > 1 ? Gamelan.parts.ugal[i - 2] : Gamelan.parts.ugal[Gamelan.parts.ugal.length - 1];
             var pattern = patternFunction([prev, cur]);
             //reduce/concat??
             pattern[0].forEach(function (v) {elab[0].push(v)});
             pattern[1].forEach(function (v) {elab[1].push(v)});
+        } else if (patternType === kMalPal) { //malpal
+            var prev = i > 1 ? Gamelan.parts.ugal[i - 1] : Gamelan.parts.ugal[Gamelan.parts.ugal.length - 1];
+            elab[0] = elab[0].concat(["-", prev, "-", cur]);
+            var cS = cur + 3 > 9 ? cur : cur + 3;
+            var pS = prev + 3 > 9 ? prev : prev + 3;
+            elab[1] = elab[1].concat(["-", pS, "-", cS]);
         }
         return elab
     }, [[],[]]);
@@ -85,8 +92,6 @@ function setGangsaPart(instrument) {
     }
 }
 //************Pattern Calculation Methods*********************
-//TODO: basic implementation for empat, and nyog cag
-
 //Reyong
 //Part parameter, is an integer from 0-3, corresponding to the positions on the reyong
 function getReyongNorotAtIndex(pokokPair){
