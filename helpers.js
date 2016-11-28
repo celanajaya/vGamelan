@@ -71,7 +71,7 @@ var Helpers = {
     getNgempat: function(num) {
         var ngempat = num + 3;
         if (ngempat > 9) {
-            ngempat = ngempat % 5;
+            ngempat = num;
         }
         return ngempat;
     },
@@ -89,5 +89,11 @@ var Helpers = {
             a[i] = b.concat(arr2[i]);
             return a;
         }, [])
+    },
+
+    clear: function(domElement) {
+        if (domElement) {
+            domElement.removeChild(domElement);
+        }
     }
 }

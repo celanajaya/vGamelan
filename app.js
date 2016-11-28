@@ -27,11 +27,11 @@ var nyogCagStayingPattern = 0;
 
 //******Building UI**********
 function init() {
-    setAllParts();
     configurePokokEditor();
     configurePartEditor();
     Tone.Master.connect(new Tone.Normalize(2,4));
     Tone.Transport.bpm.value = 60;
+    setAllParts();
     Gamelan.config.forEach(buildInstrument);
 
     //TODO: move these two to inside the build instrument methods?
@@ -179,19 +179,19 @@ function createVolumeSliderForInstrument(instrument) {
     volumeSlider.min = -10;
     volumeSlider.max = 10;
     volumeSlider.step = 0.1;
-    volumeSlider.id = instrument + "-slider";
     volumeSlider.value = 0;
     setSliderListener(volumeSlider, function(){
         players[instrument].volume.value = volumeSlider.value;
         console.log(instrument + " volume: " + players[instrument].volume.value);
     });
     var volumeSliderContainer = document.createElement("div");
+    volumeSliderContainer.id = "part-slider";
     volumeSliderContainer.classList.add("volume-slider-container");
     var label = document.createElement("p");
     label.innerHTML = instrument;
     volumeSliderContainer.appendChild(label);
     volumeSliderContainer.appendChild(volumeSlider);
-    document.getElementById("editor-button-row").appendChild(volumeSliderContainer);
+    return volumeSliderContainer;
 }
 
 function addDropDownContentForInstrument(instrumentName, container) {
@@ -323,13 +323,15 @@ function openInstrumentEditor(instrumentName) {
         var editor = document.getElementById("part-editor");
         editor.id = instrumentName + "-part-editor";
 
+        //editor SVG
         var svg = createEditor("#" + editor.id, editor.offsetHeight, editor.offsetWidth);
         svg.attr('id', "svg-part-editor");
-
         //a hack to get at the svg object's DOM node
+        //create editor will add it to the wrong place, so we remove it to add it later
         var svg_DOM = svg._groups[0][0];
         editor.removeChild(svg_DOM);
 
+        //virtual instrument
         var keyRow = document.createElement("div");
         keyRow.className = "row";
         keyRow.id = "key-row";
@@ -343,24 +345,80 @@ function openInstrumentEditor(instrumentName) {
                 players[id[0]].start(parseInt(id[1]));
             });
         }
-        createVolumeSliderForInstrument(instrumentName);
-        editor.insertBefore(keyRow, document.getElementById('editor-button-row'));
+
+        //controls volume slider
+        var vSlider = createVolumeSliderForInstrument(instrumentName);
+
+        //elaboration settings
+        var settingsTabContainer = createSettingsTabContainerForInstrument(instrumentName);
+
+        editor.insertBefore(settingsTabContainer, document.getElementById('editor-button-row'));
+        editor.insertBefore(vSlider, settingsTabContainer);
+        editor.insertBefore(keyRow, vSlider);
         editor.insertBefore(svg_DOM, keyRow);
         showPopup(instrumentName);
     }
 }
 
 function clearEditor(){
-    var keyRow = document.getElementById("key-row");
-    var svg = document.getElementById("svg-part-editor")
-    if (keyRow) {
-        keyRow.parentNode.removeChild(keyRow);
-    }
-    if (svg) {
-        svg.parentNode.removeChild(svg);
+    var elementsToClear = [document.getElementById("settings-tab-container"),
+                           document.getElementById("key-row"),
+                           document.getElementById("svg-part-editor"),
+                           document.getElementById("part-slider")];
+    elementsToClear.forEach(Helpers.clear);
+}
+
+function createSettingsTabContainerForInstrument(instrumentName) {
+    console.log(instrumentName);
+    var container = document.createElement("div");
+    container.id = "settings-tab-container";
+    var ul = document.createElement("ul")
+    var tabs;
+    switch(instrumentName) {
+        case "reyong":
+        case "pemade":
+        case "kantilan":
+            tabs = ["Part Editor", "Elaboration Settings", "Instrument Info", "Advanced"];
+            break;
+        default:
+            tabs = ["Part Editor", "Instrument Info", "Advanced"];
     }
 
+    tabs.forEach(function(tabText){
+        var li = document.createElement("li");
+        li.innerHTML = tabText;
+        li.addEventListener("mouseup", function(event){
+            var selected  = event.target.innerHTML;
+            hideAllEditorTabs();
+            switch (selected) {
+                case "Part Editor":
+                    PartEditor.build(instrumentName).show();
+                    break;
+                case "Elaboration Settings":
+                    ElaborationSettings.build(instrumentName).show();
+                    break;
+                case "Instrument Info":
+                    InstrumentInfo.build(instrumentName).show();
+                    break;
+                case "Advanced":
+                    AdvancedSettings.build(instrumentName).show();
+                    break;
+            }
+        });
+        ul.appendChild(li);
+    });
+
+    container.appendChild(ul);
+
+    //tab content
+    var tabContent = document.createElement("div");
+    tabContent.id = "settings-tab-content";
+    container.appendChild(tabContent);
+
+    return container;
 }
+
+
 
 //**********User Interactions***********
 //returns the Instrument.parts.pokok as an array of strings
@@ -414,6 +472,7 @@ function stop(event) {
     event.target.innerHTML = "Start";
     setTimeout(stopAnalyzers, 2000);
     Tone.Transport.stop();
+
 }
 
 document.getElementsByClassName("playback")[0].addEventListener("click", function(event) {

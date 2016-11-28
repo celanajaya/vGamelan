@@ -136,22 +136,13 @@ rect.active {
     display: inline-flex;
 }
 
-.pot:hover::after {
-    content:" ";
-    top:0; right:0; bottom:0; left:0;
-    width:100%;
-    border-radius:50%;
-    border: 1px solid #ED33CF;
-    animation: ripple 0.3s normal infinite;
+.pot:hover {
+    animation: visualDecay 1s;
 }
 
-.pot.active::after {
-    content:" ";
-    top:0; right:0; bottom:0; left:0;
-    width:100%;
-    border-radius:50%;
-    border: 1px solid #ED33CF;
-    animation: ripple 0.2s linear infinite;
+
+.pot.active {
+    animation: visualDecay 1s;
 }
 
 .key {
@@ -162,13 +153,13 @@ rect.active {
     display: inline-flex;
 }
 
-.key.active:after {
-    content:" ";
-    top:0; right:0; bottom:0; left:0;
-    width:100%;
-    border-radius:25%;
-    border: 1px solid #ED33CF;
-    animation: ripple 0.2s linear infinite;
+.key:hover {
+    animation: visualDecay 1s;
+}
+
+
+.key.active {
+    animation: visualDecay 1s;
 }
 
 .button {
@@ -257,7 +248,7 @@ rect.active {
 }
 
 .volume-slider-container {
-    width:20%;
+    width:80%;
     display: inline-block;
     margin:10px;
 }
@@ -277,9 +268,14 @@ rect.active {
     50% {transform:scale(.75); opacity:1;}
 }
 
+@keyframes visualDecay {
+    0% {background-color:#ed33cf; opacity : 1;}
+    0% {background-color:#ed33cf; opacity : 0;}
+}
+
 @keyframes blink {
     0%{opacity:1}
-    50%{opacity: 0}
+    100%{opacity: 0}
 }
 
 @keyframes rotate {

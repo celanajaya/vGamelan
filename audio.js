@@ -19,24 +19,23 @@ function loadGongs() {
 function setLoop(instrument) {
     return function () {
         var i = 0;
-        var q = [];
         new Tone.Loop(function (time) {
-            //handle UI state for keys/pots
-            q.forEach(toggleActive);
-            q = [];
 
             var buffers = readBuffers(instrument, i);
             buffers.forEach(function(buffer){
                 //return if it's a rest value
                 if (buffer === "-" || players[instrument].mute) return;
+                var uiElem = document.getElementById(instrument + " " + buffer);
+
                 players[instrument].start(buffer, time);
+                turnOn(uiElem);
+
                 players[instrument].stop(buffer, "+" + Gamelan.interval[instrument]());
+                Tone.Transport.scheduleOnce(function(time){
+                    turnOff(uiElem);
+                }, "+" + Gamelan.interval[instrument]());
 
-                //add the note to be turned on
-                q.push(document.getElementById(instrument + " " + buffer));
             });
-
-            q.forEach(toggleActive);
             i++;
         }, Gamelan.interval[instrument]()).start(Gamelan.offset[instrument]);
     }
@@ -77,7 +76,7 @@ function configureGong() {
                 players["gong"].start(0);
             }
             i++;
-        }, "2n").start("0:1:4");
+        }, "2n").start("0:1:3");
     }).toMaster();
     players["gong"].fadeIn = 0.1;
     players["gong"].fadeOut = 0.3;
@@ -91,6 +90,20 @@ function toggleActive(item) {
         item.classList.remove("active")
     } else {
         item.classList.add("active");
+    }
+}
+
+function turnOn(item) {
+    if (!item) return;
+    if (!item.classList.contains("active")){
+        item.classList.add("active");
+    }
+}
+
+function turnOff(item) {
+    if (!item) return;
+    if (item.classList.contains("active")){
+        item.classList.remove("active");
     }
 }
 

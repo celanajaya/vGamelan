@@ -10,15 +10,18 @@ function setReyongPart() {
             if (reyongPatternType === "kilitan") {
                 //convert to reyong buffers
                 prev = Gamelan.range.reyong.indexOf(prev);
-                if (prev < 2) {
-                    prev = prev + 5;
-                }
                 cur =  Gamelan.range.reyong.indexOf(cur);
-                if (cur < 2) {
-                    cur = cur + 5;
-                }
 
-                var lowPattern = patternFunction([prev, cur]);
+                var lowPattern = patternFunction([prev, cur]).map(function(part){
+                    return part.map(function(note){
+                        if (note === "-") return note;
+                        if (note < 0) {
+                            console.log("Reyong part out of range adding a rest instead");
+                            return "-";
+                        }
+                        return note;
+                    })
+                });
                 var highPattern = lowPattern.map(function (part) {
                     return part.map(function (note) {
                         if (note === "-") return note;
