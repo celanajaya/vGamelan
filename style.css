@@ -176,8 +176,15 @@ rect.active {
     box-shadow: 1px 1px 1px #555
 }
 
-.button.close {
+.close {
+    width: 15px;
     background-color: cornflowerblue;
+    border-radius: 5px;
+}
+
+.close::before {
+    content: "X";
+    color: #ffffff;
 }
 
 #start {

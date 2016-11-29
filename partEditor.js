@@ -2,8 +2,11 @@ var ElaborationSettings = {
     'build': function(instrumentName){
         this['mainNode'] = document.createElement('div');
         this['mainNode'].className = 'static-pattern-selector'
-        this['mainNode'].innerHTML = "Static Pattern Selector";
+        this['mainNode'].innerHTML = "Elaboration Settings";
         this['mainNode'].id = instrumentName + "-elaboration-settings-main-node";
+        var dropdownContainer = document.createElement("dropdown-container");
+        this['mainNode'].appendChild(dropdownContainer);
+        addDropDownContentForInstrument(instrumentName, dropdownContainer);
         createPatternSelector(this['mainNode']);
         return this;
     },
@@ -37,10 +40,8 @@ function createPatternSelector(parent){
     });
     for (var y = 0; y < 3; y++) {
         var row = document.createElement('tr');
-        console.log(row);
         for (var x = 0; x < 8; x++) {
             var d = document.createElement('td');
-            console.log(d);
             var svg = d3.select(d).append('svg').attr('height', 30).attr('width', 80);
             svg.attr("id",  x.toString() + "-" + y.toString()+ "-static-svg");
             svg.on('click', selectPattern);

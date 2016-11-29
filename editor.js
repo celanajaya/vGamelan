@@ -93,6 +93,10 @@ function clearAllForInstrument(instrumentName){
                 .select(i_Selector + "-" + y.toString() + "-" + x.toString())
                 .classed('active', false);
 
+            d3.select("#svg-part-editor")
+                .select(i_Selector + "-" + y.toString() + "-" + x.toString())
+                .classed('active', false);
+
         }
     }
 }

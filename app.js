@@ -160,9 +160,8 @@ function configurePartEditor() {
 
     //close button
     var closeButton = document.createElement('div')
-    closeButton.className = 'button close';
+    closeButton.className = 'close';
     closeButton.id = 'close';
-    closeButton.innerText = 'Close';
     closeButton.addEventListener('click', function(){
         hidePopup();
         clearEditor();
@@ -170,7 +169,7 @@ function configurePartEditor() {
     });
 
     editorButtonRow.appendChild(closeButton);
-    editor.appendChild(editorButtonRow);
+    editor.insertBefore(editorButtonRow, editor.firstChild);
 }
 
 function createVolumeSliderForInstrument(instrument) {
@@ -352,10 +351,10 @@ function openInstrumentEditor(instrumentName) {
         //elaboration settings
         var settingsTabContainer = createSettingsTabContainerForInstrument(instrumentName);
 
-        editor.insertBefore(settingsTabContainer, document.getElementById('editor-button-row'));
-        editor.insertBefore(vSlider, settingsTabContainer);
-        editor.insertBefore(keyRow, vSlider);
-        editor.insertBefore(svg_DOM, keyRow);
+        editor.appendChild(svg_DOM);
+        editor.appendChild(keyRow);
+        editor.appendChild(vSlider);
+        editor.appendChild(settingsTabContainer);
         showPopup(instrumentName);
     }
 }

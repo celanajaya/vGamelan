@@ -92,8 +92,8 @@ var Helpers = {
     },
 
     clear: function(domElement) {
-        if (domElement) {
-            domElement.removeChild(domElement);
+        if (domElement != null) {
+            domElement.parentNode.removeChild(domElement);
         }
     }
 }
