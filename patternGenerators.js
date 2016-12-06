@@ -75,8 +75,20 @@ function setGangsaPart(instrument) {
     }
     var elab = Gamelan.parts.ugal.reduce(function(elab, cur, i){
         if (i % 2 != 0 && patternType != kMalPal) {
-            var prev = i > 1 ? Gamelan.parts.ugal[i - 2] : Gamelan.parts.ugal[Gamelan.parts.ugal.length - 1];
-            var pattern = patternFunction([prev, cur]);
+            var pattern = [];
+            if (patternType === kGambangan) {
+                //gambangan
+                var prev = i > 1 ? Gamelan.parts.ugal[i - 1] : Gamelan.parts.ugal[Gamelan.parts.ugal.length - 1];
+                // var prev = i > 1 ? Gamelan.parts.ugal[i - 2] : Gamelan.parts.ugal[Gamelan.parts.ugal.length - 1];
+                var polos = ["-", cur, "-", prev, cur, prev, "-", cur];
+                var sangsih = polos.atRotation(1);
+                pattern = [polos, sangsih];
+            } else {
+                //other patterns
+                var prevJublag = i > 1 ? Gamelan.parts.ugal[i - 2] : Gamelan.parts.ugal[Gamelan.parts.ugal.length - 1];
+                pattern = patternFunction([prevJublag, cur]);
+            }
+
             //reduce/concat??
             pattern[0].forEach(function (v) {elab[0].push(v)});
             pattern[1].forEach(function (v) {elab[1].push(v)});

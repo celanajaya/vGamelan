@@ -7,7 +7,8 @@ var kKilitan = "kilitan";
 var kTelu = "kotekan telu";
 var kEmpat = "kotekan empat";
 var kMalPal = "malpal";
-var patternTypes = [kKilitan, kNorot, kTelu, kEmpat, kNyogCag, kMalPal];
+var kGambangan = "gambangan";
+var patternTypes = [kKilitan, kNorot, kTelu, kEmpat, kNyogCag, kMalPal, kGambangan];
 
 //Audio Players
 var players = {};

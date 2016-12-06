@@ -108,11 +108,12 @@ rect.active {
     border: 1px solid #ED33CF;
     border-radius: 3px;
     padding:3px;
-    box-shadow: 1px 1px 1px #555
 }
 
 .mute-button:hover{
     cursor: pointer;
+    animation: float 0.5s;
+    box-shadow: 1px 1px 1px #555;
 }
 
 .mute-button.active {
@@ -263,6 +264,11 @@ rect.active {
 @keyframes glow {
     from {color: black;}
     to {color: #ED33CF;}
+}
+
+@keyframes float {
+    from {box-shadow: 0px 0px 0px;}
+    to {box-shadow: 1px 1px 1px #555;}
 }
 
 @keyframes show {
