@@ -101,6 +101,19 @@
     visibility: visible;
 }
 
+.editor-part-container {
+    padding: 0 10px 0 10px;
+}
+
+.editor-part-container svg {
+    width: 100%;
+}
+
+.part-editor-svg-container {
+    border: 1px dotted cornflowerblue;
+    margin: 10px;
+}
+
 .static-pattern-selector {
     visibility: hidden;
 }

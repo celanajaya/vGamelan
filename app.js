@@ -322,15 +322,12 @@ function openInstrumentEditor(instrumentName) {
         //rename editor with instrument name
         var editor = document.getElementById("part-editor");
         editor.id = instrumentName + "-part-editor";
+        var rowHeight = editor.offsetHeight;
+        var rowWidth = editor.offsetWidth - 20;
 
         //editor SVG
-        var svg = createEditor("#" + editor.id, editor.offsetHeight, editor.offsetWidth);
-        svg.attr('id', "svg-part-editor");
-        //a hack to get at the svg object's DOM node
-        //create editor will add it to the wrong place, so we remove it to add it later
-        var svg_DOM = svg._groups[0][0];
-        editor.removeChild(svg_DOM);
-
+        var svg_container = document.createElement("div");
+        svg_container.className = "part-editor-svg-container";
         //virtual instrument
         var keyRow = document.createElement("div");
         keyRow.className = "row";
@@ -352,7 +349,25 @@ function openInstrumentEditor(instrumentName) {
         //elaboration settings
         var settingsTabContainer = createSettingsTabContainerForInstrument(instrumentName);
 
-        editor.appendChild(svg_DOM);
+        //attach UI elements to DOM
+        editor.appendChild(svg_container);
+        //create editor will add it to the wrong place, so we remove it to add it later
+        [instrumentName, "ugal", "jublag"].forEach(function(name) {
+            var editor_part_container = document.createElement("div");
+            editor_part_container.id = name + "editor-part-container";
+            editor_part_container.className = "editor-part-container";
+            svg_container.appendChild(editor_part_container);
+
+            var label = document.createElement("p");
+            label.innerHTML = name;
+            editor_part_container.appendChild(label);
+
+            var pattern_svg = createEditor("#" + editor_part_container.id, rowHeight, rowWidth, name);
+            pattern_svg.attr('id', name +"-svg-part-editor");
+
+            svg_container.appendChild(editor_part_container)
+        });
+
         editor.appendChild(keyRow);
         editor.appendChild(vSlider);
         editor.appendChild(settingsTabContainer);

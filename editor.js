@@ -1,5 +1,7 @@
-function createEditor(parent, totalHeight, totalWidth) {
-    var instrumentName = parent.split("-")[0].slice(1);
+function createEditor(parent, totalHeight, totalWidth, instrumentName) {
+    if (!instrumentName) {
+        instrumentName = parent.split("-")[0].slice(1);
+    }
     //instrumental part
     var part = Gamelan.parts[instrumentName];
     //number of keys/pots, used as y value
@@ -10,7 +12,6 @@ function createEditor(parent, totalHeight, totalWidth) {
     var svg = d3.select(parent).append('svg').attr('height', totalHeight).attr('width', totalWidth);
     svg.attr("id", instrumentName + "-svg");
     //configure dimensions based on pattern/instrument properties
-    var meter = Gamelan.meter;
     switch (instrumentName) {
         case"pemade":
         case"kantilan":
