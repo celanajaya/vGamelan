@@ -15,9 +15,9 @@ var players = {};
 var analyzers = {};
 
 //default settings
-var pemadePatternType = patternTypes[1];
-var kantilanPatternType = patternTypes[1];
-var reyongPatternType = patternTypes[1];
+var pemadePatternType = patternTypes[2];
+var kantilanPatternType = patternTypes[2];
+var reyongPatternType = patternTypes[0];
 var teluStayingPattern = [0,0];
 var empatStayingPattern = [0,0];
 var nyogCagMovingPattern = 0;
@@ -325,9 +325,10 @@ function openInstrumentEditor(instrumentName) {
         var rowHeight = editor.offsetHeight;
         var rowWidth = editor.offsetWidth - 20;
 
-        //editor SVG
+        //container for editor svgs
         var svg_container = document.createElement("div");
         svg_container.className = "part-editor-svg-container";
+
         //virtual instrument
         var keyRow = document.createElement("div");
         keyRow.className = "row";
@@ -351,10 +352,10 @@ function openInstrumentEditor(instrumentName) {
 
         //attach UI elements to DOM
         editor.appendChild(svg_container);
-        //create editor will add it to the wrong place, so we remove it to add it later
+
         [instrumentName, "ugal", "jublag"].forEach(function(name) {
             var editor_part_container = document.createElement("div");
-            editor_part_container.id = name + "editor-part-container";
+            editor_part_container.id = name + "-editor-part-container";
             editor_part_container.className = "editor-part-container";
             svg_container.appendChild(editor_part_container);
 
@@ -378,7 +379,7 @@ function openInstrumentEditor(instrumentName) {
 function clearEditor(){
     var elementsToClear = [document.getElementById("settings-tab-container"),
                            document.getElementById("key-row"),
-                           document.getElementById("svg-part-editor"),
+                           document.getElementsByClassName("part-editor-svg-container")[0],
                            document.getElementById("part-slider")];
     elementsToClear.forEach(Helpers.clear);
 }

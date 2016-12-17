@@ -22,6 +22,7 @@ var ElaborationSettings = {
     }
 };
 
+//TODO: add instrument argument, add pattern bank (with each of the static patterns) to the Gamelan object
 function createPatternSelector(parent){
     var table = document.createElement('table');
     var patternBank = [['x','y','z','x','z','y','x','z'],
@@ -47,7 +48,8 @@ function createPatternSelector(parent){
             svg.on('click', selectPattern);
             for (var pY = 0; pY < 3; pY++) {
                 for (var pX = 0; pX < 8; pX++){
-                    var boxColor = patternBank[pY][pX] === pY ? 'rgb(0,0,0)' : 'rgb(220,220,220)';
+                    //LOL....wtf
+                    var boxColor = patternBank[y].atRotation(x)[pX] === pY ? 'rgb(0,0,0)' : 'rgb(220,220,220)';
                     svg.append('rect')
                         .attr('width', 10)
                         .attr('height', 10)
@@ -67,10 +69,12 @@ function createPatternSelector(parent){
 
 function selectPattern(){
     var patternID = d3.select(this).attr('id');
-    var parsedID = patternID.split("-");
-
-    teluStayingPattern = [parsedID[0],parsedID[1]];
-    empatStayingPattern = [parsedID[0],parsedID[1]];
+    var parsedID = [parseInt(patternID.split("-")[0]), parseInt(patternID.split("-")[1])];
+    teluStayingPattern = parsedID;
+    empatStayingPattern = parsedID;
+    //redraw SVGS
+    setAllParts();
+    updateAllSvgs();
 }
 
 
@@ -138,7 +142,6 @@ var InstrumentInfo = {
 function hideAllEditorTabs() {
     var tabs = [InstrumentInfo, PartEditor, ElaborationSettings, AdvancedSettings];
     tabs.forEach(function(tab){
-        console.log(tab);
         if (tab.mainNode != null) {
             tab.hide();
         }

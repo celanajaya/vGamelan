@@ -48,12 +48,14 @@ var Gamelan = {
             if (pemadePatternType == kMalPal) {
                 return "8n";
             }
-            return"16n"},
+            return"16n"
+        },
         "kantilan" : function(){
             if (kantilanPatternType == kMalPal) {
                 return "8n";
             }
-            return"16n"},
+            return"16n"
+        },
         "ugal" : function(){return"4n"},
         "jublag" : function(){return"2n"},
         "penyacah" : function(){return"4n"},
