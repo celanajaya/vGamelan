@@ -297,6 +297,7 @@ function initializeMuteButtons() {
 //TODO: fix cursor placement
 function configurePokokEditor() {
     var editor = document.getElementById("pokok-editor");
+    //listener for main pokok editor
     editor.addEventListener("keyup", function(e){
         setAllParts();
         updateAllSvgs();
@@ -385,7 +386,6 @@ function clearEditor(){
 }
 
 function createSettingsTabContainerForInstrument(instrumentName) {
-    console.log(instrumentName);
     var container = document.createElement("div");
     container.id = "settings-tab-container";
     var ul = document.createElement("ul")

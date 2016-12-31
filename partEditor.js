@@ -2,12 +2,12 @@ var ElaborationSettings = {
     'build': function(instrumentName){
         this['mainNode'] = document.createElement('div');
         this['mainNode'].className = 'static-pattern-selector'
-        this['mainNode'].innerHTML = "Elaboration Settings";
+        this['mainNode'].innerHTML = "Static Pattern Selector: ";
         this['mainNode'].id = instrumentName + "-elaboration-settings-main-node";
         var dropdownContainer = document.createElement("dropdown-container");
         this['mainNode'].appendChild(dropdownContainer);
         addDropDownContentForInstrument(instrumentName, dropdownContainer);
-        createPatternSelector(this['mainNode']);
+        createPatternSelector(this['mainNode'], instrumentName);
         return this;
     },
     'show':function(){
@@ -23,7 +23,7 @@ var ElaborationSettings = {
 };
 
 //TODO: add instrument argument, add pattern bank (with each of the static patterns) to the Gamelan object
-function createPatternSelector(parent){
+function createPatternSelector(parent, instrumentName){
     var table = document.createElement('table');
     var patternBank = [['x','y','z','x','z','y','x','z'],
                        ['y','x','z','y','z','x','y','z'],
@@ -45,11 +45,11 @@ function createPatternSelector(parent){
             var d = document.createElement('td');
             var svg = d3.select(d).append('svg').attr('height', 30).attr('width', 80);
             svg.attr("id",  x.toString() + "-" + y.toString()+ "-static-svg");
-            svg.on('click', selectPattern);
+            svg.on('click', selectPattern(instrumentName));
             for (var pY = 0; pY < 3; pY++) {
                 for (var pX = 0; pX < 8; pX++){
                     //LOL....wtf
-                    var boxColor = patternBank[y].atRotation(x)[pX] === pY ? 'rgb(0,0,0)' : 'rgb(220,220,220)';
+                    var boxColor = patternBank[y].atRotation(x)[pX] === pY ? 'rgb(237,51,207)' : 'rgb(220,220,220)';
                     svg.append('rect')
                         .attr('width', 10)
                         .attr('height', 10)
@@ -67,14 +67,24 @@ function createPatternSelector(parent){
     parent.appendChild(table);
 }
 
-function selectPattern(){
-    var patternID = d3.select(this).attr('id');
-    var parsedID = [parseInt(patternID.split("-")[0]), parseInt(patternID.split("-")[1])];
-    teluStayingPattern = parsedID;
-    empatStayingPattern = parsedID;
-    //redraw SVGS
-    setAllParts();
-    updateAllSvgs();
+function selectPattern(instrumentName) {
+    return function () {
+        var patternID = d3.select(this).attr('id');
+        var parsedID = [parseInt(patternID.split("-")[0]), parseInt(patternID.split("-")[1])];
+        teluStayingPattern = parsedID;
+        empatStayingPattern = parsedID;
+        //redraw SVG for instrument;
+        var part = Gamelan.parts[instrumentName].reduce(toConcatedArrays, []);
+        if (instrumentName === "pemade" || instrumentName === "kantilan") {
+            setGangsaPart(instrumentName);
+        } else if (instrumentName === "reyong") {
+            setReyongPart();
+        }
+
+        var rangeHeight = Gamelan.range[instrumentName].length;
+        var partLength = Gamelan.getPartLength[instrumentName]();
+        showPattern(instrumentName, part, rangeHeight, partLength);
+    }
 }
 
 

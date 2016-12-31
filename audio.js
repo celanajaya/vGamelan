@@ -26,13 +26,23 @@ function setLoop(instrument) {
                 //return if it's a rest value
                 if (buffer === "-" || players[instrument].mute) return;
                 var uiElem = document.getElementById(instrument + " " + buffer);
+                var rangeHeight = Gamelan.range[instrument].length;
+                var partLength = Gamelan.getPartLength[instrument]();
 
+                //play buffer
                 players[instrument].start(buffer, time);
+
+                //animate virtual instrument
                 turnOn(uiElem);
+
+                //active svg blocks
+                var d3ID = "#" + instrument + "-" + ((rangeHeight - 1) - buffer).toString() + "-" + (i % partLength).toString();
+                d3.selectAll(d3ID).attr('fill', 'rgb(0,255,127)');
 
                 players[instrument].stop(buffer, "+" + Gamelan.interval[instrument]());
                 Tone.Transport.scheduleOnce(function(time){
                     turnOff(uiElem);
+                    d3.selectAll(d3ID).attr('fill', 'rgb(237,51,207)');
                 }, "+" + Gamelan.interval[instrument]());
 
             });

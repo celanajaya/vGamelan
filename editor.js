@@ -48,7 +48,7 @@ function showPattern(instrumentName, part, rangeHeight, partLength) {
     part.forEach(function (buffer, index) {
         if (buffer === "-") return;
         var id = instrumentName + "-" + ((rangeHeight - 1) - buffer).toString() + "-" + (index % partLength).toString();
-        d3.select("#" + id).attr('class', 'active');
+        d3.selectAll("#" + id).attr('class', 'active');
     });
 }
 
@@ -94,10 +94,9 @@ function clearAllForInstrument(instrumentName){
                 .select(i_Selector + "-" + y.toString() + "-" + x.toString())
                 .classed('active', false);
 
-            d3.select("#svg-part-editor")
+            d3.select(i_Selector + "-svg-part-editor")
                 .select(i_Selector + "-" + y.toString() + "-" + x.toString())
                 .classed('active', false);
-
         }
     }
 }

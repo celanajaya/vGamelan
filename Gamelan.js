@@ -6,6 +6,13 @@ var Gamelan = {
         "reyong" : 8
     },
 
+    patternType: {
+        "pemade" : function() {return pemadePatternType},
+        "kantilan" : function() {return kantilanPatternType},
+        "reyong" : function() {return reyongPatternType}
+    },
+
+
     meter : 8,
 
     //the instrument names, ranges, type of key (used when building UI)
