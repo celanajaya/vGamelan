@@ -50,8 +50,8 @@ function initializeTempoVolumeSliders(){
 
     var vSlider = document.getElementById("master-volume-slider");
     setSliderListener(vSlider, function() {
-        // document.getElementById("masterVolume").innerHTML = vSlider.value;
-        // Tone.Master.volume.value = tSlider.value;
+        document.getElementById("masterVolume").innerHTML = vSlider.value;
+        console.log(vSlider.value);
     });
 }
 
@@ -67,6 +67,7 @@ function buildInstrument(config) {
     players[instrumentName] = new Tone.MultiPlayer(getSamples(instrumentName, numKeys), setLoop(instrumentName)).toMaster();
     players[instrumentName].fadeIn = 0.05;
     players[instrumentName].fadeOut = 0.1;
+    players[instrumentName].volume.value = 0;
     analyzers[instrumentName] = new Tone.Analyser("fft", 32);
     players[instrumentName].chain(analyzers[instrumentName], Tone.Master);
 
@@ -74,7 +75,7 @@ function buildInstrument(config) {
     addControlsForInstrument(instrument);
 
     //Volume Stuff
-    players[instrumentName].volume.value = 0;
+    // players[instrumentName].volume.value = 0;
 
     //generate keys/pots and add listeners
     createKeysForInstrument(config);

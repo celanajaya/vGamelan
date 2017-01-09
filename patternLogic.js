@@ -32,11 +32,8 @@ var makeTelu = 	{
     stay: function(pokokBuffers, stayingPattern) {
         // console.log("static");
 		var x,y,z;
-		var stayingContours = [
-			['x','y','z','x','z','y','x','z'],
-			['y','x','z','y','z','x','y','z'],
-			['x','y','x','z','y','x','y','z']
-		];
+		var stayingContours =Gamelan.staticPatternsForPatternType(kTelu);
+
 		var contour = stayingContours[stayingPattern[0]].atRotation(stayingPattern[1]);
         var cValue = contour[contour.length - 1];
         var goalTone = pokokBuffers[1];
@@ -203,11 +200,7 @@ var makeEmpat = {
         //TODO: consolidate with duplicate code from kotekan telu
         // console.log("static");
         var x,y,z,k;
-        var stayingContours = [
-            ['x','y','z','x','z','y','x','z'],
-            ['y','x','z','y','z','x','y','z'],
-            ['x','y','x','z','y','x','y','z']
-        ];
+        var stayingContours = Gamelan.staticPatternsForPatternType(kEmpat);
         var contour = stayingContours[stayingPattern[0]].atRotation(stayingPattern[1]);
         var cValue = contour[contour.length - 1];
         var goalTone = pokokBuffers[1];
@@ -282,8 +275,20 @@ var	makeNyogCag = {
 			x = (arr[1] - 2);
 			w = (arr[1] - 3);
 		}
-		var options = [[y,z,y,z,w,x,y,z],
-                       [y,z,x,y,w,x,y,z]];
+		var options = Gamelan.movingPatternsForPatternType(kNyogCag).map(function(innerArr) {
+            return innerArr.map(function (item) {
+                switch (item) {
+                    case "y":
+                    return y;
+                    case "z":
+                        return z;
+                    case "x":
+                        return x;
+                    case "w":
+                        return w;
+                }
+            });
+        });
 		return this.split(options[contourType]);
     },
 
@@ -294,8 +299,22 @@ var	makeNyogCag = {
 		var a = (arr[0] + 2);
 		var x = (arr[0] - 1);
 		var w = (arr[0] - 2);
-		var options = [[z,y,z,y,x,w,x,y],
-                       [z,a,z,y,x,w,x,y]];
+		var options = Gamelan.staticPatternsForPatternType(kNyogCag).map(function(innerArr){
+            return innerArr.map(function (item) {
+                switch (item) {
+                    case "y":
+                        return y;
+                    case "z":
+                        return z;
+                    case 'a':
+                        return a;
+                    case "x":
+                        return x;
+                    case "w":
+                        return w;
+                }
+            });
+        });
         return this.split(options[contourType]);
 	},
 

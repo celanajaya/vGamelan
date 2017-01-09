@@ -12,6 +12,30 @@ var Gamelan = {
         "reyong" : function() {return reyongPatternType}
     },
 
+    staticPatternsForPatternType: function(patternType){
+        switch(patternType) {
+            case kEmpat:
+            case kTelu:
+                return [['x','y','z','x','z','y','x','z'],
+                        ['y','x','z','y','z','x','y','z'],
+                        ['x','y','x','z','y','x','y','z']]
+            case kNyogCag:
+                return  [['z','y','z','y','x','w','x','y'],
+                         ['z','a','z','y','x','w','x','y']]
+            default:
+                return;
+        }
+    },
+
+    movingPatternsForPatternType: function(patternType) {
+        switch(patternType) {
+            case kNyogCag:
+                return [['y','z','y','z','w','x','y','z'],
+                        ['y','z','x','y','w','x','y','z']];
+            default:
+                return;
+        }
+    },
 
     meter : 8,
 

@@ -25,9 +25,7 @@ var ElaborationSettings = {
 //TODO: add instrument argument, add pattern bank (with each of the static patterns) to the Gamelan object
 function createPatternSelector(parent, instrumentName){
     var table = document.createElement('table');
-    var patternBank = [['x','y','z','x','z','y','x','z'],
-                       ['y','x','z','y','z','x','y','z'],
-                       ['x','y','x','z','y','x','y','z']].map(function(r){
+    var patternBank = Gamelan.staticPatternsForPatternType(Gamelan.patternType[instrumentName]).map(function(r){
         return r.map(function(l){
             switch(l){
                 case 'z':
@@ -46,6 +44,7 @@ function createPatternSelector(parent, instrumentName){
             var svg = d3.select(d).append('svg').attr('height', 30).attr('width', 80);
             svg.attr("id",  x.toString() + "-" + y.toString()+ "-static-svg");
             svg.on('click', selectPattern(instrumentName));
+            //for drawing each individual svg with the available static patterns
             for (var pY = 0; pY < 3; pY++) {
                 for (var pX = 0; pX < 8; pX++){
                     //LOL....wtf

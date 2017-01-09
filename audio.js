@@ -90,7 +90,7 @@ function configureGong() {
     }).toMaster();
     players["gong"].fadeIn = 0.1;
     players["gong"].fadeOut = 0.3;
-    players["gong"].volume.value = -40;
+    players["gong"].volume.value = -30;
 }
 
 //handle animations
