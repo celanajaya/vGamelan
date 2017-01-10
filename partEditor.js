@@ -70,8 +70,7 @@ function selectPattern(instrumentName) {
     return function () {
         var patternID = d3.select(this).attr('id');
         var parsedID = [parseInt(patternID.split("-")[0]), parseInt(patternID.split("-")[1])];
-        teluStayingPattern = parsedID;
-        empatStayingPattern = parsedID;
+
         //redraw SVG for instrument;
         var part = Gamelan.parts[instrumentName].reduce(toConcatedArrays, []);
         if (instrumentName === "pemade" || instrumentName === "kantilan") {
@@ -85,8 +84,6 @@ function selectPattern(instrumentName) {
         showPattern(instrumentName, part, rangeHeight, partLength);
     }
 }
-
-
 
 var PartEditor = {
     'build': function(instrumentName){

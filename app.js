@@ -360,11 +360,6 @@ function openInstrumentEditor(instrumentName) {
             editor_part_container.id = name + "-editor-part-container";
             editor_part_container.className = "editor-part-container";
             svg_container.appendChild(editor_part_container);
-
-            var label = document.createElement("p");
-            label.innerHTML = name;
-            editor_part_container.appendChild(label);
-
             var pattern_svg = createEditor("#" + editor_part_container.id, rowHeight, rowWidth, name);
             pattern_svg.attr('id', name +"-svg-part-editor");
 
