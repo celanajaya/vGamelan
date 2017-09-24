@@ -22,10 +22,9 @@ var ElaborationSettings = {
     }
 };
 
-//TODO: add instrument argument, add pattern bank (with each of the static patterns) to the Gamelan object
 function createPatternSelector(parent, instrumentName){
     var table = document.createElement('table');
-    var patternBank = Gamelan.staticPatternsForPatternType(Gamelan.patternType[instrumentName]).map(function(r){
+    var patternBank = Gamelan.staticPatternsForPatternType(Gamelan.patternType[instrumentName]()).map(function(r){
         return r.map(function(l){
             switch(l){
                 case 'z':
@@ -69,16 +68,24 @@ function createPatternSelector(parent, instrumentName){
 function selectPattern(instrumentName) {
     return function () {
         var patternID = d3.select(this).attr('id');
-        var parsedID = [parseInt(patternID.split("-")[0]), parseInt(patternID.split("-")[1])];
-
+        var parsedID = [parseInt(patternID.split("-")[1]), parseInt(patternID.split("-")[0])];
         //redraw SVG for instrument;
-        var part = Gamelan.parts[instrumentName].reduce(toConcatedArrays, []);
         if (instrumentName === "pemade" || instrumentName === "kantilan") {
+            switch (Gamelan.patternType[instrumentName]()) {
+                case kTelu:
+                    teluStayingPattern = parsedID;
+                    break;
+                case kEmpat:
+                    empatStayingPattern = parsedID;
+                    break;
+            }
             setGangsaPart(instrumentName);
         } else if (instrumentName === "reyong") {
+            empatStayingPattern = parsedID;
             setReyongPart();
         }
 
+        var part = Gamelan.parts[instrumentName].reduce(toConcatedArrays, []);
         var rangeHeight = Gamelan.range[instrumentName].length;
         var partLength = Gamelan.getPartLength[instrumentName]();
         showPattern(instrumentName, part, rangeHeight, partLength);
