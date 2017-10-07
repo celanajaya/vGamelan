@@ -1,4 +1,5 @@
 var ElaborationSettings = {
+
     'build': function(instrumentName){
         this['mainNode'] = document.createElement('div');
         this['mainNode'].className = 'static-pattern-selector'
@@ -10,19 +11,22 @@ var ElaborationSettings = {
         createPatternSelector(this['mainNode'], instrumentName);
         return this;
     },
+
     'show':function(){
         this.mainNode.classList.add('show');
         this.isShowing = true;
         document.getElementById('settings-tab-content').appendChild(this['mainNode']);
     },
+
     'hide':function(){
         this.mainNode.classList.remove('show');
         this.isShowing = false;
         this['mainNode'].parentNode.removeChild(this['mainNode']);
     }
+
 };
 
-function createPatternSelector(parent, instrumentName){
+function createPatternSelector(parent, instrumentName) {
     var table = document.createElement('table');
     var patternBank = Gamelan.staticPatternsForPatternType(Gamelan.patternType[instrumentName]()).map(function(r){
         return r.map(function(l){
@@ -93,6 +97,7 @@ function selectPattern(instrumentName) {
 }
 
 var PartEditor = {
+
     'build': function(instrumentName){
         this['mainNode'] = document.createElement('div');
         this['mainNode'].className = 'part-editor'
@@ -100,11 +105,13 @@ var PartEditor = {
         this['mainNode'].id = instrumentName + "-part-editor-main-node";
         return this;
     },
+
     'show':function(){
         this.mainNode.classList.add('show');
         this.isShowing = true;
         document.getElementById('settings-tab-content').appendChild(this['mainNode']);
     },
+
     'hide':function(){
         this.mainNode.classList.remove('show');
         this.isShowing = false;

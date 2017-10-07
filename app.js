@@ -116,38 +116,25 @@ function addControlsForInstrument(instrument) {
                 muteButton.classList.add("mute-button");
                 muteButton.innerHTML = "mute";
                 cItem.appendChild(muteButton);
-                controlItemContainer.appendChild(cItem);
                 break;
             case 1:
                 cItem.innerHTML = instrument.id;
                 cItem.classList.add("instrument-name");
-                controlItemContainer.appendChild(cItem);
-                break;
-            case 3:
-                cItem = document.createElement("i");
-                cItem.className = "control-item fa fa-cog";
-                cItem.id = instrument.id + "-editor";
-                cItem.addEventListener("click", openInstrumentEditor(instrument.id));
-                controlItemContainer.appendChild(cItem);
                 break;
             case 2:
                 if (elaboratingPart) {
                     cItem.classList.add("dropdown-container");
-                    controlItemContainer.appendChild(cItem);
+                    cItem.appendChild(dropDownForInstrument(instrument.id, DropDownTypes.pattern));
+                }
+                break;
+            case 3:
+                if (elaboratingPart) {
+                    cItem.classList.add("dropdown-container");
+                    cItem.appendChild(dropDownForInstrument(instrument.id, DropDownTypes.contour));
                 }
                 break;
         }
-    }
-    //add elaboration dropdowns for elaborating instruments only
-    switch (instrument.id) {
-        case "pemade":
-        case "kantilan":
-        case "reyong":
-            var dropdownContainer = controlItemContainer.lastChild.previousSibling;
-            addDropDownContentForInstrument(instrument.id, dropdownContainer);
-            break;
-        default:
-            break;
+        controlItemContainer.appendChild(cItem);
     }
 
     controls.appendChild(controlItemContainer);
@@ -195,75 +182,6 @@ function createVolumeSliderForInstrument(instrument) {
     volumeSliderContainer.appendChild(label);
     volumeSliderContainer.appendChild(volumeSlider);
     return volumeSliderContainer;
-}
-
-function addDropDownContentForInstrument(instrumentName, container) {
-    var dropDown = document.createElement("div");
-    dropDown.className = "dropdown";
-    var dropDownText;
-    var pTypes;
-    switch(instrumentName) {
-        case "reyong":
-            dropDownText = reyongPatternType;
-            pTypes = patternTypes.slice(0, -3);
-            break;
-        case "kantilan":
-            pTypes = patternTypes.slice(1);
-            dropDownText = kantilanPatternType;
-            break;
-        case "pemade":
-            pTypes = patternTypes.slice(1);
-            dropDownText = pemadePatternType;
-            break;
-    }
-
-    dropDown.textContent = dropDownText;
-    var caret = createCaret();
-    dropDown.appendChild(caret);
-    container.appendChild(dropDown);
-
-    var dropDownContent = document.createElement("div");
-    dropDownContent.className = "dropdown-content";
-    dropDownContent.id = dropDownContent.className + "-" + instrumentName;
-    dropDown.appendChild(dropDownContent);
-    dropDown.addEventListener("click", function(){
-        toggleClass(dropDownContent, "show");
-        toggleClass(caret, "fa-caret-down")
-        toggleClass(caret, "fa-caret-left")
-    })
-
-    pTypes.forEach(function(pType) {
-        var menuItem = document.createElement("p");
-        menuItem.innerHTML = pType;
-        menuItem.addEventListener("click", function (event) {
-            var dropDownTextNode = event.target.parentElement.parentElement.childNodes[0];
-            dropDownTextNode.data = event.target.textContent;
-            switch (instrumentName) {
-                case"reyong":
-                    reyongPatternType = event.target.textContent;
-                    setReyongPart();
-                    break;
-                case"kantilan":
-                    kantilanPatternType = event.target.textContent;
-                    setGangsaPart("kantilan");
-                    break;
-                case "pemade":
-                    pemadePatternType = event.target.textContent;
-                    setGangsaPart("pemade");
-                    break;
-            }
-            showPattern(instrumentName, Gamelan.parts[instrumentName].reduce(toConcatedArrays),
-                                        Gamelan.range[instrumentName].length,
-                                        Gamelan.getPartLength[instrumentName]());
-        });
-        dropDownContent.appendChild(menuItem);
-    });
-}
-
-function createCaret(){
-    var caret = document.createElement("i");
-    caret.className = "fa-caret-left";
-    return caret;
 }
 
 function setSliderListener(slider, listenerFunction) {

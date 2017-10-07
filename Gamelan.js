@@ -15,6 +15,7 @@ var Gamelan = {
     staticPatternsForPatternType: function(patternType){
         switch(patternType) {
             case kEmpat:
+            case kKilitan:
             case kTelu:
                 return [['x','y','z','x','z','y','x','z'],
                         ['y','x','z','y','z','x','y','z'],
