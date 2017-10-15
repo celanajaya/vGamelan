@@ -73,34 +73,49 @@ function setGangsaPart(instrument) {
             patternFunction = getGangsaEmpatAtIndex;
             break;
     }
-    var elab = Gamelan.parts.ugal.reduce(function(elab, cur, i){
-        if (i % 2 != 0 && patternType != kMalPal) {
-            var pattern = [];
-            if (patternType === kGambangan) {
-                //gambangan
-                var prev = i > 1 ? Gamelan.parts.ugal[i - 1] : Gamelan.parts.ugal[Gamelan.parts.ugal.length - 1];
-                // var prev = i > 1 ? Gamelan.parts.ugal[i - 2] : Gamelan.parts.ugal[Gamelan.parts.ugal.length - 1];
-                var polos = ["-", cur, "-", prev, cur, prev, "-", cur];
-                var sangsih = polos.atRotation(1);
-                pattern = [polos, sangsih];
-            } else {
-                //other patterns
-                var prevJublag = i > 1 ? Gamelan.parts.ugal[i - 2] : Gamelan.parts.ugal[Gamelan.parts.ugal.length - 1];
-                pattern = patternFunction([prevJublag, cur]);
+
+    //generate elaboration
+    //TODO: this needs refactoring to be more general
+        var elab = Gamelan.parts.ugal.reduce(function (elab, cur, i) {
+            var prev = i > 1 ? Gamelan.parts.ugal[i - 1] : Gamelan.parts.ugal[Gamelan.parts.ugal.length - 1];
+            if (i % 2 != 0 && patternType != kMalPal && patternType != kNeliti) {
+                var pattern = [];
+                if (patternType === kGambangan) { //gambangan
+                    //gambangan
+                    var polos = ["-", cur, "-", prev, cur, prev, "-", cur];
+                    var sangsih = polos.atRotation(1);
+                    pattern = [polos, sangsih];
+                } else {
+                    //other patterns
+                    var prevJublag = i > 1 ? Gamelan.parts.ugal[i - 2] : Gamelan.parts.ugal[Gamelan.parts.ugal.length - 1];
+                    pattern = patternFunction([prevJublag, cur]);
+                }
+
+                //reduce/concat??
+                pattern[0].forEach(function (v) {
+                    elab[0].push(v)
+                });
+                pattern[1].forEach(function (v) {
+                    elab[1].push(v)
+                });
+
             }
 
-            //reduce/concat??
-            pattern[0].forEach(function (v) {elab[0].push(v)});
-            pattern[1].forEach(function (v) {elab[1].push(v)});
-        } else if (patternType === kMalPal) { //malpal
-            var prev = i > 1 ? Gamelan.parts.ugal[i - 1] : Gamelan.parts.ugal[Gamelan.parts.ugal.length - 1];
-            elab[0] = elab[0].concat(["-", prev, "-", cur]);
-            var cS = cur + 3 > 9 ? cur : cur + 3;
-            var pS = prev + 3 > 9 ? prev : prev + 3;
-            elab[1] = elab[1].concat(["-", pS, "-", cS]);
-        }
-        return elab
-    }, [[],[]]);
+            else if (patternType === kMalPal) { //malpal
+                elab[0] = elab[0].concat(["-", prev, "-", cur]);
+                var cS = cur + 3 > 9 ? cur : cur + 3;
+                var pS = prev + 3 > 9 ? prev : prev + 3;
+                elab[1] = elab[1].concat(["-", pS, "-", cS]);
+            }
+
+            else if (patternType === kNeliti) { // neliti
+                elab[0] = elab[0].concat(["-", "-", "-", cur]);
+                var cS = cur + 3 > 9 ? cur : cur + 3;
+                elab[1] = elab[1].concat(["-", "-", "-", cS]);
+            }
+
+            return elab
+        }, [[], []]);
 
     if (instrument === "pemade") {
         Gamelan.parts.pemade = elab;

@@ -14,17 +14,13 @@ var Gamelan = {
 
     staticPatternsForPatternType: function(patternType){
         switch(patternType) {
-            case kEmpat:
-            case kKilitan:
-            case kTelu:
-                return [['x','y','z','x','z','y','x','z'],
-                        ['y','x','z','y','z','x','y','z'],
-                        ['x','y','x','z','y','x','y','z']]
             case kNyogCag:
                 return  [['z','y','z','y','x','w','x','y'],
-                         ['z','a','z','y','x','w','x','y']]
+                         ['z','a','z','y','x','w','x','y']];
             default:
-                return;
+                return [['x','y','z','x','z','y','x','z'],
+                ['y','x','z','y','z','x','y','z'],
+                ['x','y','x','z','y','x','y','z']];
         }
     },
 
@@ -77,14 +73,20 @@ var Gamelan = {
     interval: {
         "reyong": function(){return"16n"},
         "pemade" : function(){
-            if (pemadePatternType == kMalPal) {
+            if (pemadePatternType === kMalPal) {
                 return "8n";
+            }
+            else if (kantilanPatternType === kNeliti) {
+                return "4n"
             }
             return"16n"
         },
         "kantilan" : function(){
-            if (kantilanPatternType == kMalPal) {
+            if (kantilanPatternType === kMalPal) {
                 return "8n";
+            }
+            else if (kantilanPatternType === kNeliti) {
+                return "4n"
             }
             return"16n"
         },

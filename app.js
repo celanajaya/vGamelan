@@ -10,15 +10,16 @@ var kTelu = "kotekan telu";
 var kEmpat = "kotekan empat";
 var kMalPal = "malpal";
 var kGambangan = "gambangan";
-var patternTypes = [kKilitan, kNorot, kTelu, kEmpat, kNyogCag, kMalPal, kGambangan];
+var kNeliti = "neliti";
+var patternTypes = [kKilitan,kNorot, kNeliti,kTelu, kEmpat, kNyogCag, kMalPal, kGambangan];
 
 //Audio Players
 var players = {};
 var analyzers = {};
 
 //default settings
-var pemadePatternType = patternTypes[2];
-var kantilanPatternType = patternTypes[2];
+var pemadePatternType = patternTypes[3];
+var kantilanPatternType = patternTypes[3];
 var reyongPatternType = patternTypes[0];
 var teluStayingPattern = [0,0];
 var empatStayingPattern = [0,0];
@@ -218,11 +219,20 @@ function initializeMuteButtons() {
 //TODO: fix cursor placement
 function configurePokokEditor() {
     var editor = document.getElementById("pokok-editor");
+    var regex = new RegExp("[1-5]");
+
     //listener for main pokok editor
-    editor.addEventListener("keyup", function(e){
-        setAllParts();
-        updateAllSvgs();
+    editor.addEventListener("keydown", function(e) {
+        if (regex.test(e.key)) {
+            setAllParts();
+            updateAllSvgs();
+        }
+        else if (e.key !== "Backspace") {
+            e.preventDefault();
+            return false;
+        }
     });
+
 }
 
 function showPopup(instrumentName) {

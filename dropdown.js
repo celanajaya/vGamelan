@@ -7,11 +7,12 @@ var DropDownTypes = {
 function dropDownForInstrument(instrumentName, type) {
     var startingText;
     var list;
+    var dropdown;
 
     if (type === DropDownTypes.pattern) {
         switch (instrumentName) {
             case "reyong":
-                list = patternTypes.slice(0, -3);
+                list = patternTypes.slice(0, 2);
                 startingText = reyongPatternType;
                 break;
             case "kantilan":
@@ -24,15 +25,16 @@ function dropDownForInstrument(instrumentName, type) {
                 break;
         }
 
-        var dropdown = createDropDown(startingText, instrumentName);
+        dropdown = createDropDown(startingText, instrumentName);
         addItemsToDropdown(list, dropdown, instrumentName);
-        return dropdown;
+
     } else {
-        var dropdown2 = createDropDown("Contour", instrumentName);
-        createPatternSelector(dropdown2.lastChild, instrumentName);
-        return dropdown2;
+
+        dropdown = createDropDown("Contour", instrumentName);
+        createPatternSelector(dropdown.lastChild, instrumentName);
     }
 
+    return dropdown;
 }
 
 function createDropDown(defaultTitle, instrumentName) {
@@ -51,7 +53,6 @@ function createDropDown(defaultTitle, instrumentName) {
         toggleClass(caret, "fa-caret-down")
         toggleClass(caret, "fa-caret-left")
     });
-
     return dropDown;
 }
 
@@ -85,6 +86,76 @@ function addItemsToDropdown(itemList, dropdown, instrumentName) {
         dropDownContent.appendChild(menuItem);
     });
 
+}
+
+function createPatternSelector(parent, instrumentName) {
+    var table = document.createElement('table');
+    var patternBank = Gamelan.staticPatternsForPatternType(Gamelan.patternType[instrumentName]()).map(function(r){
+        return r.map(function(l){
+            switch(l){
+                case 'z':
+                    return 0;
+                case 'y':
+                    return 1;
+                case 'x':
+                    return 2;
+            }
+        })
+    });
+    for (var y = 0; y < 3; y++) {
+        var row = document.createElement('tr');
+        for (var x = 0; x < 8; x++) {
+            var d = document.createElement('td');
+            var svg = d3.select(d).append('svg').attr('height', 30).attr('width', 80);
+            svg.attr("id",  x.toString() + "-" + y.toString()+ "-static-svg");
+            svg.on('click', selectPattern(instrumentName));
+            //for drawing each individual svg with the available static patterns
+            for (var pY = 0; pY < 3; pY++) {
+                for (var pX = 0; pX < 8; pX++){
+                    //LOL....wtf
+                    var boxColor = patternBank[y].atRotation(x)[pX] === pY ? 'rgb(237,51,207)' : 'rgb(220,220,220)';
+                    svg.append('rect')
+                        .attr('width', 10)
+                        .attr('height', 10)
+                        .attr('fill', boxColor)
+                        .attr('stroke', 'black')
+                        .attr('stroke-width', 0.05)
+                        .attr('x',10 * pX)
+                        .attr('y', 10 * pY)
+                }
+            }
+            row.appendChild(d);
+        }
+        table.appendChild(row);
+    }
+    parent.appendChild(table);
+}
+
+function selectPattern(instrumentName) {
+    return function () {
+        var patternID = d3.select(this).attr('id');
+        var parsedID = [parseInt(patternID.split("-")[1]), parseInt(patternID.split("-")[0])];
+        //redraw SVG for instrument;
+        if (instrumentName === "pemade" || instrumentName === "kantilan") {
+            switch (Gamelan.patternType[instrumentName]()) {
+                case kTelu:
+                    teluStayingPattern = parsedID;
+                    break;
+                case kEmpat:
+                    empatStayingPattern = parsedID;
+                    break;
+            }
+            setGangsaPart(instrumentName);
+        } else if (instrumentName === "reyong") {
+            empatStayingPattern = parsedID;
+            setReyongPart();
+        }
+
+        var part = Gamelan.parts[instrumentName].reduce(toConcatedArrays, []);
+        var rangeHeight = Gamelan.range[instrumentName].length;
+        var partLength = Gamelan.getPartLength[instrumentName]();
+        showPattern(instrumentName, part, rangeHeight, partLength);
+    }
 }
 
 function createCaret(){
