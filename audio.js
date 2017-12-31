@@ -33,16 +33,12 @@ function setLoop(instrument) {
                 //play buffer
                 players[instrument].start(buffer, time);
 
-                //animate virtual instrument
-                turnOn(uiElem);
-
                 //active svg blocks
                 var d3ID = "#" + instrument + "-" + ((rangeHeight - 1) - buffer).toString() + "-" + (i % partLength).toString();
                 d3.selectAll(d3ID).attr('fill', 'rgb(0,255,127)');
 
                 players[instrument].stop(buffer, "+" + Gamelan.interval[instrument]());
                 Tone.Transport.scheduleOnce(function(time){
-                    turnOff(uiElem);
                     d3.selectAll(d3ID).attr('fill', 'rgb(237,51,207)');
                 }, "+" + Gamelan.interval[instrument]());
 
@@ -93,28 +89,3 @@ function configureGong() {
     players["gong"].fadeOut = 0.3;
     players["gong"].volume.value = -30;
 }
-
-//handle animations
-function toggleActive(item) {
-    if (!item) return;
-    if (item.classList.contains("active")){
-        item.classList.remove("active")
-    } else {
-        item.classList.add("active");
-    }
-}
-
-function turnOn(item) {
-    if (!item) return;
-    if (!item.classList.contains("active")){
-        item.classList.add("active");
-    }
-}
-
-function turnOff(item) {
-    if (!item) return;
-    if (item.classList.contains("active")){
-        item.classList.remove("active");
-    }
-}
-

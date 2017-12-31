@@ -26,7 +26,7 @@ function setReyongPart() {
                     return part.map(function (note) {
                         if (note === "-") return note;
                         var newNote = note + 5;
-                        if (newNote > 11) {
+                        if (newNote > 10) {
                             console.log("Reyong part out range adding a rest instead");
                             return "-";
                         }

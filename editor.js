@@ -42,13 +42,13 @@ function createEditor(parent, totalHeight, totalWidth, instrumentName) {
     return svg;
 }
 
-//actual length of the part
 function showPattern(instrumentName, part, rangeHeight, partLength) {
     clearAllForInstrument(instrumentName);
     part.forEach(function (buffer, index) {
         if (buffer === "-") return;
         var id = instrumentName + "-" + ((rangeHeight - 1) - buffer).toString() + "-" + (index % partLength).toString();
-        d3.selectAll("#" + id).attr('class', 'active');
+        var rect = d3.select("#" + id);
+        rect.attr('fill', 'rgb(237,51,207)');
     });
 }
 
@@ -60,8 +60,7 @@ function rectClick(){
         var partIndex = components[2];
         players[instrumentName].start(buffer);
         Gamelan.parts[instrumentName][partIndex] = partIndex;
-        var rect = d3.select("#" + this.id);
-        rect.classed('active', !rect.classed('active'));
+        rect.attr('fill', 'rgb(237,51,207)');
     }
 }
 
@@ -90,13 +89,8 @@ function clearAllForInstrument(instrumentName){
     for (var y = 0; y < range; y++) {
         for (var x = 0; x < part; x++) {
             var i_Selector = "#" + instrumentName;
-            d3.select(i_Selector + "-svg")
-                .select(i_Selector + "-" + y.toString() + "-" + x.toString())
-                .classed('active', false);
-
-            d3.select(i_Selector + "-svg-part-editor")
-                .select(i_Selector + "-" + y.toString() + "-" + x.toString())
-                .classed('active', false);
+            var rect = d3.select(i_Selector + "-" + y.toString() + "-" + x.toString());
+            rect.attr('fill', 'rgb(220, 220, 220)');
         }
     }
 }

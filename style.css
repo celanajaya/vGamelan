@@ -55,10 +55,6 @@ p {
     animation: rotate 5s linear infinite;
 }
 
-rect.active {
-    fill: #ED33CF;
-}
-
 #pokok-editor {
     margin: 0 auto;
     width: 80%;
@@ -117,7 +113,6 @@ rect.active {
 }
 
 .mute-button.active {
-    border: 1px solid black;
     color:white;
     background-color: #ED33CF;
     animation: blink 1s linear infinite;
@@ -282,8 +277,8 @@ rect.active {
 }
 
 @keyframes visualDecay {
-    0% {background-color:#ed33cf; opacity : 1;}
-    0% {background-color:#ed33cf; opacity : 0;}
+    0% {background-color:springgreen; opacity : 1;}
+    0% {background-color:springgreen; opacity : 0;}
 }
 
 @keyframes blink {
