@@ -41,7 +41,7 @@ function startAnalyzers() {
                     return d;
                 })
                 .attr('fill', function (d) {
-                    return 'rgb(' + d + ', ' + d * 3 + ', ' + d + ')';
+                    return 'rgb(' + d + ', ' + d * 2 + ', ' + d + ')';
                 });
         }
     }

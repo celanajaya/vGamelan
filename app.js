@@ -223,7 +223,10 @@ function configurePokokEditor() {
 
     //listener for main pokok editor
     editor.addEventListener("keydown", function(e) {
+
         if (regex.test(e.key)) {
+            e.preventDefault();
+            formatPokokEditorString(editor.value + e.key);
             setAllParts();
             updateAllSvgs();
         }
@@ -233,6 +236,33 @@ function configurePokokEditor() {
         }
     });
 
+}
+
+function formatPokokEditorString(string) {
+    var splitString = string.split("");
+
+    var filteredString = splitString.filter(function(char){
+        return (char !== "\n") && (char !== " ");
+    });
+
+    if (filteredString.length > 8) {
+        filteredString = filteredString.slice(filteredString.length - 8);
+    }
+
+    var formattedString = filteredString.reduce(function(final, char, i){
+        if (i > 0 && i % 8 === 0) {
+            return final + "\n" + char;
+        }
+        else if (i > 0 && i % 4 === 0) {
+            return final + " " + char;
+        }
+        else {
+            return final + char;
+        }
+    }, "");
+
+    var editor = document.getElementById("pokok-editor");
+    editor.value = formattedString;
 }
 
 function showPopup(instrumentName) {
@@ -414,7 +444,6 @@ function stop(event) {
     event.target.innerHTML = "Start";
     setTimeout(stopAnalyzers, 2000);
     Tone.Transport.stop();
-
 }
 
 document.getElementsByClassName("playback")[0].addEventListener("click", function(event) {
