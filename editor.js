@@ -95,8 +95,4 @@ function clearAllForInstrument(instrumentName){
     }
 }
 
-function toConcatedArrays(a,b) {return a.concat(b)}
-
-
-
-
+function toConcatedArrays(a,b) {return a.concat(b)};

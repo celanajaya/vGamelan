@@ -25,10 +25,20 @@ function setLoop(instrument) {
             var buffers = readBuffers(instrument, i);
             buffers.forEach(function(buffer){
                 //return if it's a rest value
-                if (buffer === "-" || players[instrument].mute) return;
-                var uiElem = document.getElementById(instrument + " " + buffer);
                 var rangeHeight = Gamelan.range[instrument].length;
+
+                if (buffer === "-" || players[instrument].mute) {
+                    //Don't play rests or on muted players
+                    return;
+                }
+
                 var partLength = Gamelan.getPartLength[instrument]();
+
+                //Sometimes patterns calculated return keys that are out of range
+                if (buffer >= rangeHeight) {
+                    console.log("Error: Buffer " + buffer + " for instrument " + instrument + " is out of range");
+                    return;
+                }
 
                 //play buffer
                 players[instrument].start(buffer, time);
