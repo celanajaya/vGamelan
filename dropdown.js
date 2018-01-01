@@ -102,9 +102,9 @@ function createPatternSelector(parent, instrumentName) {
             }
         })
     });
-    for (var y = 0; y < 3; y++) {
+    for (var y = 0; y < 8; y++) {
         var row = document.createElement('tr');
-        for (var x = 0; x < 8; x++) {
+        for (var x = 0; x < 3; x++) {
             var d = document.createElement('td');
             var svg = d3.select(d).append('svg').attr('height', 30).attr('width', 80);
             svg.attr("id",  x.toString() + "-" + y.toString()+ "-static-svg");
@@ -113,7 +113,7 @@ function createPatternSelector(parent, instrumentName) {
             for (var pY = 0; pY < 3; pY++) {
                 for (var pX = 0; pX < 8; pX++){
                     //LOL....wtf
-                    var boxColor = patternBank[y].atRotation(x)[pX] === pY ? 'rgb(237,51,207)' : 'rgb(220,220,220)';
+                    var boxColor = patternBank[x].atRotation(y)[pX] === pY ? 'rgb(237,51,207)' : 'rgb(220,220,220)';
                     svg.append('rect')
                         .attr('width', 10)
                         .attr('height', 10)

@@ -85,7 +85,7 @@ function updateAllSvgs() {
 
 function clearAllForInstrument(instrumentName){
     var range = Gamelan.range[instrumentName].length;
-    var part = Gamelan.getPartLength[instrumentName]();
+    var part = 64;
     for (var y = 0; y < range; y++) {
         for (var x = 0; x < part; x++) {
             var i_Selector = "#" + instrumentName;

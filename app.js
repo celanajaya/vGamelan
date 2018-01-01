@@ -194,6 +194,7 @@ function setSliderListener(slider, listenerFunction) {
         listener();
         slider.addEventListener("mousemove", listener);
     });
+
     slider.addEventListener("mouseup", function() {
         slider.removeEventListener("mousemove", listener);
     });
@@ -226,19 +227,20 @@ function configurePokokEditor() {
 
         if (regex.test(e.key)) {
             e.preventDefault();
-            formatPokokEditorString(editor.value + e.key);
-            setAllParts();
-            updateAllSvgs();
+            editor.value = formattedPokokEditorString(editor.value + e.key);
         }
         else if (e.key !== "Backspace") {
             e.preventDefault();
             return false;
         }
+
+        setAllParts();
+        updateAllSvgs();
     });
 
 }
 
-function formatPokokEditorString(string) {
+function formattedPokokEditorString(string) {
     var splitString = string.split("");
 
     var filteredString = splitString.filter(function(char){
@@ -261,19 +263,18 @@ function formatPokokEditorString(string) {
         }
     }, "");
 
-    var editor = document.getElementById("pokok-editor");
-    editor.value = formattedString;
+    return formattedString;
 }
 
 function showPopup(instrumentName) {
-    var hider = document.getElementById("hider")
+    var hider = document.getElementById("hider");
     var editorPopup = document.getElementById("editor-popup");
     editorPopup.classList.add("show-popup");
     hider.classList.add("show-popup");
 }
 
 function hidePopup() {
-    var hider = document.getElementById("hider")
+    var hider = document.getElementById("hider");
     var editorPopup = document.getElementById("editor-popup");
     editorPopup.classList.remove("show-popup");
     hider.classList.remove("show-popup");
@@ -397,7 +398,14 @@ function createSettingsTabContainerForInstrument(instrumentName) {
 function getPokokFromEditor(){
     var textArr = (document.getElementById("pokok-editor").value.split(""));
     var reg = new RegExp(/^\d+$/);
-    return textArr.filter(function(item) {return  reg.test(item)});
+    var numsOnly = textArr.filter(function(item) {return  reg.test(item)});
+
+    //add an extra note if the pattern is odd numbered
+    if (numsOnly.length % 2 !== 0) {
+        var last = numsOnly[numsOnly.length - 1];
+        numsOnly.push(last);
+    }
+    return numsOnly;
 }
 
 function setPokokParts() {
