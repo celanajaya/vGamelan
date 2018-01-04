@@ -223,11 +223,11 @@ function configurePokokEditor() {
     var regex = new RegExp("[1-5]");
 
     //listener for main pokok editor
-    editor.addEventListener("keydown", function(e) {
+    editor.addEventListener("keyup", function(e) {
 
         if (regex.test(e.key)) {
             e.preventDefault();
-            editor.value = formattedPokokEditorString(editor.value + e.key);
+            editor.value = formattedPokokEditorString(editor.value);
         }
         else if (e.key !== "Backspace") {
             e.preventDefault();
@@ -401,11 +401,15 @@ function getPokokFromEditor(){
     var numsOnly = textArr.filter(function(item) {return  reg.test(item)});
 
     //add an extra note if the pattern is odd numbered
-    if (numsOnly.length % 2 !== 0) {
-        var last = numsOnly[numsOnly.length - 1];
-        numsOnly.push(last);
-    }
+    // if (numsOnly.length % 2 !== 0) {
+    //     var last = numsOnly[numsOnly.length - 1];
+    //     numsOnly.push(last);
+    // }
     return numsOnly;
+}
+
+function setGongPart() {
+    Gamelan.parts.gong = [1,"-","-","-",1,2,"-","-"];
 }
 
 function setPokokParts() {
@@ -437,6 +441,8 @@ function start(event) {
 
 function setAllParts() {
     Gamelan.resetAllParts();
+
+    setGongPart();
 
     //set basic melody parts
     setPokokParts();
