@@ -43,8 +43,7 @@ var Gamelan = {
         ["ugal", 10, "key"],
         ["penyacah", 5, "key"],
         ["jublag", 5, "key"],
-        ["jegogan", 5, "key"],
-        ["gong", 3, "pot"]
+        ["jegogan", 5, "key"]
     ],
 
     //initial arrays of buffer indices
@@ -58,7 +57,6 @@ var Gamelan = {
         "jegogan" : [],
         "pokok":[],
         "neliti":[],
-        "gong":[]
     },
 
     //an array which shows the range of an given instrument in scale degrees
@@ -70,7 +68,6 @@ var Gamelan = {
         "jublag" : [].instrumentRange(5, 0, 5),
         "penyacah" : [].instrumentRange(5, 0, 5),
         "jegogan" : [].instrumentRange(5, 0, 5),
-        "gong" : [].instrumentRange(3,0,3)
     },
 
     interval: {
@@ -97,7 +94,6 @@ var Gamelan = {
         "jublag" : function(){return"2n"},
         "penyacah" : function(){return"4n"},
         "jegogan" : function(){return"1n"},
-        "gong" : function(){return "1n"}
     },
 
     offset: {
@@ -108,7 +104,6 @@ var Gamelan = {
         "jublag":"0:1:3",
         "penyacah": "0:0:3",
         "jegogan": "0:3:3",
-        "gong" : "0:3:3"
     },
 
     //returns the total numbers notes for that part
@@ -119,7 +114,6 @@ var Gamelan = {
         "ugal" : function(){return Gamelan.parts.neliti.length},
         "penyacah" : function(){return Gamelan.parts.neliti.length},
         "jublag" : function(){return Gamelan.parts.pokok.length},
-        "gong" : function(){return Gamelan.parts.jegogan.length},
         "jegogan" : function(){return Gamelan.parts.jegogan.length
         }
     },

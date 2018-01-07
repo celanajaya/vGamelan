@@ -398,18 +398,7 @@ function createSettingsTabContainerForInstrument(instrumentName) {
 function getPokokFromEditor(){
     var textArr = (document.getElementById("pokok-editor").value.split(""));
     var reg = new RegExp(/^\d+$/);
-    var numsOnly = textArr.filter(function(item) {return  reg.test(item)});
-
-    //add an extra note if the pattern is odd numbered
-    // if (numsOnly.length % 2 !== 0) {
-    //     var last = numsOnly[numsOnly.length - 1];
-    //     numsOnly.push(last);
-    // }
-    return numsOnly;
-}
-
-function setGongPart() {
-    Gamelan.parts.gong = [1,"-","-","-",1,2,"-","-"];
+    return textArr.filter(function(char) {return reg.test(char)});
 }
 
 function setPokokParts() {
@@ -446,8 +435,6 @@ function start(event) {
 
 function setAllParts() {
     Gamelan.resetAllParts();
-
-    setGongPart();
 
     //set basic melody parts
     setPokokParts();
