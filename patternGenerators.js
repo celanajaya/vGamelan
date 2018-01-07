@@ -1,28 +1,63 @@
 //*********Pattern Generation**************
 //Setting the elaborations to globally defined arrays
-function setReyongPart(pokok) {
-    reyong_part = [];
+function setReyongPart() {
     var patternFunction = (reyongPatternType === "norot") ? getReyongNorotAtIndex : getReyongKilitanAtIndex;
-    for (var i = 0; i < 4; i++) {
-        var rPattern = [];
-        for (var j = 0; j < pokok.length; j++) {
-            rPattern = rPattern.concat(patternFunction(i,j));
+    Gamelan.parts.reyong = Gamelan.parts.neliti.reduce(function(elab, cur, i){
+        if (i % 2 != 0) {
+            //use the last one for the first
+            var prev = i > 1 ? Gamelan.parts.neliti[i - 2] : Gamelan.parts.neliti[Gamelan.parts.neliti.length - 1];
+            var pattern;
+            if (reyongPatternType === "kilitan") {
+                //convert to reyong buffers
+                prev = Gamelan.range.reyong.indexOf(prev);
+                cur =  Gamelan.range.reyong.indexOf(cur);
+
+                var lowPattern = patternFunction([prev, cur]).map(function(part){
+                    return part.map(function(note){
+                        if (note === "-") return note;
+                        if (note < 0) {
+                            console.log("Reyong part out of range adding a rest instead");
+                            return "-";
+                        }
+                        return note;
+                    })
+                });
+                var highPattern = lowPattern.map(function (part) {
+                    return part.map(function (note) {
+                        if (note === "-") return note;
+                        var newNote = note + 5;
+                        if (newNote > 11) {
+                            console.log("Reyong part out range adding a rest instead");
+                            return "-";
+                        }
+                        return newNote;
+                    });
+                });
+                pattern = lowPattern.concat(highPattern);
+            } else {
+                pattern = patternFunction([prev, cur]);
+            }
+            pattern[0].forEach(function (note) {elab[0].push(note)});
+            pattern[1].forEach(function (note) {elab[1].push(note)});
+            pattern[2].forEach(function (note) {elab[2].push(note)});
+            pattern[3].forEach(function (note) {elab[3].push(note)});
         }
-        reyong_part[i] = rPattern;
-    }
-    console.log("reyong part set:", reyong_part);
+        return elab
+    }, [[],[],[],[]]);
+    console.log("reyong part set:", Gamelan.parts.reyong);
 }
 
-function setGangsaPart(instrument, pokok) {
-    //take the pokok and convert to polos and sangsih arrays
+function setGangsaPart(instrument) {
+    //take the Instrument.parts.pokok and convert to polos and sangsih arrays
     var patternType;
     var patternFunction;
 
     if (instrument === "kantilan") {
         patternType = kantilanPatternType;
-        kantilan_part = [];
+        Gamelan.parts.kantilan = [];
     } else {
         patternType = pemadePatternType;
+        Gamelan.parts.pemade = [];
     }
     switch (patternType) {
         case kTelu:
@@ -37,241 +72,102 @@ function setGangsaPart(instrument, pokok) {
         case kEmpat:
             patternFunction = getGangsaEmpatAtIndex;
             break;
-        default:
-            patternFunction = getGangsaTeluAtIndex;
-            break;
     }
-    var polos = [];
-    var sangsih = [];
-    for (var i = 0; i < pokok.length; i++) {
-        var cur = pokok[i]
-        var prev = i > 0 ? pokok[i-1]:pokok[pokok.length - 1];
-        polos = polos.concat(patternFunction("polos", [prev, cur]));
-        sangsih = sangsih.concat(patternFunction("sangsih", [prev, cur]));
-    }
+
+    //generate elaboration
+    //TODO: this needs refactoring to be more general
+        var elab = Gamelan.parts.ugal.reduce(function (elab, cur, i) {
+            var prev = i > 1 ? Gamelan.parts.ugal[i - 1] : Gamelan.parts.ugal[Gamelan.parts.ugal.length - 1];
+            if (i % 2 != 0 && patternType != kMalPal && patternType != kNeliti) {
+                var pattern = [];
+                if (patternType === kGambangan) { //gambangan
+                    //gambangan
+                    var polos = ["-", cur, "-", prev, cur, prev, "-", cur];
+                    var sangsih = polos.atRotation(1);
+                    pattern = [polos, sangsih];
+                } else {
+                    //other patterns
+                    var prevJublag = i > 1 ? Gamelan.parts.ugal[i - 2] : Gamelan.parts.ugal[Gamelan.parts.ugal.length - 1];
+                    pattern = patternFunction([prevJublag, cur]);
+                }
+
+                //reduce/concat??
+                pattern[0].forEach(function (v) {
+                    elab[0].push(v)
+                });
+                pattern[1].forEach(function (v) {
+                    elab[1].push(v)
+                });
+
+            }
+
+            else if (patternType === kMalPal) { //malpal
+                elab[0] = elab[0].concat(["-", prev, "-", cur]);
+                var cS = cur + 3 > 9 ? cur : cur + 3;
+                var pS = prev + 3 > 9 ? prev : prev + 3;
+                elab[1] = elab[1].concat(["-", pS, "-", cS]);
+            }
+
+            else if (patternType === kNeliti) { // neliti
+                elab[0] = elab[0].concat(["-", "-", "-", cur]);
+                var cS = cur + 3 > 9 ? cur : cur + 3;
+                elab[1] = elab[1].concat(["-", "-", "-", cS]);
+            }
+
+            return elab
+        }, [[], []]);
 
     if (instrument === "pemade") {
-        pemade_part = [polos, sangsih];
-        // console.log(instrument + " part set: ", pemade_part);
+        Gamelan.parts.pemade = elab;
+        console.log(instrument + " part set: ", Gamelan.parts.pemade, patternType);
+
     } else {
-        kantilan_part = [polos, sangsih];
-        // console.log(instrument + " part set: ", kantilan_part);
+        Gamelan.parts.kantilan = elab;
+        console.log(instrument + " part set: ", Gamelan.parts.kantilan, patternType);
     }
 }
-
-function setNeliti(pokok) {
-    for (var i = 1; i < pokok.length; i+=2) {
-        neliti = neliti.concat(makeNeliti([pokok[i-1], pokok[i]]));
-    }
-    console.log("neliti set: ", neliti);
-}
-
 //************Pattern Calculation Methods*********************
-//TODO: add separate polos and sangsih outputs
-//TODO: create better methods for mapping an elaboration to an instrument
-//TODO: basic implementation for norot, telu, empat, and nyog cag for both reyong and gangsa
-
 //Reyong
 //Part parameter, is an integer from 0-3, corresponding to the positions on the reyong
-function getReyongNorotAtIndex(position, index){
-    var firstHalfPatternType = (pokok[index] !== pokok[index - 1]) ? "moving":"staying"
-    var firstHalf = reyongNorotBank[pokok[index] - 1][position][firstHalfPatternType];
-    var secondHalf = reyongNorotBank[pokok[index] - 1][position].staying;
-    return firstHalf.concat(secondHalf);
+function getReyongNorotAtIndex(pokokPair){
+    if (pokokPair[0] != pokokPair[1]) {
+        return makeReyongNorot.move(pokokPair);
+    }
+    return makeReyongNorot.stay(pokokPair, empatStayingPattern);
 }
 
-function getReyongKilitanAtIndex(position, index) {
-    var currentNote = pokok[index];
-    var previousNote = pokok[index - 1];
-    if (!previousNote) {
-        previousNote = pokok[pokok.length - 1];
+function getReyongKilitanAtIndex(pokokPair) {
+    if (pokokPair[0] != pokokPair[1]) {
+        return makeEmpat.move(pokokPair);
     }
-
-    //determine whether to assign the buffer polos or sangsih
-    var part = position % 2 === 0 ? "polos":"sangsih";
-    var ambitus = position < 2 ? reyongRange.slice(0,6):reyongRange.slice(6, reyongRange.length);
-
-    if (currentNote !== previousNote) {
-        var e = makeEmpat.move([previousNote, currentNote], part).map(function(scaleDegree){
-            var index = ambitus.indexOf(scaleDegree);
-            //hack to fix out of bounds issues
-            if (index === -1 && position < 2) {
-                index += 3;
-            }
-            return position < 2 ? index:index + 5;
-        });
-        return e;
-    } else {
-        var e = makeEmpat.stay([previousNote, currentNote], part, empatStayingPattern).map(function(scaleDegree){
-            var index = ambitus.indexOf(scaleDegree);
-            //hack to fix out of bounds issues;
-            if (index === -1 && position < 2) {
-                index += 3;
-            }
-            return position < 2 ? index:index + 5;
-        });
-        return e;
-    }
+    return makeEmpat.stay(pokokPair, empatStayingPattern);
 }
 
 //Gangsa
-function getGangsaNorotAtIndex(part, index) {
-    var currentNote = pokok[index];
-    var previousNote = pokok[index - 1];
-    if (!previousNote) {
-        previousNote = pokok[pokok.length - 1];
-    }
+function getGangsaNorotAtIndex(pokokPair) {
+    return makeNorot.basicNorot(pokokPair);
+}
 
-    var composite = makeNorot.basicNorot([previousNote, currentNote]);
-    if (Tone.Transport.bpm.value > 90) {
-        if (part === "sangsih") {
-            if (previousNote === currentNote) {
-                return composite.map(fastStayingSangsih);
-            }
-            return composite.map(fastMovingSangsih);
-        } else {
-            if (previousNote === currentNote) {
-                return composite.map(fastStayingPolos);
-            }
-            return composite.map(fastMovingPolos);
-        }
+function getGangsaTeluAtIndex(pokokPair) {
+    if (pokokPair[0] != pokokPair[1]) { //moving or staying
+        return makeTelu.move(pokokPair);
     } else {
-        if (part === "sangsih"){
-            return composite.map(getNgempat);
-        }
-    }
-    return composite;
-}
-
-//Norot Helpers
-function fastMovingPolos(value, index) {
-    switch (index) {
-        case 1:
-        case 3:
-        case 4:
-        case 5:
-        case 7:
-            return value;
-        default:
-            return "-";
+        return makeTelu.stay(pokokPair, teluStayingPattern);
     }
 }
 
-function fastStayingPolos(value, index) {
-    if (index % 2 != 0) {
-        return value;
+function getGangsaNyogCagAtIndex(pokokPair) {
+    if (pokokPair[0] !== pokokPair[1]) {
+        return makeNyogCag.move(pokokPair, nyogCagMovingPattern);
     } else {
-        return "-"
+        return makeNyogCag.stay(pokokPair, nyogCagStayingPattern);
     }
 }
-
-function fastMovingSangsih(value, index) {
-    switch (index) {
-        case 0:
-        case 2:
-        case 4:
-        case 5:
-        case 6:
-            return value;
-        default:
-            return "-";
-    }
-}
-
-function fastStayingSangsih(value, index) {
-    if (index % 2 === 0) {
-        return value;
+//
+function getGangsaEmpatAtIndex(pokokPair) {
+    if (pokokPair[0] != pokokPair[1]) { //moving or staying
+        return makeEmpat.move(pokokPair);
     } else {
-        return "-"
+        return makeEmpat.stay(pokokPair, teluStayingPattern);
     }
-}
-
-function getNgempat(num) {
-    var ngempat = num + 3;
-    if (ngempat > 5) {
-        ngempat = ngempat % 5;
-    }
-    return ngempat;
-}
-
-function getGangsaTeluAtIndex(part, pair) {
-    var kotekanFunc = part === "polos" ? teluCompositeToPolos : teluCompositeToSangsih
-
-    if (pair[0] != pair[1]) {
-        return makeTelu.move(pair).map(kotekanFunc);
-    } else {
-        return makeTelu.stay(pair, teluStayingPattern).map(kotekanFunc);
-    }
-}
-
-function teluCompositeToPolos(value, index) {
-    switch (index) {
-        case 1:
-        case 3:
-        case 4:
-        case 6:
-        case 7:
-            return value;
-        default:
-            return "-";
-    }
-}
-
-function teluCompositeToSangsih(value, index) {
-    switch (index) {
-        case 0:
-        case 2:
-        case 3:
-        case 5:
-        case 6:
-            return value;
-        default:
-            return "-";
-    }
-}
-
-function getGangsaNyogCagAtIndex(part, index) {
-    var currentNote = pokok[index];
-    var previousNote = pokok[index - 1];
-    if (!previousNote) {
-        previousNote = pokok[pokok.length - 1];
-    }
-    if (currentNote !== previousNote) {
-        return makeNyogCag.move([previousNote, currentNote], 0)
-            .map(scaleDegreeToGangsaKey);
-    } else {
-        return makeNyogCag.stay([previousNote, currentNote], 0)
-            .map(scaleDegreeToGangsaKey);
-    }
-}
-
-function getGangsaEmpatAtIndex(part, index) {
-    var currentNote = pokok[index];
-    var previousNote = pokok[index - 1];
-    if (!previousNote) {
-        previousNote = pokok[pokok.length - 1];
-    }
-    if (currentNote !== previousNote) {
-        return makeEmpat.move([previousNote, currentNote], part)
-            .map(scaleDegreeToGangsaKey);
-    } else {
-        return makeEmpat.stay([previousNote, currentNote], part, empatStayingPattern)
-            .map(scaleDegreeToGangsaKey);
-    }
-}
-
-function scaleDegreeToGangsaKey(scaleDegree) {
-    var index = gangsaRange.indexOf(scaleDegree);
-    if (index === -1) {
-        index += 3;
-    }
-    return index;
-}
-
-function scaleDegreeToReyongPot(scaleDegree) {
-    var index = reyongRange.indexOf(scaleDegree);
-    if (index === -1) {
-        index += 3;
-    }
-    return index;
 }

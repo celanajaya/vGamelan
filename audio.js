@@ -6,98 +6,75 @@ function getSamples(instrument, range)  {
 
     for (var i = 0; i < range; i++) {
         var filename = instrument + "_" + i.toString() + ".mp3";
-        var filePath = "./audio/" + instrument + "/mp3/" + filename;
+        var filePath = baseURL.local + "audio/" + instrument + "/mp3/" + filename;
         arr.push(filePath);
     }
     return arr;
 }
 
 function loadGongs() {
-   return ["./audio/gongs/mp3/gong.mp3","./audio/gongs/mp3/kemong.mp3"]
+    var base = baseURL.local;
+   return [base + "audio/gongs/mp3/gong.mp3", base + "audio/gongs/mp3/kemong.mp3"]
 }
 
 function setLoop(instrument) {
     return function () {
         var i = 0;
-        var q = [];
-        var interval;
-        var offset = 0;
-
-        switch (instrument) {
-            case "jegogan":
-                interval = "1n";
-                offset = "1:0:0";
-                break;
-            case "jublag":
-                interval = "2n";
-                offset = "0:1:4";
-                break;
-            case "penyacah":
-            case "ugal":
-                interval = "4n";
-                offset = "0:0:4";
-                break;
-            case "pemade":
-            case "kantilan":
-                interval = "16n";
-                offset = "0:0:4";
-                break;
-            case "reyong":
-                interval = "16n";
-                offset = "0:1:1";
-                break;
-        }
-
         new Tone.Loop(function (time) {
 
-            q.forEach(toggleActive);
-            q = [];
-            var buffers = getBuffers(instrument, i);
+            var buffers = readBuffers(instrument, i);
             buffers.forEach(function(buffer){
-                if (buffer === "-" || players[instrument].mute) return;
-                players[instrument].start(buffer);
-                players[instrument].stop(buffer, "+" + interval);
-                q.push(document.getElementById(instrument + " " + buffer));
+                //return if it's a rest value
+                var rangeHeight = Gamelan.range[instrument].length;
+
+                if (buffer === "-" || players[instrument].mute) {
+                    //Don't play rests or on muted players
+                    return;
+                }
+
+                var partLength = Gamelan.getPartLength[instrument]();
+
+                //Sometimes patterns calculated return keys that are out of range
+                if (buffer >= rangeHeight) {
+                    console.log("Error: Buffer " + buffer + " for instrument " + instrument + " is out of range");
+                    return;
+                }
+
+                //play buffer
+                players[instrument].start(buffer, time);
+
+                //active svg blocks
+                var d3ID = "#" + instrument + "-" + ((rangeHeight - 1) - buffer).toString() + "-" + (i % partLength).toString();
+                d3.selectAll(d3ID).attr('fill', 'rgb(0,255,127)');
+
+                players[instrument].stop(buffer, "+" + Gamelan.interval[instrument]());
+                Tone.Transport.scheduleOnce(function(time){
+                    d3.selectAll(d3ID).attr('fill', 'rgb(237,51,207)');
+                }, "+" + Gamelan.interval[instrument]());
+
             });
-            q.forEach(toggleActive);
             i++;
-        }, interval).start(offset);
+        }, Gamelan.interval[instrument]()).start(Gamelan.offset[instrument]);
     }
 }
 
-//TODO: find ways to appropriately cross octaves
-//this method converts
-function getBuffers(instrument, index) {
-    //helper function for parsing gangsa buffers
-    function bufferFromPart(buffers, part) {
-        var value = part[index % part.length];
-        if (value != "-") {
-            var gangsaBuffer = gangsaRange.indexOf(value);
-            //if it's below low dang, move to upper octave
-            gangsaBuffer = gangsaBuffer < 3 ? gangsaBuffer + 5 : gangsaBuffer
-            buffers.push(gangsaBuffer);
-        } else {
-            buffers.push(value);
-        }
-        return buffers;
-    }
-
+//returns an array of buffers to be played simultaneously (takes a instrument name and an index)
+function readBuffers(instrument, index) {
     switch (instrument) {
+        //melody instruments
         case "jegogan":
-            return [jegogan[index % jegogan.length] - 1];
         case "jublag":
-            return [pokok[index % pokok.length] - 1];
         case "penyacah":
-            return [neliti[index % neliti.length] - 1];
         case "ugal":
-            var lowOctaveBuffer = gangsaRange.indexOf(neliti[index % neliti.length]);
-            return [lowOctaveBuffer + 5];
+            return [Gamelan.parts[instrument][index % Gamelan.getPartLength[instrument]()]];
+
+        //elaborating instruments
         case "pemade":
-            return pemade_part.reduce(bufferFromPart, []);
         case "kantilan":
-            return kantilan_part.reduce(bufferFromPart, []);
         case "reyong":
-            return reyong_part.map(function(arr){return arr[index % (pokok.length * 8)]});
+            return Gamelan.parts[instrument].map(function(arr){
+                return arr[index % Gamelan.getPartLength[instrument]()];
+            });
     }
 }
 
@@ -109,26 +86,16 @@ function configureGong() {
                 i++;
                 return;
             }
-            if (i % pokok.length === pokok.length / 2 - 1) {
+            if (i % Gamelan.parts.pokok.length === Gamelan.parts.pokok.length / 2 - 1) {
                 players["gong"].start(1);
             }
-            if (i % pokok.length === pokok.length - 1) {
+            if (i % Gamelan.parts.pokok.length === Gamelan.parts.pokok.length - 1) {
                 players["gong"].start(0);
             }
             i++;
-        }, "2n").start("0:1:4");
+        }, "2n").start("0:1:3");
     }).toMaster();
     players["gong"].fadeIn = 0.1;
     players["gong"].fadeOut = 0.3;
+    players["gong"].volume.value = -30;
 }
-
-//handle animations
-function toggleActive(item) {
-    if (!item) return;
-    if (item.classList.contains("active")){
-        item.classList.remove("active")
-    } else {
-        item.classList.add("active");
-    }
-}
-

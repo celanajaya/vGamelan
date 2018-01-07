@@ -1,126 +1,98 @@
-function createEditor(parent, height, width) {
-    var instrumentName = parent.split("-")[0].slice(1);
-    var part;
-    var rangeLength;
-    var partLength;
-    var meter;
-
-    var svg = d3.select(parent).append('svg').attr('height', height).attr('width', width);
-    var len = reyongRange.length;
-    var splitRange = [reyongRange.splice(0, len / 2), reyongRange.splice(len / 2, len)];
-
-
-    function getAllGangsaBuffers(a, b) {
-
-        function partToBuffers(item) {
-            if (item === "-") return item
-            var gangsaKey = gangsaRange.indexOf(item);
-            gangsaKey = gangsaKey < 2 ? gangsaKey + 5 : gangsaKey;
-            return gangsaKey
-        }
-
-        return a.concat(b.map(partToBuffers))
+function createEditor(parent, totalHeight, totalWidth, instrumentName) {
+    if (!instrumentName) {
+        instrumentName = parent.split("-")[0].slice(1);
     }
+    //instrumental part
+    var part = Gamelan.parts[instrumentName];
+    //number of keys/pots, used as y value
+    var rangeHeight = Gamelan.range[instrumentName].length;
+    //total length of pattern, used as x value
+    var partLength = Gamelan.getPartLength[instrumentName]();
 
-    //TODO: fix reyong elaboration
-    function getAllReyongBuffers(a, b) {
-        var part = 1;
-        function partToBuffers(item) {
-            if (item === "-") return item
-            var octave = part < 2 ? 0:1;
-            return splitRange[octave].indexOf(item)
-        }
-
-        return function () {
-            part++;
-            return a.concat(b);
-        }()
-    }
-
-
+    var svg = d3.select(parent).append('svg').attr('height', totalHeight).attr('width', totalWidth);
+    svg.attr("id", instrumentName + "-svg");
+    //configure dimensions based on pattern/instrument properties
     switch (instrumentName) {
-        case "jegogan":
-            part = jegogan;
-            rangeLength = jegoganRange.length;
-            partLength = jegogan.length
-            meter = 4;
-            break;
-        case "jublag":
-            part= pokok;
-            rangeLength = jublagRange.length;
-            partLength = pokok.length;
-            meter = 4;
-            break;
-        case"penyacah":
-            part= neliti;
-            rangeLength = jublagRange.length;
-            partLength = neliti.length;
-            meter = 4;
-        case "ugal":
-            part = neliti;
-            rangeLength = gangsaRange.length;
-            partLength = neliti.length;
-            meter = 4;
-            break;
         case"pemade":
-            part = pemade_part.reduce(getAllGangsaBuffers, []);
-            rangeLength = gangsaRange.length;
-            partLength = pokok.length * 8;
-            meter = 8;
-            break;
         case"kantilan":
-            part = kantilan_part.reduce(getAllGangsaBuffers, []);
-            partLength = pokok.length * 8;
-            rangeLength = gangsaRange.length;
-            meter = 8;
-            break;
         case"reyong":
-            part = reyong_part.reduce(getAllReyongBuffers, []);
-            rangeLength = 12;
-            partLength = pokok.length * 8;
-            meter = 8;
+            part = part.reduce(toConcatedArrays, []);
             break;
     }
-    for (var col = 0; col < rangeLength; col++) {
-        for (var row = 0; row < partLength; row++) {
-            var squareWidth = width / partLength;
-            var squareHeight = height / rangeLength;
-            var boxColor = row % meter === meter - 1 ? 'rgb(200, 200, 200)':'rgb(220, 220, 220)';
+
+    //make basic grid of svg rects
+    for (var y = 0; y < rangeHeight; y++) {
+        for (var x = 0; x < partLength; x++) {
+            var squareWidth = totalWidth / partLength;
+            var squareHeight = totalHeight / rangeHeight;
+            var boxColor = x % Gamelan.meter === Gamelan.meter - 1 ? 'rgb(200, 200, 200)':'rgb(220, 220, 220)';
             svg.append('rect')
                 .attr('width', squareWidth)
                 .attr('height', squareHeight)
                 .attr('fill', boxColor)
                 .attr('stroke', 'black')
                 .attr('stroke-width', 0.05)
-                .attr('x',squareWidth * row)
-                .attr('y', squareHeight * col)
-                .attr('id', instrumentName + "-" + col.toString() + "-" + row.toString())
+                .attr('x',squareWidth * x)
+                .attr('y', squareHeight * y)
+                .attr('id', instrumentName + "-" + y.toString() + "-" + x.toString())
+                .on('click', rectClick)
         }
     }
-    showPattern(instrumentName, part, rangeLength, partLength);
+    showPattern(instrumentName, part, rangeHeight, partLength);
     return svg;
 }
 
-//takes a string for the instrument name, a flattened (polos and sangsih, etc...) array of buffers, the total range of the instrument, and the
-//actual length of the part
-function showPattern(instrumentName, part, rangeLength, partLength) {
-    //add the data stuff
-    return function() {
-        part.forEach(function (buffer, index) {
-            var color = index > partLength ? "rgb(0,255,127)" : "rgb(232, 113, 228)"
-            if (buffer === "-") return;
-            var id = instrumentName + "-" + (rangeLength - buffer).toString() + "-" + (index % partLength).toString();
-            d3.select("#" + id)
-                .attr('fill', color)
-        });
-    }();
+function showPattern(instrumentName, part, rangeHeight, partLength) {
+    clearAllForInstrument(instrumentName);
+    part.forEach(function (buffer, index) {
+        if (buffer === "-") return;
+        var id = instrumentName + "-" + ((rangeHeight - 1) - buffer).toString() + "-" + (index % partLength).toString();
+        var rect = d3.select("#" + id);
+        rect.attr('fill', 'rgb(237,51,207)');
+    });
 }
 
-function clearAllSvg(){
-    d3.selectAll("rect")
-        .attr('fill', "rgb(220, 220, 220)");
+function rectClick(){
+    if (this.parentNode.classList.contains('edit-mode')) {
+        var components = this.id.split("-");
+        var instrumentName = components[0];
+        var buffer = components[1];
+        var partIndex = components[2];
+        players[instrumentName].start(buffer);
+        Gamelan.parts[instrumentName][partIndex] = partIndex;
+        rect.attr('fill', 'rgb(237,51,207)');
+    }
 }
 
+function updateAllSvgs() {
+    var allInstruments = Gamelan.config.map(function(item) {return item[0]});
+    allInstruments.forEach(function(instrumentName){
+        var part = Gamelan.parts[instrumentName];
+        var rangeHeight = Gamelan.range[instrumentName].length;
+        var partLength = Gamelan.getPartLength[instrumentName]();
 
+        switch (instrumentName) {
+            case"pemade":
+            case"kantilan":
+            case"reyong":
+                part = part.reduce(toConcatedArrays, []);
+                break;
+        }
 
+        showPattern(instrumentName, part, rangeHeight, partLength);
+    });
+}
 
+function clearAllForInstrument(instrumentName){
+    var range = Gamelan.range[instrumentName].length;
+    var part = 64;
+    for (var y = 0; y < range; y++) {
+        for (var x = 0; x < part; x++) {
+            var i_Selector = "#" + instrumentName;
+            var rect = d3.select(i_Selector + "-" + y.toString() + "-" + x.toString());
+            rect.attr('fill', 'rgb(220, 220, 220)');
+        }
+    }
+}
+
+function toConcatedArrays(a,b) {return a.concat(b)};

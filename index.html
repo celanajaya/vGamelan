@@ -3,41 +3,42 @@
 <head>
 <meta charset="UTF-8">
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="part-editor.css">
     <link rel="stylesheet" type="text/css" href="slider.css">
-<title>gamelan_komposer</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+<title>gamelan komposer</title>
 </head>
 
 <body>
+<div id="hider"></div>
+<div id="editor-popup">
+    <div class="instrument" id="part-editor"></div>
+</div>
 	<div class="container">
         <div class="sub-container main">
-            <h1>gamelan_komposer</h1>
-		    <div class="row">
-                <div contenteditable="true" class="pokok">
-				    <div class='gatra'>2223</div>
-				    <div class="gatra">5153</div>
-			    </div>
+            <h1>gamelan komposer</h1>
+            <div class="row">
+                <textarea id="pokok-editor">1224 5433</textarea>
 		    </div>
             <div class="row" id="mixer">
                 <div class="button playback" id="start">Start</div>
                 <div class='slider-container'>
-                    <p>Tempo: <span id="tempoValue">90</span><br></p>
-                    <input id="tempo-slider" type="range"  min="30" max="250"  value="90"/>
+                    <p>Tempo: <span id="tempoValue">60</span><br></p>
+                    <input id="tempo-slider" type="range"  min="30" max="250"  value="60"/>
                 </div>
                 <div class='slider-container'>
-                    <p>Volume: <span id="masterVolume">0</span><br></p>
-                    <input id="master-volume-slider" type="range"  min="-50" max="50"  value="0"/>
+                    <p>Volume: <span id="masterVolume">50</span><br></p>
+                    <input id="master-volume-slider" type="range"  min="0" max="100"  value="50"/>
                 </div>
-                <!--<p>Volume</p>-->
-                <div id="mixer-controls"></div>
             </div>
         </div>
         <div class="sub-container elaboration">
-		    <div class="row">
-			    <div class="instrument">
-				    <div id="reyong"></div>
-			    </div>
-		    </div>
+            <div class="instrument">
+                <div id="reyong"></div>
+            </div>
             <div class="instrument">
                 <div id="kantilan"></div>
             </div>
@@ -46,32 +47,34 @@
             </div>
         </div>
         <div class="sub-container bass">
-    		<div class="row">
-                <div class="instrument">
-                    <div id="ugal"></div>
-                </div>
-	    		<div class="instrument">
-		    		<div id="penyacah"></div>
-			    </div>
-			    <div class="instrument">
-				    <div id="jublag"></div>
-		    	</div>
-			    <div class="instrument">
-				    <div id="jegogan"></div>
-			    </div>
-		    </div>
+            <div class="instrument">
+                <div id="ugal"></div>
+            </div>
+            <div class="instrument">
+                <div id="penyacah"></div>
+            </div>
+            <div class="instrument">
+                <div id="jublag"></div>
+            </div>
+            <div class="instrument">
+                <div id="jegogan"></div>
+            </div>
         </div>
 	</div>
 </body>
-<!--<script src="https://tonejs.github.io/CDN/latest/Tone.min.js"></script>-->
-<script src="/node_modules/d3/build/d3.min.js"></script>
-<script src="/node_modules/tone/build/Tone.min.js"></script>
+<script src="node_modules/d3/build/d3.min.js"></script>
+<script src="node_modules/tone/build/Tone.min.js"></script>
+<script src ="helpers.js"></script>
+<script src="partEditor.js"></script>
+<script src="Gamelan.js"></script>
+<script src="neliti.js"></script>
 <script src="editor.js"></script>
 <script src="visualizer.js"></script>
 <script src="audio.js"></script>
 <script src="reyongPatternBank.js"></script>
 <script src="patternGenerators.js"></script>
 <script src="patternLogic.js"></script>
+<script src="dropdown.js"></script>
 <script src="app.js"></script>
 <script type="text/javascript">
 	document.addEventListener('DOMContentLoaded', function() {
