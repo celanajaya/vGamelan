@@ -1,7 +1,7 @@
 //*************"Class" variables
 
 //"Constants"
-var baseURL = {"remote": "http://s3.us-east-2.amazonaws.com/kotekanator/",
+var baseURL = {"remote": "https://s3.us-east-2.amazonaws.com/kotekanator/",
                 "local": "./"};
 var kNorot = "norot";
 var kNyogCag = "nyog cag";

@@ -6,14 +6,14 @@ function getSamples(instrument, range)  {
 
     for (var i = 0; i < range; i++) {
         var filename = instrument + "_" + i.toString() + ".mp3";
-        var filePath = baseURL.local + "audio/" + instrument + "/mp3/" + filename;
+        var filePath = baseURL.remote + "audio/" + instrument + "/mp3/" + filename;
         arr.push(filePath);
     }
     return arr;
 }
 
 function loadGongs() {
-    var base = baseURL.local;
+    var base = baseURL.remote;
    return [base + "audio/gongs/mp3/gong.mp3", base + "audio/gongs/mp3/kemong.mp3"]
 }
 
