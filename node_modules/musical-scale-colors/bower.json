@@ -1,0 +1,9 @@
+{
+  "name": "musical-scale-colors",
+  "main": "index.js",
+  "ignore": [
+    "*",
+    "!index.js",
+    "!LICENSE.txt"
+  ]
+}
