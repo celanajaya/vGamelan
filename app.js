@@ -419,10 +419,15 @@ function setPokokParts() {
 
     Gamelan.parts.jublag = Gamelan.parts.pokok.map(function(v){return v - 1});
     Gamelan.parts.jegogan = Gamelan.parts.jublag.filter(function(n, i){return i%2 != 0});
-
-    //set neliti ugal and penyacah
-    for (var i = 1; i < Gamelan.parts.pokok.length; i+=2) {
-        Gamelan.parts.ugal = Gamelan.parts.ugal.concat(makeNeliti([Gamelan.parts.pokok[i-1], Gamelan.parts.pokok[i]]));
+    Gamelan.parts.pokok.forEach(function(currentTone, i){
+        var nextTone = (i + 1) >= Gamelan.parts.pokok.length ? Gamelan.parts.pokok[0] : Gamelan.parts.pokok[i + 1];
+        if (i % 2 === 0) {
+            Gamelan.parts.ugal = Gamelan.parts.ugal.concat(makeNeliti([currentTone, nextTone]));
+        }
+    });
+    //handling odd numbered pokoks
+    if (Gamelan.parts.pokok.length % 2 !== 0) {
+        Gamelan.parts.ugal = Gamelan.parts.ugal.slice(0, length - 2);
     }
     Gamelan.parts.neliti = Gamelan.parts.ugal.map(function(v){return Gamelan.range.pemade[v]});
     Gamelan.parts.penyacah = Gamelan.parts.neliti.map(function(v){return v - 1});
