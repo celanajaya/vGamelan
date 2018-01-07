@@ -228,14 +228,15 @@ function configurePokokEditor() {
         if (regex.test(e.key)) {
             e.preventDefault();
             editor.value = formattedPokokEditorString(editor.value);
+            setAllParts();
+            updateAllSvgs();
         }
         else if (e.key !== "Backspace") {
             e.preventDefault();
+            setAllParts();
+            updateAllSvgs();
             return false;
         }
-
-        setAllParts();
-        updateAllSvgs();
     });
 
 }
