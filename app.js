@@ -223,19 +223,27 @@ function configurePokokEditor() {
     var regex = new RegExp("[1-5]");
 
     //listener for main pokok editor
-    editor.addEventListener("keyup", function(e) {
+    editor.addEventListener("keydown", function(e) {
+        if (!regex.test(e.key) &&
+            e.key !== "Backspace" &&
+            e.key !== "ArrowRight" &&
+            e.key !== "ArrowLeft") {
 
+            e.preventDefault();
+        }
+    });
+
+    editor.addEventListener("keyup", function(e) {
         if (regex.test(e.key)) {
             e.preventDefault();
+
             editor.value = formattedPokokEditorString(editor.value);
             setAllParts();
             updateAllSvgs();
         }
-        else if (e.key !== "Backspace") {
-            e.preventDefault();
+        else if (e.key === "Backspace") {
             setAllParts();
             updateAllSvgs();
-            return false;
         }
     });
 
