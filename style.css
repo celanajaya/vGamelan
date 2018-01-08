@@ -133,12 +133,12 @@ p {
 }
 
 .pot:hover {
-    animation: visualDecay 1s;
+    animation: visualDecay 0.5s;
 }
 
 
 .pot.active {
-    animation: visualDecay 1s;
+    animation: visualDecay 0.5s;
 }
 
 .key {
@@ -150,12 +150,12 @@ p {
 }
 
 .key:hover {
-    animation: visualDecay 1s;
+    animation: visualDecay 0.5s;
 }
 
 
 .key.active {
-    animation: visualDecay 1s;
+    animation: visualDecay 0.5s;
 }
 
 .button {
