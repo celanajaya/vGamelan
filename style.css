@@ -277,8 +277,8 @@ p {
 }
 
 @keyframes visualDecay {
-    0% {background-color:springgreen; opacity : 1;}
-    0% {background-color:springgreen; opacity : 0;}
+    0% {background:springgreen;}
+    100% {background:white;}
 }
 
 @keyframes blink {
