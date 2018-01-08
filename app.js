@@ -51,11 +51,11 @@ function initializeTempoVolumeSliders(){
         Tone.Transport.bpm.value = tSlider.value;
     });
 
-    var vSlider = document.getElementById("master-volume-slider");
-    setSliderListener(vSlider, function() {
-        document.getElementById("masterVolume").innerHTML = vSlider.value;
-        console.log(vSlider.value);
-    });
+    // var vSlider = document.getElementById("master-volume-slider");
+    // setSliderListener(vSlider, function() {
+    //     document.getElementById("masterVolume").innerHTML = vSlider.value;
+    //     console.log(vSlider.value);
+    // });
 }
 
 function buildInstrument(config) {
