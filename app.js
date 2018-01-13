@@ -51,11 +51,14 @@ function initializeTempoVolumeSliders(){
         Tone.Transport.bpm.value = tSlider.value;
     });
 
-    // var vSlider = document.getElementById("master-volume-slider");
-    // setSliderListener(vSlider, function() {
-    //     document.getElementById("masterVolume").innerHTML = vSlider.value;
-    //     console.log(vSlider.value);
-    // });
+    var vSlider = document.getElementById("master-volume-slider");
+    setSliderListener(vSlider, function() {
+        document.getElementById("masterVolume").innerHTML = -30 / vSlider.value;
+        for (var instrumentName in players) {
+            players[instrumentName].volume.value = vSlider.value;
+        };
+        console.log(vSlider.value);
+    });
 }
 
 function buildInstrument(config) {
@@ -67,10 +70,10 @@ function buildInstrument(config) {
     //create a player with the array of samples based on the based on the name of the instrument and the range
     //assign a callback function to define the looping behavior for each instrument. This method will get called at set intervals
     //during the Tone.Transport timeline
-    players[instrumentName] = new Tone.MultiPlayer(getSamples(instrumentName, numKeys), setLoop(instrumentName)).toMaster();
-    // players[instrumentName].fadeIn = 0.01;
+    players[instrumentName] = new Tone.Players(getSamples(instrumentName, numKeys), setLoop(instrumentName)).toMaster();
+    players[instrumentName].fadeIn = 0.05;
     players[instrumentName].fadeOut = 0.1;
-    players[instrumentName].volume.value = 0;
+    players[instrumentName].volume.value = -15;
     analyzers[instrumentName] = new Tone.Analyser("fft", 32);
     players[instrumentName].chain(analyzers[instrumentName], Tone.Master);
 
@@ -78,7 +81,7 @@ function buildInstrument(config) {
     addControlsForInstrument(instrument);
 
     //Volume Stuff
-    // players[instrumentName].volume.value = 0;
+    players[instrumentName].volume.value = 0;
 
     //generate keys/pots and add listeners
     createKeysForInstrument(config);
@@ -96,7 +99,7 @@ function createKeysForInstrument(config) {
         key.id = config[0] + " " + i.toString();
         key.addEventListener("click", function(event){
             var id = event.target.id.split(" ");
-            players[id[0]].start(parseInt(id[1]));
+            players[id[0]].get(id[1]).start();
         });
     }
 }

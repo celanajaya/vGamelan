@@ -1,5 +1,5 @@
 function getSamples(instrument, range)  {
-    var arr = [];
+    var obj = {};
     //TODO: get ugal and penyacah samples for ugal
     instrument = instrument === "ugal" ? "pemade":instrument;
     instrument = instrument === "penyacah" ? "jublag":instrument;
@@ -7,14 +7,14 @@ function getSamples(instrument, range)  {
     for (var i = 0; i < range; i++) {
         var filename = instrument + "_" + i.toString() + ".mp3";
         var filePath = baseURL.remote + "audio/" + instrument + "/mp3/" + filename;
-        arr.push(filePath);
+        obj[i] = filePath;
     }
-    return arr;
+    return obj;
 }
 
 function loadGongs() {
     var base = baseURL.remote;
-   return [base + "audio/gongs/mp3/gong.mp3", base + "audio/gongs/mp3/kemong.mp3"]
+    return {"0" : base + "audio/gongs/mp3/gong.mp3", "1" : base + "audio/gongs/mp3/kemong.mp3"}
 }
 
 function setLoop(instrument) {
@@ -42,7 +42,7 @@ function setLoop(instrument) {
                 }
 
                 //play buffer
-                players[instrument].start(buffer, time);
+                players[instrument].get(buffer).start(time);
 
                 //animate virtual instrument
                 turnOn(uiElem);
@@ -51,7 +51,7 @@ function setLoop(instrument) {
                 var d3ID = "#" + instrument + "-" + ((rangeHeight - 1) - buffer).toString() + "-" + (i % partLength).toString();
                 d3.selectAll(d3ID).attr('fill', 'rgb(0,255,127)');
 
-                players[instrument].stop(buffer, "+" + Gamelan.interval[instrument]());
+                players[instrument].get(buffer).stop( "+" + Gamelan.interval[instrument]());
                 Tone.Transport.scheduleOnce(function(time){
                     turnOff(uiElem);
                     d3.selectAll(d3ID).attr('fill', 'rgb(237,51,207)');
@@ -84,7 +84,7 @@ function readBuffers(instrument, index) {
 }
 
 function configureGong() {
-    players["gong"] = new Tone.MultiPlayer(loadGongs(), function () {
+    players["gong"] = new Tone.Players(loadGongs(), function () {
         var i = 0;
         new Tone.Loop(function (time) {
             if (i === 0) {
@@ -92,10 +92,10 @@ function configureGong() {
                 return;
             }
             if (i % Gamelan.parts.pokok.length === Gamelan.parts.pokok.length / 2 - 1) {
-                players["gong"].start(1);
+                players["gong"].get("0").start(1);
             }
             if (i % Gamelan.parts.pokok.length === Gamelan.parts.pokok.length - 1) {
-                players["gong"].start(0);
+                players["gong"].get("1").start(0);
             }
             i++;
         }, "2n").start("0:1:3");

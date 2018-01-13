@@ -26,24 +26,24 @@ function startAnalyzers() {
     var instrumentHeight =  document.getElementById("reyong").offsetHeight;
 
     for (var analyzer in analyzers) {
-        if (analyzers.hasOwnProperty(analyzer)) {
-            var svg = analyzers[analyzer].svg;
-
-            svg.frequencyData = analyzers[analyzer].analyse();
-            // Update d3 chart with new data.
-            svg.selectAll('rect')
-                .data(svg.frequencyData)
-                .attr('y', function (d) {
-                    return instrumentHeight - d;
-                })
-                .attr('height', function (d) {
-                    if (d < 50) return 0;
-                    return d;
-                })
-                .attr('fill', function (d) {
-                    return 'rgb(' + d + ', ' + d * 2 + ', ' + d + ')';
-                });
-        }
+        // if (analyzers.hasOwnProperty(analyzer)) {
+        //     var svg = analyzers[analyzer].svg;
+        //
+        //     svg.frequencyData = analyzers[analyzer].getValue();
+        //     // Update d3 chart with new data.
+        //     svg.selectAll('rect')
+        //         .data(svg.frequencyData)
+        //         .attr('y', function (d) {
+        //             return instrumentHeight - d;
+        //         })
+        //         .attr('height', function (d) {
+        //             if (d < 50) return 0;
+        //             return d;
+        //         })
+        //         .attr('fill', function (d) {
+        //             return 'rgb(' + d + ', ' + d * 2 + ', ' + d + ')';
+        //         });
+        // }
     }
     ids.push(requestAnimationFrame(startAnalyzers));
 }
