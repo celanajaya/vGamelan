@@ -1,31 +1,11 @@
 
-.container {
-    display: flex;           /* establish flex container */
-    flex-direction: row;  /* make main axis horizontal */
-    justify-content: space-between; /* center items vertically, in this case */
-    align-items: flex-start;     /* center items horizontally, in this case */
-    height: 100%;
-    width: 100%;
-    font-family: 'Open Sans';
-    margin: 0 auto;
-    border: 1px dotted cornflowerblue;
-}
-
-.sub-container {
-    flex-direction: column;
-    justify-content: center; /* center items vertically, in this case */
-    align-items: center;     /* center items horizontally, in this case */
-    text-align: center;
-    height: 100%;
-    width: 80%;
-    margin: 0 auto;
-}
-
 i {
     font-family: 'FontAwesome';
+    font-style: normal;
 }
 
 svg {
+    width: 100%;
     margin: 0 auto;
     padding-top: 5px;
 }
@@ -33,13 +13,6 @@ svg {
 .elaboration {
     width: 133%;
 }
-
-.row {
-    flex-direction: row;
-    width: 100%;
-    text-align: center; /* will center text in <p>, which is not a flex item */
-}
-
 
 p {
     font-size: large;
@@ -56,8 +29,7 @@ p {
 }
 
 #pokok-editor {
-    margin: 0 auto;
-    width: 80%;
+    width: 100%;
     border: 1px solid #ED33CF;
     border-radius: 15px;
     box-shadow: 0.5px 0.5px 0.5px #555;
@@ -71,11 +43,9 @@ p {
     border: 1px solid #ED33CF;
     margin: 5px;
     border-radius: 15px;
-    box-shadow: 0.5px 0.5px 0.5px #555
 }
 
 .controls {
-    flex-direction: column;
     border-bottom: 1px dotted cornflowerblue;
     margin: 10px;
 }
@@ -248,6 +218,10 @@ p {
 #mixer-controls {
     margin: 10px;
     padding: 10px;
+}
+
+.main-text {
+    text-align: center;
 }
 
 .volume-slider-container {
