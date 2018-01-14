@@ -30,7 +30,7 @@ function dropDownForInstrument(instrumentName, type) {
 
     } else {
 
-        dropdown = createDropDown("Contour", instrumentName);
+        dropdown = createDropDown("contour ", instrumentName);
         createPatternSelector(dropdown.lastChild, instrumentName);
     }
 
@@ -106,7 +106,7 @@ function createPatternSelector(parent, instrumentName) {
         var row = document.createElement('tr');
         for (var x = 0; x < 3; x++) {
             var d = document.createElement('td');
-            var svg = d3.select(d).append('svg').attr('height', 30).attr('width', 80);
+            var svg = d3.select(d).append('svg').attr('viewBox', '0 0 3 8').attr('height', 3).attr('width', 8);
             svg.attr("id",  x.toString() + "-" + y.toString()+ "-static-svg");
             svg.on('click', selectPattern(instrumentName));
             //for drawing each individual svg with the available static patterns
@@ -115,13 +115,14 @@ function createPatternSelector(parent, instrumentName) {
                     //LOL....wtf
                     var boxColor = patternBank[x].atRotation(y)[pX] === pY ? 'rgb(237,51,207)' : 'rgb(220,220,220)';
                     svg.append('rect')
-                        .attr('width', 10)
-                        .attr('height', 10)
+                        .attr('viewBox', '' + pX + '' + pY + '1 1')
+                        .attr('width', 1)
+                        .attr('height', 1)
                         .attr('fill', boxColor)
                         .attr('stroke', 'black')
                         .attr('stroke-width', 0.05)
-                        .attr('x',10 * pX)
-                        .attr('y', 10 * pY)
+                        .attr('x', pX)
+                        .attr('y', pY)
                 }
             }
             row.appendChild(d);

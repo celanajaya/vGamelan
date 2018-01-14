@@ -93,15 +93,19 @@ function buildInstrument(config) {
 function createKeysForInstrument(config) {
     var numKeys = config[1];
     var instrument = document.getElementById(config[0]);
+    var container = document.createElement('div');
+    container.classList.add('container');
+    container.classList.add('key-container');
     for (var i = 0; i < numKeys; i++) {
         var key = document.createElement("div");
-        instrument.appendChild(key).className = config[2];
+        container.appendChild(key).className = config[2];
         key.id = config[0] + " " + i.toString();
         key.addEventListener("click", function(event){
             var id = event.target.id.split(" ");
             players[id[0]].get(id[1]).start();
         });
     }
+    instrument.appendChild(container);
 }
 
 function addControlsForInstrument(instrument) {

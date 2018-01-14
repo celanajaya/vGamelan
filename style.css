@@ -6,12 +6,10 @@ i {
 
 svg {
     width: 100%;
+    height: 100%;
     margin: 0 auto;
     padding-top: 5px;
-}
-
-.elaboration {
-    width: 133%;
+    preserveAspectRatio: none;
 }
 
 p {
@@ -40,8 +38,14 @@ p {
 .instrument {
     background: white;
     border: 1px solid #ED33CF;
-    margin: 5px;
+    margin: 5%;
     border-radius: 15px;
+}
+
+.key-container {
+    align-items: center;
+    width: 100%;
+    height: 33%;
 }
 
 .controls {
@@ -92,11 +96,11 @@ p {
 }
 
 .pot {
-    width: 40px;
-    height: 40px;
-    margin: 5px;
+    width: 7%;
+    height: auto;
+    margin: 1%;
     border: 1px solid #ED33CF;
-    border-radius: 25px;
+    border-radius: 20px;
     display: inline-flex;
 }
 
@@ -110,9 +114,9 @@ p {
 }
 
 .key {
-    width: 20px;
-    height: 40px;
-    margin: 5px;
+    width: 5%;
+    height: auto;
+    margin: 2.5%;
     border: 1px solid #ED33CF;
     display: inline-flex;
 }
