@@ -5,7 +5,7 @@
 var ids = [];
 function createAnalyzer(parent, height, width) {
     var barPadding = 1;
-    var frequencyData = new Uint8Array(16);
+    var frequencyData = new Uint8Array(8);
     var svg = d3.select(parent).append('svg').attr('height', height).attr('width', width);
     svg.frequencyData = frequencyData;
     //render initial state for svg
@@ -23,29 +23,28 @@ function createAnalyzer(parent, height, width) {
 //render audio components
 function startAnalyzers() {
     // Copy frequency data to frequencyData array.
-    // var instrumentHeight =  document.getElementById("reyong").offsetHeight;
-    //
-    // for (var analyzer in analyzers) {
-    //     if (analyzers.hasOwnProperty(analyzer)) {
-    //         var svg = analyzers[analyzer].svg;
-    //
-    //         svg.frequencyData = analyzers[analyzer].getValue();
-    //         // Update d3 chart with new data.
-    //         svg.selectAll('rect')
-    //             .data(svg.frequencyData)
-    //             .attr('y', function (d) {
-    //                 return instrumentHeight - d;
-    //             })
-    //             .attr('height', function (d) {
-    //                 if (d < 50) return 0;
-    //                 return d;
-    //             })
-    //             .attr('fill', function (d) {
-    //                 return 'rgb(' + d + ', ' + d * 2 + ', ' + d + ')';
-    //             });
-    //     }
-    // }
-    // ids.push(requestAnimationFrame(startAnalyzers));
+    var instrumentHeight =  document.getElementById("reyong").offsetHeight;
+
+    for (var analyzer in analyzers) {
+        if (analyzers.hasOwnProperty(analyzer)) {
+            var svg = analyzers[analyzer].svg;
+            svg.frequencyData = analyzers[analyzer].getValue();
+            console.log(svg.frequencyData);
+            // Update d3 chart with new data.
+            svg.selectAll('rect')
+                .data(svg.frequencyData)
+                .attr('y', function (d) {
+                    return Math.abs(d);
+                })
+                .attr('height', function (d) {
+                    return instrumentHeight - Math.abs(d);
+                })
+                .attr('fill', function (d) {
+                    return 'rgb(0, 255, 127)';
+                });
+        }
+    }
+    ids.push(requestAnimationFrame(startAnalyzers));
 }
 
 function stopAnalyzers() {

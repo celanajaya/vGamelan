@@ -74,7 +74,7 @@ function buildInstrument(config) {
     players[instrumentName].fadeIn = 0.01;
     players[instrumentName].fadeOut = 0.1;
     players[instrumentName].volume.value = -15;
-    analyzers[instrumentName] = new Tone.Analyser("fft", 32);
+    analyzers[instrumentName] = new Tone.FFT(8);
     players[instrumentName].chain(analyzers[instrumentName], Tone.Master);
 
     //Controls Stuff
@@ -136,10 +136,10 @@ function addControlsForInstrument(instrument) {
                 }
                 break;
             case 3:
-                if (elaboratingPart) {
-                    cItem.classList.add("dropdown-container");
-                    cItem.appendChild(dropDownForInstrument(instrument.id, DropDownTypes.contour));
-                }
+                // if (elaboratingPart) {
+                //     cItem.classList.add("dropdown-container");
+                //     cItem.appendChild(dropDownForInstrument(instrument.id, DropDownTypes.contour));
+                // }
                 break;
         }
         controlItemContainer.appendChild(cItem);
@@ -158,7 +158,7 @@ function configurePartEditor() {
     editorButtonRow.id = 'editor-button-row';
 
     //close button
-    var closeButton = document.createElement('div')
+    var closeButton = document.createElement('div');
     closeButton.className = 'close';
     closeButton.id = 'close';
     closeButton.addEventListener('click', function(){

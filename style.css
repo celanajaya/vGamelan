@@ -8,8 +8,7 @@ svg {
     width: 100%;
     height: 100%;
     margin: 0 auto;
-    padding-top: 5px;
-    preserveAspectRatio: none;
+    padding: 0;
 }
 
 p {
@@ -37,15 +36,9 @@ p {
 
 .instrument {
     background: white;
+    margin: 2.5%;
     border: 1px solid #ED33CF;
-    margin: 5%;
     border-radius: 15px;
-}
-
-.key-container {
-    align-items: center;
-    width: 100%;
-    height: 33%;
 }
 
 .controls {
@@ -90,17 +83,24 @@ p {
     animation: blink 1s linear infinite;
 }
 
+
+.key-container {
+    width: 100%;
+    height: 33%;
+    margin: 0 auto;
+}
+
 .reyong {
     align-items: center;
     width: 100%;
 }
 
 .pot {
-    width: 7%;
-    height: auto;
+    width: 5.5%;
+    height: 40px;
     margin: 1%;
     border: 1px solid #ED33CF;
-    border-radius: 20px;
+    border-radius: 50%;
     display: inline-flex;
 }
 
@@ -114,9 +114,9 @@ p {
 }
 
 .key {
-    width: 5%;
-    height: auto;
-    margin: 2.5%;
+    width: 2.5%;
+    height: 40px;
+    margin: 1%;
     border: 1px solid #ED33CF;
     display: inline-flex;
 }

@@ -25,7 +25,7 @@ function dropDownForInstrument(instrumentName, type) {
                 break;
         }
 
-        dropdown = createDropDown(startingText, instrumentName);
+        dropdown = createDropDown(startingText + ' ', instrumentName);
         addItemsToDropdown(list, dropdown, instrumentName);
 
     } else {
@@ -50,8 +50,8 @@ function createDropDown(defaultTitle, instrumentName) {
     dropDown.appendChild(dropDownContent);
     dropDown.addEventListener("click", function () {
         toggleClass(dropDownContent, "show");
-        toggleClass(caret, "fa-caret-down")
-        toggleClass(caret, "fa-caret-left")
+        toggleClass(caret, "fa-caret-down");
+        toggleClass(caret, "fa-caret-left");
     });
     return dropDown;
 }
@@ -106,9 +106,14 @@ function createPatternSelector(parent, instrumentName) {
         var row = document.createElement('tr');
         for (var x = 0; x < 3; x++) {
             var d = document.createElement('td');
-            var svg = d3.select(d).append('svg').attr('viewBox', '0 0 3 8').attr('height', 3).attr('width', 8);
+            var svg = d3.select(d).append('svg')
+                .attr('viewBox', '0 0 5 15')
+                .attr('height', 5)
+                .attr('width', 15);
+
             svg.attr("id",  x.toString() + "-" + y.toString()+ "-static-svg");
             svg.on('click', selectPattern(instrumentName));
+
             //for drawing each individual svg with the available static patterns
             for (var pY = 0; pY < 3; pY++) {
                 for (var pX = 0; pX < 8; pX++){
