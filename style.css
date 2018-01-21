@@ -11,9 +11,17 @@ svg {
     padding: 0;
 }
 
+h1 {
+    font-size: 7vh;
+}
+
 p {
-    font-size: large;
+    font-size: 1vh;
     font-weight: 500;
+}
+
+.container-fluid {
+    text-align: center;
 }
 
 .fa-cog {
@@ -30,7 +38,7 @@ p {
     border: 1px solid #ED33CF;
     border-radius: 15px;
     text-align: center;
-    font-size: 40px;
+    font-size: 5vh;
     resize: none;
 }
 
@@ -93,10 +101,6 @@ p {
     height: 5vh;
 }
 
-.col-lg-3 {
-    height: 100vh;
-}
-
 .pot {
     width: 7%;
     height: 75%;
@@ -141,7 +145,7 @@ p {
     text-align: center;
     vertical-align: text-bottom;
     color: white;
-    font-size: 18px;
+    font-size: 2vh;
     border-radius: 5px;
 }
 
