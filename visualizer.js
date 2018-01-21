@@ -13,6 +13,7 @@ function createAnalyzer(parent, height, width) {
         .data(frequencyData)
         .enter()
         .append('rect')
+        .attr('fill', 'rgb(0, 255, 127)')
         .attr('width', width / frequencyData.length - barPadding)
         .attr('x', function (d, i) {
             return i * (width / frequencyData.length);
@@ -39,9 +40,6 @@ function startAnalyzers() {
                 .attr('height', function (d) {
                     return instrumentHeight - Math.abs(d);
                 })
-                .attr('fill', function (d) {
-                    return 'rgb(0, 255, 127)';
-                });
         }
     }
     ids.push(requestAnimationFrame(startAnalyzers));

@@ -18,9 +18,9 @@ var players = {};
 var analyzers = {};
 
 //default settings
-var pemadePatternType = patternTypes[3];
-var kantilanPatternType = patternTypes[3];
-var reyongPatternType = patternTypes[0];
+var pemadePatternType = patternTypes[5];
+var kantilanPatternType = patternTypes[5];
+var reyongPatternType = patternTypes[1];
 var teluStayingPattern = [0,0];
 var empatStayingPattern = [0,0];
 var nyogCagMovingPattern = 0;
@@ -74,7 +74,7 @@ function buildInstrument(config) {
     players[instrumentName].fadeIn = 0.01;
     players[instrumentName].fadeOut = 0.1;
     players[instrumentName].volume.value = -15;
-    analyzers[instrumentName] = new Tone.FFT(8);
+    analyzers[instrumentName] = new Tone.FFT(32);
     players[instrumentName].chain(analyzers[instrumentName], Tone.Master);
 
     //Controls Stuff
@@ -94,7 +94,7 @@ function createKeysForInstrument(config) {
     var numKeys = config[1];
     var instrument = document.getElementById(config[0]);
     var container = document.createElement('div');
-    container.classList.add('container');
+    // container.classList.add('container');
     container.classList.add('key-container');
     for (var i = 0; i < numKeys; i++) {
         var key = document.createElement("div");
