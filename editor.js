@@ -9,7 +9,7 @@ function createEditor(parent, totalHeight, totalWidth, instrumentName) {
     //total length of pattern, used as x value
     var partLength = Gamelan.getPartLength[instrumentName]();
 
-    var svg = d3.select(parent).append('svg').attr('height', totalHeight).attr('width', totalWidth);
+    var svg = d3.select(parent).append('svg').attr('viewBox', "0 0 " + totalWidth + " " + totalHeight).attr('height', totalHeight).attr('width', totalWidth);
     svg.attr("id", instrumentName + "-svg");
     //configure dimensions based on pattern/instrument properties
     switch (instrumentName) {
@@ -23,17 +23,16 @@ function createEditor(parent, totalHeight, totalWidth, instrumentName) {
     //make basic grid of svg rects
     for (var y = 0; y < rangeHeight; y++) {
         for (var x = 0; x < partLength; x++) {
-            var squareWidth = totalWidth / partLength;
-            var squareHeight = totalHeight / rangeHeight;
             var boxColor = x % Gamelan.meter === Gamelan.meter - 1 ? 'rgb(200, 200, 200)':'rgb(220, 220, 220)';
             svg.append('rect')
-                .attr('width', squareWidth)
-                .attr('height', squareHeight)
+                .attr('viewBox', '' + y + '' + x + ' 10 10')
+                .attr('height', totalHeight / rangeHeight)
+                .attr('width', totalWidth / partLength)
                 .attr('fill', boxColor)
                 .attr('stroke', 'black')
                 .attr('stroke-width', 0.05)
-                .attr('x',squareWidth * x)
-                .attr('y', squareHeight * y)
+                .attr('x', (totalWidth / partLength) * x)
+                .attr('y',(totalHeight / rangeHeight) * y)
                 .attr('id', instrumentName + "-" + y.toString() + "-" + x.toString())
                 .on('click', rectClick)
         }

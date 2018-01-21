@@ -18,9 +18,9 @@ var players = {};
 var analyzers = {};
 
 //default settings
-var pemadePatternType = patternTypes[3];
-var kantilanPatternType = patternTypes[3];
-var reyongPatternType = patternTypes[0];
+var pemadePatternType = patternTypes[5];
+var kantilanPatternType = patternTypes[5];
+var reyongPatternType = patternTypes[1];
 var teluStayingPattern = [0,0];
 var empatStayingPattern = [0,0];
 var nyogCagMovingPattern = 0;
@@ -34,7 +34,7 @@ function init() {
     configurePokokEditor();
     configurePartEditor();
     Tone.Master.connect(new Tone.Normalize(2,4));
-    Tone.Transport.bpm.value = 60;
+    Tone.Transport.bpm.value = 120;
     setAllParts();
     Gamelan.config.forEach(buildInstrument);
 
@@ -51,11 +51,14 @@ function initializeTempoVolumeSliders(){
         Tone.Transport.bpm.value = tSlider.value;
     });
 
-    // var vSlider = document.getElementById("master-volume-slider");
-    // setSliderListener(vSlider, function() {
-    //     document.getElementById("masterVolume").innerHTML = vSlider.value;
-    //     console.log(vSlider.value);
-    // });
+    var vSlider = document.getElementById("master-volume-slider");
+    setSliderListener(vSlider, function() {
+        document.getElementById("masterVolume").innerHTML = -30 / vSlider.value;
+        for (var instrumentName in players) {
+            players[instrumentName].volume.value = vSlider.value;
+        };
+        console.log(vSlider.value);
+    });
 }
 
 function buildInstrument(config) {
@@ -67,18 +70,18 @@ function buildInstrument(config) {
     //create a player with the array of samples based on the based on the name of the instrument and the range
     //assign a callback function to define the looping behavior for each instrument. This method will get called at set intervals
     //during the Tone.Transport timeline
-    players[instrumentName] = new Tone.MultiPlayer(getSamples(instrumentName, numKeys), setLoop(instrumentName)).toMaster();
-    // players[instrumentName].fadeIn = 0.01;
+    players[instrumentName] = new Tone.Players(getSamples(instrumentName, numKeys), setLoop(instrumentName)).toMaster();
+    players[instrumentName].fadeIn = 0.01;
     players[instrumentName].fadeOut = 0.1;
-    players[instrumentName].volume.value = 0;
-    analyzers[instrumentName] = new Tone.Analyser("fft", 32);
+    players[instrumentName].volume.value = -15;
+    analyzers[instrumentName] = new Tone.FFT(32);
     players[instrumentName].chain(analyzers[instrumentName], Tone.Master);
 
     //Controls Stuff
     addControlsForInstrument(instrument);
 
     //Volume Stuff
-    // players[instrumentName].volume.value = 0;
+    players[instrumentName].volume.value = 0;
 
     //generate keys/pots and add listeners
     createKeysForInstrument(config);
@@ -90,15 +93,19 @@ function buildInstrument(config) {
 function createKeysForInstrument(config) {
     var numKeys = config[1];
     var instrument = document.getElementById(config[0]);
+    var container = document.createElement('div');
+    // container.classList.add('container');
+    container.classList.add('key-container');
     for (var i = 0; i < numKeys; i++) {
         var key = document.createElement("div");
-        instrument.appendChild(key).className = config[2];
+        container.appendChild(key).className = config[2];
         key.id = config[0] + " " + i.toString();
         key.addEventListener("click", function(event){
             var id = event.target.id.split(" ");
-            players[id[0]].start(parseInt(id[1]));
+            players[id[0]].get(id[1]).start();
         });
     }
+    instrument.appendChild(container);
 }
 
 function addControlsForInstrument(instrument) {
@@ -129,10 +136,10 @@ function addControlsForInstrument(instrument) {
                 }
                 break;
             case 3:
-                if (elaboratingPart) {
-                    cItem.classList.add("dropdown-container");
-                    cItem.appendChild(dropDownForInstrument(instrument.id, DropDownTypes.contour));
-                }
+                // if (elaboratingPart) {
+                //     cItem.classList.add("dropdown-container");
+                //     cItem.appendChild(dropDownForInstrument(instrument.id, DropDownTypes.contour));
+                // }
                 break;
         }
         controlItemContainer.appendChild(cItem);
@@ -151,7 +158,7 @@ function configurePartEditor() {
     editorButtonRow.id = 'editor-button-row';
 
     //close button
-    var closeButton = document.createElement('div')
+    var closeButton = document.createElement('div');
     closeButton.className = 'close';
     closeButton.id = 'close';
     closeButton.addEventListener('click', function(){

@@ -3,14 +3,23 @@
 <head>
 <meta charset="UTF-8">
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="part-editor.css">
     <link rel="stylesheet" type="text/css" href="slider.css">
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+    <script src="https://use.fontawesome.com/bad17f52c0.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.12.2/d3.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/0.8.0/Tone.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/0.11.0/Tone.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
 
     <title>vGamelan</title>
 </head>
@@ -20,46 +29,48 @@
 <div id="editor-popup">
     <div class="instrument" id="part-editor"></div>
 </div>
-	<div class="container">
-        <div class="sub-container main">
-            <h1>vGamelan</h1>
-            <p>Enter up to 8 digits between 1 and 5</p>
-            <div class="row">
-                <textarea id="pokok-editor">1224 5433</textarea>
-		    </div>
-            <div class="row" id="mixer">
-                <div class="button playback" id="start">Start</div>
-                <div class='slider-container'>
-                    <p>Tempo: <span id="tempoValue">60</span><br></p>
-                    <input id="tempo-slider" type="range"  min="30" max="250"  value="60"/>
+	<div class="container-fluid">
+        <div class="container-fluid main col-lg-3">
+            <div class ="row">
+                <h1 class="main-text">vGamelan</h1>
+                <p class="main-text">Enter up to 8 digits between 1 and 5</p>
+                <textarea id="pokok-editor">2255 3344</textarea>
+                <div class="row" id="mixer">
+                    <div class="button playback" id="start">Start</div>
+                    <div class='slider-container'>
+                        <p>Tempo: <span id="tempoValue">120</span><br></p>
+                        <input id="tempo-slider" type="range"  min="30" max="250"  value="120"/>
+                    </div>
+                    <div class='slider-container'>
+                        <p>Volume: <span id="masterVolume">50</span><br></p>
+                        <input id="master-volume-slider" type="range"  min="-30" max="0"  value="-15"/>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <p>made using <a href="https://tonejs.github.io/">Tone.js</a></p>
+                <p class="main-text">made using <a href="https://tonejs.github.io/">Tone.js</a></p>
             </div>
         </div>
-        <div class="sub-container elaboration">
-            <div class="instrument">
+        <div class="container-fluid elaboration col-lg-5">
+            <div class="row-fluid instrument">
                 <div id="reyong"></div>
             </div>
-            <div class="instrument">
+            <div class="row-fluid instrument">
                 <div id="kantilan"></div>
             </div>
-            <div class="instrument">
+            <div class="row-fluid instrument">
                 <div id="pemade"></div>
             </div>
         </div>
-        <div class="sub-container bass">
-            <div class="instrument">
+        <div class="container-fluid bass col-lg-4">
+            <div class="row-fluid instrument">
                 <div id="ugal"></div>
             </div>
-            <div class="instrument">
+            <div class="row-fluid instrument">
                 <div id="penyacah"></div>
             </div>
-            <div class="instrument">
+            <div class="row-fluid instrument">
                 <div id="jublag"></div>
             </div>
-            <div class="instrument">
+            <div class="row-fluid instrument">
                 <div id="jegogan"></div>
             </div>
         </div>

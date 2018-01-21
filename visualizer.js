@@ -5,7 +5,7 @@
 var ids = [];
 function createAnalyzer(parent, height, width) {
     var barPadding = 1;
-    var frequencyData = new Uint8Array(16);
+    var frequencyData = new Uint8Array(8);
     var svg = d3.select(parent).append('svg').attr('height', height).attr('width', width);
     svg.frequencyData = frequencyData;
     //render initial state for svg
@@ -13,6 +13,7 @@ function createAnalyzer(parent, height, width) {
         .data(frequencyData)
         .enter()
         .append('rect')
+        .attr('fill', 'rgb(0, 255, 127)')
         .attr('width', width / frequencyData.length - barPadding)
         .attr('x', function (d, i) {
             return i * (width / frequencyData.length);
@@ -28,28 +29,22 @@ function startAnalyzers() {
     for (var analyzer in analyzers) {
         if (analyzers.hasOwnProperty(analyzer)) {
             var svg = analyzers[analyzer].svg;
-
-            svg.frequencyData = analyzers[analyzer].analyse();
+            svg.frequencyData = analyzers[analyzer].getValue();
+            console.log(svg.frequencyData);
             // Update d3 chart with new data.
             svg.selectAll('rect')
                 .data(svg.frequencyData)
                 .attr('y', function (d) {
-                    return instrumentHeight - d;
+                    return Math.abs(d);
                 })
                 .attr('height', function (d) {
-                    if (d < 50) return 0;
-                    return d;
+                    return instrumentHeight - Math.abs(d);
                 })
-                .attr('fill', function (d) {
-                    return 'rgb(' + d + ', ' + d * 2 + ', ' + d + ')';
-                });
         }
     }
     ids.push(requestAnimationFrame(startAnalyzers));
 }
 
 function stopAnalyzers() {
-    ids.forEach(function(id){
-        cancelAnimationFrame(id);
-    });
+    ids.forEach(cancelAnimationFrame);
 }
