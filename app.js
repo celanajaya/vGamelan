@@ -34,7 +34,7 @@ function init() {
     configurePokokEditor();
     configurePartEditor();
     Tone.Master.connect(new Tone.Normalize(2,4));
-    Tone.Transport.bpm.value = 60;
+    Tone.Transport.bpm.value = 120;
     setAllParts();
     Gamelan.config.forEach(buildInstrument);
 

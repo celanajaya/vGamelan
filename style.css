@@ -93,6 +93,10 @@ p {
     height: 5vh;
 }
 
+.col-lg-3 {
+    height: 100vh;
+}
+
 .pot {
     width: 7%;
     height: 75%;
