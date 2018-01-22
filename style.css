@@ -12,15 +12,18 @@ svg {
 }
 
 h1 {
-    font-size: 7vh;
+    color: #ed33cf;
+    font-size: 10vh;
 }
 
 p {
-    font-size: 1vh;
+    font-size: 3vh;
     font-weight: 500;
 }
 
 .container-fluid {
+    margin:0 auto;
+    width: 90vw;
     text-align: center;
 }
 
