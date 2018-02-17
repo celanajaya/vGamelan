@@ -71,7 +71,7 @@ function buildInstrument(config) {
     //assign a callback function to define the looping behavior for each instrument. This method will get called at set intervals
     //during the Tone.Transport timeline
     players[instrumentName] = new Tone.Players(getSamples(instrumentName, numKeys), setLoop(instrumentName)).toMaster();
-    players[instrumentName].fadeIn = 0.07;
+    players[instrumentName].fadeIn = 0.06;
     players[instrumentName].fadeOut = 0.1;
     players[instrumentName].volume.value = -15;
 
