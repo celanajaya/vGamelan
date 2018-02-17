@@ -53,7 +53,7 @@ function initializeTempoVolumeSliders(){
 
     var vSlider = document.getElementById("master-volume-slider");
     setSliderListener(vSlider, function() {
-        document.getElementById("masterVolume").innerHTML = -30 / vSlider.value;
+        document.getElementById("masterVolume").innerHTML = (parseInt(vSlider.value) + 30);
         for (var instrumentName in players) {
             players[instrumentName].volume.value = vSlider.value;
         };
