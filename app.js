@@ -93,30 +93,41 @@ function createKeysForInstrument(config) {
     var numKeys = config[1];
     var instrument = document.getElementById(config[0]);
     var container = document.createElement('div');
+
     // container.classList.add('container');
     container.classList.add('key-container');
+
     for (var i = 0; i < numKeys; i++) {
+
         var key = document.createElement("div");
         container.appendChild(key).className = config[2];
+
         key.id = config[0] + " " + i.toString();
         key.addEventListener("click", function(event){
+
             var id = event.target.id.split(" ");
             players[id[0]].get(id[1]).start();
         });
     }
+
     instrument.appendChild(container);
 }
 
 function addControlsForInstrument(instrument) {
     var elaboratingPart = (instrument.id === "reyong" || instrument.id === "kantilan" || instrument.id === "pemade");
     var controls = document.createElement("div");
+
     controls.classList.add("controls");
     controls.id = instrument.id + "-controls";
     var controlItemContainer = document.createElement("div");
+
     controlItemContainer.classList.add("control-item-container");
+
     for (var i = 0; i < 4; i++) {
+
         var cItem = document.createElement("div");
         cItem.classList.add("control-item");
+
         switch (i) {
             case 0:
                 var muteButton = document.createElement("span");
