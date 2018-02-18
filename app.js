@@ -18,8 +18,8 @@ var players = {};
 var analyzers = {};
 
 //default settings
-var pemadePatternType = patternTypes[5];
-var kantilanPatternType = patternTypes[5];
+var pemadePatternType = patternTypes[1];
+var kantilanPatternType = patternTypes[1];
 var reyongPatternType = patternTypes[1];
 var teluStayingPattern = [0,0];
 var empatStayingPattern = [0,0];
