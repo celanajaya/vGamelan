@@ -96,20 +96,28 @@ function configureGong() {
                 i++;
                 return;
             }
-            if ((i % Gamelan.parts.pokok.length) === (Gamelan.parts.pokok.length / 4 - 1) || (Gamelan.parts.pokok.length / 4 - 1)) {
+            if ((i % Gamelan.parts.pokok.length) === (Gamelan.parts.pokok.length / 4)) {
                 players["gong"].get("1").start(0);
+                console.log((i % Gamelan.parts.pokok.length));
                 console.log("played kempur");
             }
-            if (i % Gamelan.parts.pokok.length === Gamelan.parts.pokok.length / 2 - 1) {
-                players["gong"].get("2").start(1);
+            if ((i % Gamelan.parts.pokok.length) === (Gamelan.parts.pokok.length / 4) * 3) {
+                players["gong"].get("1").start(0);
+                console.log((i % Gamelan.parts.pokok.length));
+                console.log("played kempur");
+            }
+            if (i % Gamelan.parts.pokok.length === Gamelan.parts.pokok.length / 2) {
+                players["gong"].get("2").start(0);
+                console.log((i % Gamelan.parts.pokok.length));
                 console.log("Played klentong");
             }
-            if (i % Gamelan.parts.pokok.length === Gamelan.parts.pokok.length - 1) {
+            if (i % Gamelan.parts.pokok.length === 0) {
                 players["gong"].get("0").start(0);
+                console.log((i % Gamelan.parts.pokok.length));
                 console.log("played gong");
             }
             i++;
-        }, "2n").start("0:1:4");
+        }, "2n").start("0:0:0");
     }).toMaster();
 
 }
