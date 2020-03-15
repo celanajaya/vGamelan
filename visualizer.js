@@ -30,15 +30,20 @@ function startAnalyzers() {
         if (analyzers.hasOwnProperty(analyzer)) {
             var svg = analyzers[analyzer].svg;
             svg.frequencyData = analyzers[analyzer].getValue();
-            // console.log(svg.frequencyData);
             // Update d3 chart with new data.
             svg.selectAll('rect')
                 .data(svg.frequencyData)
                 .attr('y', function (d) {
-                    return Math.abs(d);
+                    if (d === Infinity || d === -Infinity) {
+                        return 0;
+                    }
+                    else {
+                        return d + 200;
+                    }
                 })
                 .attr('height', function (d) {
-                    return instrumentHeight - Math.abs(d);
+                    var height = instrumentHeight - Math.abs(d);
+                    return height > 0 ? height : 0;
                 })
         }
     }

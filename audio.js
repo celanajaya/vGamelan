@@ -113,6 +113,7 @@ function configureGong() {
             }
             if (i % Gamelan.parts.pokok.length === 0) {
                 players["gong"].get("0").start(0);
+                console.log(players["gong"]);
                 console.log((i % Gamelan.parts.pokok.length));
                 console.log("played gong");
             }
@@ -124,7 +125,6 @@ function configureGong() {
 
 function configureKajar() {
     players["kajar"] = new Tone.Players(loadKajar(), function () {
-
         new Tone.Loop(function (time) {
             players["kajar"].get("0").start(0);
             console.log("played a kajar note");

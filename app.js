@@ -58,7 +58,7 @@ function initializeTempoVolumeSliders(){
         for (var instrumentName in players) {
             players[instrumentName].volume.value = vSlider.value;
         };
-        console.log(vSlider.value);
+        // console.log(vSlider.value);
     });
 }
 
@@ -477,6 +477,7 @@ function stop(event) {
     event.target.innerHTML = "Start";
     setTimeout(stopAnalyzers, 2000);
     Tone.Transport.stop();
+    setAllParts();
 }
 
 document.getElementsByClassName("playback")[0].addEventListener("click", function(event) {
@@ -489,7 +490,7 @@ document.getElementsByClassName("playback")[0].addEventListener("click", functio
 
 function activateTransport() {
     Tone.Transport.loopStart = 0;
-    Tone.Transport.loopEnd = (Gamelan.parts.pokok.length / 2).toString() + "m";
+    Tone.Transport.loopEnd = (Gamelan.parts.pokok.length / 4).toString() + "m";
     Tone.Transport.start();
 }
 
