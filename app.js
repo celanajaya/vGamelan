@@ -34,15 +34,15 @@ function init() {
     configurePokokEditor();
     configurePartEditor();
     Tone.Master.connect(new Tone.Normalize(2,4));
-    Tone.Transport.bpm.value = 120;
+    Tone.Transport.bpm.value = 140;
     setAllParts();
     Gamelan.config.forEach(buildInstrument);
 
     //TODO: move these two to inside the build instrument methods?
     initializeMuteButtons();
     initializeTempoVolumeSliders();
-    configureGong();
     configureKajar();
+    configureGong();
 };
 
 function initializeTempoVolumeSliders(){
@@ -58,7 +58,7 @@ function initializeTempoVolumeSliders(){
         for (var instrumentName in players) {
             players[instrumentName].volume.value = vSlider.value;
         };
-        console.log(vSlider.value);
+        // console.log(vSlider.value);
     });
 }
 
@@ -72,8 +72,8 @@ function buildInstrument(config) {
     //assign a callback function to define the looping behavior for each instrument. This method will get called at set intervals
     //during the Tone.Transport timeline
     players[instrumentName] = new Tone.Players(getSamples(instrumentName, numKeys), setLoop(instrumentName)).toMaster();
-    players[instrumentName].fadeIn = 0.05;
-    players[instrumentName].fadeOut = 1;
+    players[instrumentName].fadeIn = 0.01;
+    players[instrumentName].fadeOut = 0.1;
     players[instrumentName].volume.value = -15;
 
     //Analyzers
@@ -477,6 +477,7 @@ function stop(event) {
     event.target.innerHTML = "Start";
     setTimeout(stopAnalyzers, 2000);
     Tone.Transport.stop();
+    setAllParts();
 }
 
 document.getElementsByClassName("playback")[0].addEventListener("click", function(event) {
@@ -488,8 +489,8 @@ document.getElementsByClassName("playback")[0].addEventListener("click", functio
 });
 
 function activateTransport() {
-    Tone.Transport.loopStart = 0;
-    Tone.Transport.loopEnd = (Gamelan.parts.pokok.length / 2).toString() + "m";
+    // Tone.Transport.loopStart = 0;
+    // Tone.Transport.loopEnd = (Gamelan.parts.pokok.length / 4).toString() + "m";
     Tone.Transport.start();
 }
 

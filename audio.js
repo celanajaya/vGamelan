@@ -91,35 +91,40 @@ function readBuffers(instrument, index) {
 function configureGong() {
     players["gong"] = new Tone.Players(loadGongs(), function () {
         var i = 0;
+
         new Tone.Loop(function (time) {
-            if (i === 0) {
-                i++;
-                return;
-            }
-            if ((i % Gamelan.parts.pokok.length) === (Gamelan.parts.pokok.length / 4)) {
+            var cyclePoint = (i % Gamelan.parts.pokok.length);
+            console.log(cyclePoint);
+
+            if (cyclePoint === (Gamelan.parts.pokok.length / 4)) {
                 players["gong"].get("1").start(0);
-                console.log((i % Gamelan.parts.pokok.length));
+                players["gong"].get("1").stop("+2n");
                 console.log("played kempur");
             }
-            if ((i % Gamelan.parts.pokok.length) === (Gamelan.parts.pokok.length / 4) * 3) {
+
+            if (cyclePoint === (Gamelan.parts.pokok.length / 4) * 3) {
                 players["gong"].get("1").start(0);
-                console.log((i % Gamelan.parts.pokok.length));
+                players["gong"].get("1").stop("+2n");
+
                 console.log("played kempur");
             }
-            if (i % Gamelan.parts.pokok.length === Gamelan.parts.pokok.length / 2) {
+
+            if (cyclePoint === Gamelan.parts.pokok.length / 2) {
                 players["gong"].get("2").start(0);
-                console.log((i % Gamelan.parts.pokok.length));
+                players["gong"].get("2").stop("+2n");
                 console.log("Played klentong");
             }
-            if (i % Gamelan.parts.pokok.length === 0) {
+
+            if (cyclePoint === 0) {
                 players["gong"].get("0").start(0);
-                console.log((i % Gamelan.parts.pokok.length));
+                players["gong"].get("0").stop("+2n");
                 console.log("played gong");
             }
             i++;
         }, "2n").start("0:0:0");
     }).toMaster();
-
+    players["gong"].fadeIn = 0.01;
+    players["gong"].fadeOut = 0.1;
 }
 
 function configureKajar() {
@@ -127,10 +132,14 @@ function configureKajar() {
 
         new Tone.Loop(function (time) {
             players["kajar"].get("0").start(0);
+            players["kajar"].get("0").stop("+8n");
             console.log("played a kajar note");
-        }, "4n").start("0:0:4");
+        }, "4n").start("0:0:3");
 
     }).toMaster();
+
+    players["kajar"].fadeIn = 0.01;
+    players["kajar"].fadeOut = 0.1;
 }
 
 //handle animations
