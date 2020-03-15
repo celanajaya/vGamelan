@@ -127,6 +127,7 @@ var Gamelan = {
             "jublag" : [],
             "jegogan" : [],
             "gong" : [],
+            "kajar" : [],
             "pokok":[],
             "neliti":[],
             "penyacah" : [],

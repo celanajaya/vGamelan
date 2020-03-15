@@ -14,7 +14,12 @@ function getSamples(instrument, range)  {
 
 function loadGongs() {
     var base = baseURL.remote;
-    return {"0" : base + "audio/gongs/mp3/gong.mp3", "1" : base + "audio/gongs/mp3/kemong.mp3"}
+    return {"0" : base + "audio/gongs/mp3/gong_0.mp3", "1" : base + "audio/gongs/mp3/gong_1.mp3", "2" : base + "audio/gongs/mp3/gong_2.mp3"}
+}
+
+function loadKajar() {
+    var base = baseURL.remote;
+    return {"0" : base + "audio/kajar/mp3/kajar.mp3"}
 }
 
 function setLoop(instrument) {
@@ -91,18 +96,33 @@ function configureGong() {
                 i++;
                 return;
             }
+            if ((i % Gamelan.parts.pokok.length) === (Gamelan.parts.pokok.length / 4 - 1) || (Gamelan.parts.pokok.length / 4 - 1)) {
+                players["gong"].get("1").start(0);
+                console.log("played kempur");
+            }
             if (i % Gamelan.parts.pokok.length === Gamelan.parts.pokok.length / 2 - 1) {
-                players["gong"].get("0").start(1);
+                players["gong"].get("2").start(1);
+                console.log("Played klentong");
             }
             if (i % Gamelan.parts.pokok.length === Gamelan.parts.pokok.length - 1) {
-                players["gong"].get("1").start(0);
+                players["gong"].get("0").start(0);
+                console.log("played gong");
             }
             i++;
-        }, "2n").start("0:1:3");
+        }, "2n").start("0:1:4");
     }).toMaster();
-    players["gong"].fadeIn = 0.1;
-    players["gong"].fadeOut = 0.3;
-    players["gong"].volume.value = -30;
+
+}
+
+function configureKajar() {
+    players["kajar"] = new Tone.Players(loadKajar(), function () {
+
+        new Tone.Loop(function (time) {
+            players["kajar"].get("0").start(0);
+            console.log("played a kajar note");
+        }, "4n").start("0:0:4");
+
+    }).toMaster();
 }
 
 //handle animations

@@ -30,7 +30,7 @@ function startAnalyzers() {
         if (analyzers.hasOwnProperty(analyzer)) {
             var svg = analyzers[analyzer].svg;
             svg.frequencyData = analyzers[analyzer].getValue();
-            console.log(svg.frequencyData);
+            // console.log(svg.frequencyData);
             // Update d3 chart with new data.
             svg.selectAll('rect')
                 .data(svg.frequencyData)
