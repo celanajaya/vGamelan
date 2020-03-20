@@ -134,7 +134,7 @@ function configureKajar() {
             players["kajar"].get("0").start(0);
             players["kajar"].get("0").stop("+8n");
             console.log("played a kajar note");
-        }, "4n").start("0:0:3");
+        }, "4n").start("0:0:0");
 
     }).toMaster();
 
