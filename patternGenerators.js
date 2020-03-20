@@ -126,7 +126,7 @@ function setGangsaPart(instrument) {
         console.log(instrument + " part set: ", Gamelan.parts.kantilan, patternType);
     }
 }
-//************Pattern Calculation Methods*********************
+//************Pattern Calculation Methods******************
 //Reyong
 //Part parameter, is an integer from 0-3, corresponding to the positions on the reyong
 function getReyongNorotAtIndex(pokokPair){

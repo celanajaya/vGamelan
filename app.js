@@ -25,6 +25,7 @@ var teluStayingPattern = [0,0];
 var empatStayingPattern = [0,0];
 var nyogCagMovingPattern = 0;
 var nyogCagStayingPattern = 0;
+var playbackIncrementor = 0;
 
 //TODO: support polyrhythmic elaborations
 
@@ -92,7 +93,8 @@ function buildInstrument(config) {
 
 function createKeysForInstrument(config) {
     var numKeys = config[1];
-    var instrument = document.getElementById(config[0]);
+    var instrumenName = config[0];
+    var instrument = document.getElementById(instrumenName);
     var container = document.createElement('div');
 
     // container.classList.add('container');
@@ -101,8 +103,12 @@ function createKeysForInstrument(config) {
     for (var i = 0; i < numKeys; i++) {
 
         var key = document.createElement("div");
-        container.appendChild(key).className = config[2];
+        var textLabel = document.createElement("div");
+        textLabel.className = "keyText";
+        key.appendChild(textLabel);
 
+        container.appendChild(key).className = config[2];
+        textLabel.innerHTML = Gamelan.range[instrumenName][i];
         key.id = config[0] + " " + i.toString();
         key.addEventListener("click", function(event){
 
@@ -476,8 +482,8 @@ function stop(event) {
     event.target.id = "start";
     event.target.innerHTML = "Start";
     setTimeout(stopAnalyzers, 2000);
+    Gamelan.resetPlaybackCoordinator();
     Tone.Transport.stop();
-    setAllParts();
 }
 
 document.getElementsByClassName("playback")[0].addEventListener("click", function(event) {
@@ -489,8 +495,8 @@ document.getElementsByClassName("playback")[0].addEventListener("click", functio
 });
 
 function activateTransport() {
-    // Tone.Transport.loopStart = 0;
-    // Tone.Transport.loopEnd = (Gamelan.parts.pokok.length / 4).toString() + "m";
+    Tone.Transport.loopStart = 0;
+    Tone.Transport.loopEnd = (Gamelan.parts.pokok.length / 4).toString() + "m";
     Tone.Transport.start();
 }
 

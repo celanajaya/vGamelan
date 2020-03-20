@@ -24,10 +24,14 @@ function loadKajar() {
 
 function setLoop(instrument) {
     return function () {
-        var i = 0;
         new Tone.Loop(function (time) {
 
-            var buffers = readBuffers(instrument, i);
+            var positionArray = Tone.Transport.position.split(":");
+
+            var beat = parseInt(positionArray[1]);
+            var sixteenth = parseInt(positionArray[2]);
+
+            var buffers = readBuffers(instrument, Gamelan.playbackCoordinator[instrument]);
             buffers.forEach(function(buffer){
                 //return if it's a rest value
                 var rangeHeight = Gamelan.range[instrument].length;
@@ -53,17 +57,18 @@ function setLoop(instrument) {
                 turnOn(uiElem);
 
                 //active svg blocks
-                var d3ID = "#" + instrument + "-" + ((rangeHeight - 1) - buffer).toString() + "-" + (i % partLength).toString();
+                var d3ID = "#" + instrument + "-" + ((rangeHeight - 1) - buffer).toString() + "-" + (Gamelan.playbackCoordinator[instrument] % partLength).toString();
                 d3.selectAll(d3ID).attr('fill', 'rgb(0,255,127)');
 
                 players[instrument].get(buffer).stop( "+" + Gamelan.interval[instrument]());
+
                 Tone.Transport.scheduleOnce(function(time){
                     turnOff(uiElem);
                     d3.selectAll(d3ID).attr('fill', 'rgb(237,51,207)');
                 }, "+" + Gamelan.interval[instrument]());
 
             });
-            i++;
+            Gamelan.playbackCoordinator[instrument] += 1;
         }, Gamelan.interval[instrument]()).start(Gamelan.offset[instrument]);
     }
 }
@@ -74,7 +79,6 @@ function readBuffers(instrument, index) {
         //melody instruments
         case "jegogan":
         case "jublag":
-        case "penyacah":
         case "ugal":
             return [Gamelan.parts[instrument][index % Gamelan.getPartLength[instrument]()]];
 
@@ -90,39 +94,43 @@ function readBuffers(instrument, index) {
 
 function configureGong() {
     players["gong"] = new Tone.Players(loadGongs(), function () {
-        var i = 0;
-
         new Tone.Loop(function (time) {
-            var cyclePoint = (i % Gamelan.parts.pokok.length);
-            console.log(cyclePoint);
 
+            var cyclePoint = (Gamelan.playbackCoordinator["gong"] % Gamelan.parts.pokok.length);
+            console.log(cyclePoint);
             if (cyclePoint === (Gamelan.parts.pokok.length / 4)) {
-                players["gong"].get("1").start(0);
+                players["gong"].get("1").start();
                 players["gong"].get("1").stop("+2n");
+
                 console.log("played kempur");
             }
 
             if (cyclePoint === (Gamelan.parts.pokok.length / 4) * 3) {
-                players["gong"].get("1").start(0);
+                players["gong"].get("1").start();
                 players["gong"].get("1").stop("+2n");
 
                 console.log("played kempur");
             }
 
             if (cyclePoint === Gamelan.parts.pokok.length / 2) {
-                players["gong"].get("2").start(0);
+                players["gong"].get("2").start();
                 players["gong"].get("2").stop("+2n");
+
                 console.log("Played klentong");
             }
 
             if (cyclePoint === 0) {
-                players["gong"].get("0").start(0);
+
+                players["gong"].get("0").start();
                 players["gong"].get("0").stop("+2n");
+
                 console.log("played gong");
             }
-            i++;
+            Gamelan.playbackCoordinator["gong"] += 1;
+
         }, "2n").start("0:0:0");
     }).toMaster();
+
     players["gong"].fadeIn = 0.01;
     players["gong"].fadeOut = 0.1;
 }
@@ -131,15 +139,17 @@ function configureKajar() {
     players["kajar"] = new Tone.Players(loadKajar(), function () {
 
         new Tone.Loop(function (time) {
+
             players["kajar"].get("0").start(0);
             players["kajar"].get("0").stop("+8n");
+
             console.log("played a kajar note");
         }, "4n").start("0:0:0");
 
     }).toMaster();
 
     players["kajar"].fadeIn = 0.01;
-    players["kajar"].fadeOut = 0.1;
+    players["kajar"].fadeOut = 0.01;
 }
 
 //handle animations

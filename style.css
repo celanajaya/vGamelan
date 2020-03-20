@@ -1,8 +1,8 @@
 
-i {
-    font-family: 'FontAwesome';
-    font-style: normal;
-}
+/*i {*/
+    /*font-family: 'FontAwesome';*/
+    /*font-style: normal;*/
+/*}*/
 
 svg {
     width: 100%;
@@ -100,7 +100,7 @@ p {
 
 .key-container {
     width: 100%;
-    height: 5vh;
+    height: 7vh;
 }
 
 .pot {
@@ -110,10 +110,11 @@ p {
     border: 1px solid #ED33CF;
     border-radius: 50%;
     display: inline-flex;
+    text-align: center;
 }
 
 .pot:hover {
-    animation: visualDecay 0.5s;
+    background-color: springgreen;
 }
 
 
@@ -129,10 +130,14 @@ p {
     display: inline-flex;
 }
 
-.key:hover {
-    animation: visualDecay 0.5s;
+.keyText {
+    text-align: center;
+    margin: auto;
 }
 
+.key:hover {
+    background-color: springgreen;
+}
 
 .key.active {
     animation: visualDecay 0.5s;
