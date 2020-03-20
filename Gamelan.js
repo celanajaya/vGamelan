@@ -19,8 +19,8 @@ var Gamelan = {
                          ['z','a','z','y','x','w','x','y']];
             default:
                 return [['x','y','z','x','z','y','x','z'],
-                ['y','x','z','y','z','x','y','z'],
-                ['x','y','x','z','y','x','y','z']];
+                        ['y','x','z','y','z','x','y','z'],
+                        ['x','y','x','z','y','x','y','z']];
         }
     },
 
@@ -42,7 +42,6 @@ var Gamelan = {
         ["kantilan", 10, "key"],
         ["pemade", 10, "key"],
         ["ugal", 10, "key"],
-        // ["penyacah", 5, "key"],
         ["jublag", 5, "key"],
         ["jegogan", 5, "key"],
     ],
@@ -53,11 +52,10 @@ var Gamelan = {
         "pemade" : [[],[]],
         "kantilan" : [[],[]],
         "ugal" : [],
-        // "penyacah" : [],
         "jublag" : [],
         "jegogan" : [],
         "pokok":[],
-        "neliti":[],
+        "neliti":[]
     },
 
     //an array which shows the range of an given instrument in scale degrees
@@ -68,7 +66,7 @@ var Gamelan = {
         "ugal" : [].instrumentRange(10, 2, 5),
         "jublag" : [].instrumentRange(5, 0, 5),
         "penyacah" : [].instrumentRange(5, 0, 5),
-        "jegogan" : [].instrumentRange(5, 0, 5),
+        "jegogan" : [].instrumentRange(5, 0, 5)
     },
 
     interval: {
@@ -93,7 +91,6 @@ var Gamelan = {
         },
         "ugal" : function(){return"4n"},
         "jublag" : function(){return"2n"},
-        // "penyacah" : function(){return"4n"},
         "jegogan" : function(){return"1n"},
     },
 
@@ -103,8 +100,7 @@ var Gamelan = {
         "kantilan": "0:0:0",
         "ugal": "0:0:3",
         "jublag":"0:1:3",
-        // "penyacah": "0:0:3",
-        "jegogan": "0:3:3",
+        "jegogan": "0:3:3"
     },
 
     //returns the total numbers notes for that part
@@ -113,10 +109,19 @@ var Gamelan = {
         "pemade" : function(){return Gamelan.parts.pokok.length * Gamelan.patternLength.pemade},
         "kantilan" : function(){return Gamelan.parts.pokok.length * Gamelan.patternLength.kantilan},
         "ugal" : function(){return Gamelan.parts.neliti.length},
-        // "penyacah" : function(){return Gamelan.parts.neliti.length},
         "jublag" : function(){return Gamelan.parts.pokok.length},
         "jegogan" : function(){return Gamelan.parts.jegogan.length
         }
+    },
+
+    playbackCoordinator: {
+        "reyong": 0,
+        "pemade": 0,
+        "kantilan": 0,
+        "ugal": 0,
+        "jublag": 0,
+        "jegogan": 0,
+        "gong": 0
     },
 
     resetAllParts: function() {
@@ -131,7 +136,19 @@ var Gamelan = {
             "kajar" : [],
             "pokok":[],
             "neliti":[]
-            // "penyacah" : [],
+        }
+    },
+
+    resetPlaybackCoordinator: function() {
+
+        this.playbackCoordinator = {
+            "reyong": 0,
+            "pemade": 0,
+            "kantilan": 0,
+            "ugal": 0,
+            "jublag": 0,
+            "jegogan": 0,
+            "gong": 0
         }
     }
 }
