@@ -121,7 +121,7 @@ var Gamelan = {
         "ugal": 0,
         "jublag": 0,
         "jegogan": 0,
-        "gong": 0
+        "gong": 1
     },
 
     resetAllParts: function() {
@@ -148,7 +148,7 @@ var Gamelan = {
             "ugal": 0,
             "jublag": 0,
             "jegogan": 0,
-            "gong": 0
+            "gong": 1
         }
     }
 }

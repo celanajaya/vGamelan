@@ -341,7 +341,9 @@ function openInstrumentEditor(instrumentName) {
         }
 
         //controls volume slider
-        var vSlider = createVolumeSliderForInstrument(instrumentName);
+        if (instrumentName !== "gong" || instrumentName !== "kajar") {
+            var vSlider = createVolumeSliderForInstrument(instrumentName);
+        }
 
         //elaboration settings
         var settingsTabContainer = createSettingsTabContainerForInstrument(instrumentName);

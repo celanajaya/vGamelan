@@ -97,7 +97,7 @@ function configureGong() {
         new Tone.Loop(function (time) {
 
             var cyclePoint = (Gamelan.playbackCoordinator["gong"] % Gamelan.parts.pokok.length);
-            console.log(cyclePoint);
+
             if (cyclePoint === (Gamelan.parts.pokok.length / 4)) {
                 players["gong"].get("1").start();
                 players["gong"].get("1").stop("+2n");
@@ -128,11 +128,12 @@ function configureGong() {
             }
             Gamelan.playbackCoordinator["gong"] += 1;
 
-        }, "2n").start("0:0:0");
+        }, "2n").start("0:1:3");
     }).toMaster();
 
     players["gong"].fadeIn = 0.01;
     players["gong"].fadeOut = 0.1;
+
 }
 
 function configureKajar() {
@@ -140,16 +141,13 @@ function configureKajar() {
 
         new Tone.Loop(function (time) {
 
-            players["kajar"].get("0").start(0);
-            players["kajar"].get("0").stop("+8n");
-
+            players["kajar"].get("0").start();
             console.log("played a kajar note");
-        }, "4n").start("0:0:0");
+        }, "4n").start("0:0:3");
 
     }).toMaster();
 
     players["kajar"].fadeIn = 0.01;
-    players["kajar"].fadeOut = 0.01;
 }
 
 //handle animations
